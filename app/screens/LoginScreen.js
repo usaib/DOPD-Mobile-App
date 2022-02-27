@@ -86,7 +86,7 @@ function LoginScreen({navigation}) {
           </Snackbar>
           <View style={styles.logoView}>
             <Image
-              source={require('./stethoscopes.png')}
+              source={require('../images/stethoscopes.png')}
               style={{height: 100, width: 100}}
             />
           </View>

@@ -20,7 +20,7 @@ const DrawerList = props => {
       {/*Top Large Image */}
       <View style={styles.porfileView}>
         <Image
-          source={require('../screens/user.png')}
+          source={require('../images/user.png')}
           style={styles.sideMenuProfileIcon}
         />
         <Text
@@ -49,7 +49,7 @@ const DrawerList = props => {
             Rate Us
           </Text>
           <Image
-            source={require('../screens/star.png')}
+            source={require('../images/star.png')}
             style={styles.iconStyle}
           />
         </View>

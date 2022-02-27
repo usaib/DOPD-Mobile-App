@@ -39,7 +39,16 @@ const AppStack = () => {
           fontFamily: 'Gibson-Regular',
         }}
       />
-      <Drawer.Screen name="Settings" component={Settings} />
+      <Drawer.Screen
+        name="Settings"
+        options={{headerShown: false}}
+        component={Settings}
+        labelStyle={{
+          activeTintColor: '#e91e63',
+          itemStyle: {marginVertical: 5},
+          fontFamily: 'Gibson-Regular',
+        }}
+      />
     </Drawer.Navigator>
   );
 };

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   View,
   StyleSheet,
@@ -50,8 +50,8 @@ function MainScreen({navigation}) {
             rippleOverflow,
           )}>
           <Card>
-            <Card.Content>
-              <Title
+            {/* <Card.Content> */}
+            {/* <Title
                 style={{
                   fontFamily: 'Gibson-Regular',
                 }}>
@@ -61,8 +61,8 @@ function MainScreen({navigation}) {
                 Check your symptoms and find out what could be causing them by
                 Artificial Intelligence
               </Paragraph>
-            </Card.Content>
-            <Card.Cover />
+            </Card.Content> */}
+            <Card.Cover source={{uri: 'https://picsum.photos/700'}} />
           </Card>
         </TouchableNativeFeedback>
       </View>
@@ -97,7 +97,7 @@ function MainScreen({navigation}) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#3498DB',
+    backgroundColor: '#FFFFF0',
     flexDirection: 'column',
   },
   cardView: {
