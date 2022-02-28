@@ -1,5 +1,5 @@
 import axios from 'axios';
-const BASE_URL = 'https://chatty-starfish-63.loca.lt';
+const BASE_URL = 'https://friendly-liger-73.loca.lt';
 const fetchUser = async params => {
   console.log('In service call', params);
   return axios.post(

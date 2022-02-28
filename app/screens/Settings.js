@@ -4,6 +4,8 @@ import ImageMapper from 'react-native-image-mapper';
 import ReactNativeZoomableView from '@dudigital/react-native-zoomable-view/src/ReactNativeZoomableView';
 import {List, Button, Menu, Divider, Modal, Portal} from 'react-native-paper';
 import AppBarWrapper from '../components/AppBar';
+import {ScrollView} from 'react-native-gesture-handler';
+import {PaperSelect} from 'react-native-paper-select';
 
 const getRandomColor = () => {
   const letters = '0123456789ABCDEF';
@@ -203,23 +205,85 @@ const RECTANGLE_MAP = [
     y1: 410,
   },
 ];
+
+const symptoms = {
+  Head: [
+    {_id: 1, value: 'mood_swings'},
+    {_id: 2, value: 'restlessness'},
+    {_id: 3, value: 'lethargy'},
+    {_id: 4, value: 'high_fever'},
+    {_id: 5, value: 'headache'},
+    {_id: 6, value: 'mild_fever'},
+    {_id: 7, value: 'sinus_pressure'},
+  ],
+
+  Nose: [
+    {_id: 1, value: 'continuous_sneezing'},
+    {_id: 2, value: 'runny_nose'},
+    {_id: 3, value: 'loss_of_smell'},
+    {_id: 4, value: 'red_sore_around_nose'},
+    {_id: 5, value: 'congestion'},
+  ],
+};
 const Settings = ({navigation}) => {
   const [selectedAreaId, setSelectedAreaId] = useState([]);
   const [visible, setVisible] = useState(false);
-
+  const [bodyPart, setBodyPart] = useState('Nose');
   const [expanded, setExpanded] = useState(true);
+  const [selectedSymptoms, setSelectedSymptoms] = useState({
+    value: '',
+    list: [
+      {_id: 1, value: 'continuous_sneezing'},
+      {_id: 2, value: 'runny_nose'},
+      {_id: 3, value: 'loss_of_smell'},
+      {_id: 4, value: 'red_sore_around_nose'},
+      {_id: 5, value: 'congestion'},
+    ],
+    selectedList: [],
+    error: '',
+  });
   const handlePress = () => setExpanded(!expanded);
   const toggle = () => {
     navigation?.toggleDrawer();
   };
-  const showModal = () => setVisible(true);
+  const showModal = bodyPart => {
+    setVisible(true);
+    setBodyPart(bodyPart);
+  };
   const hideModal = () => setVisible(false);
 
+  const renderModalWithSymptoms = symptoms => {
+    return symptoms.map(symptom => (
+      <List.Item title={`${symptom}`} style={styles.listStyles} />
+    ));
+  };
+
+  renderSelectedSymptoms = symptomsList => (
+    <PaperSelect
+      label="Select Symptoms"
+      value={symptomsList.value}
+      onSelection={value => {
+        setSelectedSymptoms({
+          ...selectedSymptoms,
+          value: value.text,
+          selectedList: value.selectedList,
+          error: '',
+        });
+        console.log(selectedSymptoms.selectedList);
+      }}
+      arrayList={[...symptomsList]}
+      selectedArrayList={selectedSymptoms.selectedList}
+      errorText={selectedSymptoms.error}
+      multiEnable={true}
+      textInputMode="flat"
+      searchStyle={{iconColor: 'blue'}}
+    />
+  );
   logOutZoomState = (event, gestureState, zoomableViewEventObject) => {};
 
   const mapperAreaClickHandler = async (item, idx, event) => {
     const currentSelectedAreaId = selectedAreaId;
-    showModal();
+    showModal(item.name);
     if (Array.isArray(currentSelectedAreaId)) {
       const indexInState = currentSelectedAreaId.indexOf(item.id);
       if (indexInState !== -1) {
@@ -229,8 +293,8 @@ const Settings = ({navigation}) => {
           ...currentSelectedAreaId.slice(indexInState + 1),
         ]);
       } else {
-        alert(`Clicked Item Id: ${item.name}`);
-        console.log('Setting Id', item.id);
+        // alert(`Clicked Item Id: ${item.name}`);
+        // console.log('Setting Id', item.id);
         setSelectedAreaId([...currentSelectedAreaId, item.id]);
       }
     } else {
@@ -249,16 +313,17 @@ const Settings = ({navigation}) => {
         <Modal
           visible={visible}
           onDismiss={hideModal}
+          style={styles.modal}
           contentContainerStyle={{backgroundColor: 'white', padding: 20}}>
-          <Text>Example Modal. Click outside this area to dismiss.</Text>
-          <List.Item title="Continouse Sneezing" style={styles.listStyles} />
-          <List.Item title="Sour Throat" style={styles.listStyles} />
-          <List.Item title="Continouse Sneezing" style={styles.listStyles} />
-          <List.Item title="Sour Throat" style={styles.listStyles} />
-          <List.Item title="Continouse Sneezing" style={styles.listStyles} />
-          <List.Item title="Sour Throat" style={styles.listStyles} />
-          <List.Item title="Continouse Sneezing" style={styles.listStyles} />
-          <List.Item title="Sour Throat" style={styles.listStyles} />
+          <ScrollView>
+            <Text>
+              Select Symptoms from here. Click outside this area to dismiss.
+            </Text>
+            {renderSelectedSymptoms(symptoms[bodyPart])}
+            {console.log(symptoms[bodyPart])}
+            {/* ;{renderModalWithSymptoms(symptoms[bodyPart])} */}
+          </ScrollView>
+          <Button onPress={hideModal}>Done</Button>
         </Modal>
       </Portal>
       <View style={{flex: 1, alignItems: 'center', padding: 30}}>
@@ -296,14 +361,16 @@ const Settings = ({navigation}) => {
           left={props => <List.Icon {...props} icon="equal" color="#FFFFFF" />}
           expanded={expanded}
           onPress={handlePress}>
-          <List.Item title="Continouse Sneezing" style={styles.listStyles} />
-          <List.Item title="Sour Throat" style={styles.listStyles} />
-          <List.Item title="Continouse Sneezing" style={styles.listStyles} />
-          <List.Item title="Sour Throat" style={styles.listStyles} />
-          <List.Item title="Continouse Sneezing" style={styles.listStyles} />
-          <List.Item title="Sour Throat" style={styles.listStyles} />
-          <List.Item title="Continouse Sneezing" style={styles.listStyles} />
-          <List.Item title="Sour Throat" style={styles.listStyles} />
+          <ScrollView>
+            <List.Item title="Continouse Sneezing" style={styles.listStyles} />
+            <List.Item title="Sour Throat" style={styles.listStyles} />
+            <List.Item title="Continouse Sneezing" style={styles.listStyles} />
+            <List.Item title="Sour Throat" style={styles.listStyles} />
+            <List.Item title="Continouse Sneezing" style={styles.listStyles} />
+            <List.Item title="Sour Throat" style={styles.listStyles} />
+            <List.Item title="Continouse Sneezing" style={styles.listStyles} />
+            <List.Item title="Sour Throat" style={styles.listStyles} />
+          </ScrollView>
         </List.Accordion>
       </List.Section>
     </View>
@@ -315,6 +382,12 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FFFFFF',
     flexDirection: 'column',
+  },
+  modal: {
+    height: '30%',
+    marginTop: '40%',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   listStyles: {
     backgroundColor: '#FFFFFF',

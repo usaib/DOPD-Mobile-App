@@ -25,6 +25,7 @@
     "react-native-image-mapper": "^0.1.11",
     "react-native-loading-spinner-overlay": "^2.0.0",
     "react-native-paper": "^4.10.1",
+    "react-native-paper-select": "^0.2.0",
     "react-native-reanimated": "^2.3.1",
     "react-native-safe-area-context": "^3.3.2",
     "react-native-screens": "^3.10.1",
