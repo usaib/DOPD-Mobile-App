@@ -5,6 +5,8 @@ import {
   Image,
   TouchableOpacity,
   Pressable,
+  Dimensions,
+  ScrollView,
 } from 'react-native';
 import {Text, Button} from 'react-native-paper';
 import {useUserDispatch} from '../context/userContext';
@@ -12,6 +14,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import AppBarWrapper from '../components/AppBar';
 import {Avatar, Card, Title, Paragraph} from 'react-native-paper';
 import {TouchableNativeFeedback} from 'react-native-gesture-handler';
+import CustomCard from '../components/Card';
 
 const LeftContent = props => <Avatar.Icon {...props} icon="folder" />;
 
@@ -48,49 +51,120 @@ function MainScreen({navigation}) {
           background={TouchableNativeFeedback.Ripple(
             '#D3D3D3',
             rippleOverflow,
-          )}>
-          <Card>
-            {/* <Card.Content> */}
-            {/* <Title
-                style={{
-                  fontFamily: 'Gibson-Regular',
-                }}>
-                Go Smart
-              </Title>
-              <Paragraph>
-                Check your symptoms and find out what could be causing them by
-                Artificial Intelligence
-              </Paragraph>
-            </Card.Content> */}
-            <Card.Cover source={{uri: 'https://picsum.photos/700'}} />
-          </Card>
-        </TouchableNativeFeedback>
+          )}></TouchableNativeFeedback>
       </View>
-      <View style={styles.cardView}>
-        <Pressable
-          style={({pressed}) => [
-            {
-              opacity: pressed ? 0.9 : 1,
-            },
-            styles.wrapperCustom,
-          ]}>
-          <Card>
-            <Card.Content>
-              <Title
-                style={{
-                  fontFamily: 'Gibson-Regular',
-                }}>
-                Book an Appointment
-              </Title>
-              <Paragraph>
-                Book in-person or online video appointments with the best
-                Doctors and Specialists.
-              </Paragraph>
-            </Card.Content>
-            <Card.Cover />
-          </Card>
-        </Pressable>
-      </View>
+      <View style={styles.cardView}></View>
+      <ScrollView
+        style={{
+          paddingHorizontal: 20,
+          marginTop: 0,
+          display: 'flex',
+          flexDirection: 'column',
+          position: 'relative',
+          width: Dimensions.get('window').width,
+          height: Dimensions.get('window').height + 1000,
+        }}>
+        <View style={styles.top}></View>
+        <Text
+          style={{
+            fontSize: 15,
+            color: '#a1a1a1',
+            marginTop: 100,
+            letterSpacing: 0.5,
+            fontWeight: '600',
+          }}>
+          Good evening, Usaib Khan !
+        </Text>
+        <Text style={styles.openText}>How are you today?</Text>
+        <CustomCard
+          width={345}
+          height={180}
+          backColor="#B5DEFF"
+          cirBackCol="#86c6f42a"
+          bottom={-10}
+          right={-20}>
+          <Image
+            source={require('../images/robDoc.png')}
+            style={styles.cardImage}
+          />
+          <View style={{marginTop: 55}}>
+            <Text
+              style={[styles.cardText, {fontWeight: '700', marginBottom: 10}]}>
+              Go Smart
+            </Text>
+            <Text
+              style={[styles.cardText, {fontSize: 15, textTransform: 'none'}]}>
+              Check your symptoms and find their cause using AI.
+            </Text>
+          </View>
+        </CustomCard>
+        <View
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+          }}>
+          <CustomCard width={175} height={270} backColor="#053F5E">
+            <View style={{marginTop: 55}}>
+              <Text
+                style={[styles.cardText, {fontWeight: '700', color: '#fff'}]}>
+                Check Doctors in your Area
+              </Text>
+            </View>
+            <Image
+              source={require('../images/doctors.png')}
+              style={[styles.cardImage, {width: 175, right: 0}]}
+            />
+          </CustomCard>
+          <CustomCard
+            width={160}
+            height={270}
+            backColor="#D3E4CD"
+            cirBackCol="#ADC2A927"
+            bottom={-5}
+            right={-20}>
+            <View style={{marginTop: 55}}>
+              <Text style={[styles.cardText, {fontWeight: '700'}]}>
+                Explore pharmacies near you
+              </Text>
+            </View>
+            <Image
+              source={require('../images/Pharmacies.png')}
+              style={[
+                styles.cardImage,
+                {
+                  width: 160,
+                  right: -6,
+                  bottom: -30,
+                  height: 180,
+                },
+              ]}
+            />
+          </CustomCard>
+        </View>
+        <CustomCard
+          width={345}
+          height={180}
+          backColor="#FFE194"
+          cirBackCol="#E8E46E57"
+          bottom={-10}
+          right={-20}>
+          <Image
+            source={require('../images/appointment.png')}
+            style={[styles.cardImage, {right: 10, bottom: 0, height: 140}]}
+          />
+          <View style={{marginTop: 55}}>
+            <Text
+              style={[styles.cardText, {fontWeight: '700', marginBottom: 10}]}>
+              Book an appointment
+            </Text>
+            <Text
+              style={[styles.cardText, {fontSize: 15, textTransform: 'none'}]}>
+              In-person or online video appointment
+            </Text>
+          </View>
+        </CustomCard>
+      </ScrollView>
     </View>
   );
 }
@@ -113,6 +187,37 @@ const styles = StyleSheet.create({
   button: {
     fontFamily: 'Gibson-Regular',
     color: 'white',
+  },
+  top: {
+    height: 170,
+    width: Dimensions.get('window').width - 30,
+    backgroundColor: '#B5DEFF35',
+    position: 'absolute',
+    borderBottomRightRadius: 200,
+    borderBottomLeftRadius: 20,
+  },
+  openText: {
+    fontSize: 28,
+    color: '#05375a',
+    fontWeight: '600',
+    marginVertical: 12,
+    letterSpacing: 0.5,
+  },
+  cardText: {
+    fontWeight: '400',
+    fontSize: 18,
+    letterSpacing: 0.5,
+    color: '#05375a',
+    maxWidth: 230,
+    textTransform: 'capitalize',
+    marginHorizontal: 20,
+  },
+  cardImage: {
+    height: 150,
+    width: 160,
+    position: 'absolute',
+    right: 5,
+    bottom: 0,
   },
 });
 export default MainScreen;

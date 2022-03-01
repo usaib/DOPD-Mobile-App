@@ -1,13 +1,14 @@
 import React, {useState} from 'react';
-import {View, StyleSheet, Image} from 'react-native';
+import {View, StyleSheet, Image, Dimensions} from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
-import {Button, TextInput, Text, Snackbar} from 'react-native-paper';
+import {Button, TextInput, Text, Snackbar, Surface} from 'react-native-paper';
 import {Formik} from 'formik';
 import * as yup from 'yup';
 import {useUserDispatch} from '../context/userContext';
 import {signIn} from '../services/users';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Spinner from 'react-native-loading-spinner-overlay';
+import {styles} from '../components/RegisterForm';
 
 const validationSchema = yup.object().shape({
   email: yup
@@ -21,6 +22,7 @@ function LoginScreen({navigation}) {
   const [toggleCheckBox, setToggleCheckBox] = useState(true);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
+  const [passwordVisible, setPasswordVisible] = useState(true);
   const userDispatch = useUserDispatch();
   const storeData = async (key, value) => {
     try {
@@ -31,173 +33,213 @@ function LoginScreen({navigation}) {
   };
   const onDismissSnackBar = () => setError(false);
 
-  return (
-    <Formik
-      initialValues={{email: '', password: ''}}
-      validationSchema={validationSchema}
-      onSubmit={async (values, actions) => {
-        setLoading(true);
-        console.log(values);
-        try {
-          const resp = await signIn({
-            email: values.email,
-            password: values.password,
-            rememberMe: values.rememberMe,
-          });
+  const onSubmit = async (values, actions) => {
+    setLoading(true);
+    console.log(values);
+    try {
+      const resp = await signIn({
+        email: values.email,
+        password: values.password,
+        rememberMe: values.rememberMe,
+      });
 
-          if (resp) {
-            setTimeout(() => {
-              userDispatch({type: 'LOGIN_SUCCESS'});
-              storeData('isAuthenticated', 'true');
-              console.log(resp.data.data.userInfo.id);
-              const id = '' + resp.data.data.userInfo.id;
-              storeData('id', id);
-              setLoading(false);
-            }, 500);
-          } else {
-            console.log('login failed');
-            setLoading(false);
-            actions.resetForm({
-              values: {
-                password: '',
-              },
-            });
-          }
-        } catch (e) {
-          console.log('An error has occurred', e);
+      if (resp) {
+        setTimeout(() => {
+          userDispatch({type: 'LOGIN_SUCCESS'});
+          storeData('isAuthenticated', 'true');
+          console.log(resp.data.data.userInfo.id);
+          const id = '' + resp.data.data.userInfo.id;
+          storeData('id', id);
           setLoading(false);
-          setError(true);
-          actions.resetForm({
-            values: {
-              password: '',
-            },
-          });
-        }
+        }, 500);
+      } else {
+        console.log('login failed');
         setLoading(false);
-      }}>
-      {({handleChange, handleBlur, handleSubmit, values, errors, touched}) => (
-        <View style={styles.container}>
-          <Spinner visible={loading} textStyle={styles.spinnerTextStyle} />
-          <Snackbar
-            visible={error}
-            onDismiss={onDismissSnackBar}
-            duration={1000}>
-            email or password is invalid
-          </Snackbar>
-          <View style={styles.logoView}>
+        actions.resetForm({
+          values: {
+            password: '',
+          },
+        });
+      }
+    } catch (e) {
+      console.log('An error has occurred', e);
+      setLoading(false);
+      setError(true);
+      actions.resetForm({
+        values: {
+          password: '',
+        },
+      });
+    }
+    setLoading(false);
+  };
+
+  return (
+    <View style={styles.mainCont}>
+      <Spinner visible={loading} textStyle={styles.spinnerTextStyle} />
+      <Snackbar visible={error} onDismiss={onDismissSnackBar} duration={1000}>
+        email or password is invalid
+      </Snackbar>
+      <View style={styles.header}>
+        <View style={styles.imgCont}>
+          <View style={styles.imgContin}>
             <Image
-              source={require('../images/stethoscopes.png')}
-              style={{height: 100, width: 100}}
+              source={require('../images/login.png')}
+              style={{height: 30, width: 30, top: 7, left: 7}}
             />
-          </View>
-          <View style={styles.loginView}>
-            <TextInput
-              label="Email"
-              mode="outlined"
-              onChangeText={handleChange('email')}
-              onBlur={handleBlur('email')}
-              value={values.email}
-              error={errors.email}
-            />
-            <Text style={styles.errorText}>
-              {touched.email && errors.email}
-            </Text>
-            <TextInput
-              type="password"
-              label="Password"
-              mode="outlined"
-              secureTextEntry={true}
-              onBlur={handleBlur('password')}
-              value={values.password}
-              error={errors.password}
-              onChangeText={handleChange('password')}
-            />
-            <Text style={styles.errorText}>
-              {touched.password && errors.password}
-            </Text>
-            <View style={styles.checkboxView}>
-              <CheckBox
-                disabled={false}
-                value={toggleCheckBox}
-                onValueChange={prevState => setToggleCheckBox(!toggleCheckBox)}
-                onCheckColor="#0381d1"
-                tintColors={{true: '#0381d1', false: '#00000'}}
-              />
-              <Text style={styles.text}>Remember Me</Text>
-            </View>
-            <Button
-              loading={loading}
-              style={styles.button}
-              icon="lock"
-              mode="contained"
-              onPress={handleSubmit}
-              title="Submit">
-              <Text style={styles.button}>Login</Text>
-            </Button>
-            <View style={styles.forgotPasswordView}>
-              <Text style={styles.forgotText}>Forgot password?</Text>
-              <Text style={styles.forgotText}>No account? Sign Up</Text>
-            </View>
           </View>
         </View>
-      )}
-    </Formik>
+        <View style={styles.tip}></View>
+      </View>
+      <View style={styles.subCont}>
+        <Text style={styles.head}>Hey, Welcome Back!</Text>
+        <Text style={[styles.subhead, {color: '#a1a1a1'}]}>
+          If you are new /{' '}
+          <Text
+            onPress={() => navigation.navigate('Signup')}
+            style={{fontWeight: '600', color: '#05375a'}}>
+            Sign up
+          </Text>
+        </Text>
+        <Formik
+          initialValues={{email: '', password: ''}}
+          validationSchema={validationSchema}
+          onSubmit={onSubmit}>
+          {({
+            handleChange,
+            handleBlur,
+            handleSubmit,
+            values,
+            errors,
+            touched,
+          }) => (
+            <View
+              style={{
+                height: Dimensions.get('window').height,
+                width: Dimensions.get('window').width,
+                position: 'relative',
+                paddingHorizontal: 20,
+              }}>
+              <View
+                style={{
+                  flexDirection: 'column',
+                }}>
+                <TextInput
+                  theme={{roundness: 10}}
+                  mode="outlined"
+                  label="Email"
+                  onChangeText={handleChange('email')}
+                  onBlur={handleBlur('email')}
+                  value={values.email}
+                  activeOutlineColor="#05375a"
+                  outlineColor="#d9d9d9"
+                  style={styles.textInput}
+                />
+                <Text style={styles.errorText}>
+                  {touched.email && errors.email}
+                </Text>
+
+                <TextInput
+                  theme={{roundness: 10}}
+                  label="Password"
+                  mode="outlined"
+                  right={
+                    <TextInput.Icon
+                      name={passwordVisible ? 'eye' : 'eye-off'}
+                      color="#0381d1"
+                      onPress={() => setPasswordVisible(!passwordVisible)}
+                    />
+                  }
+                  secureTextEntry={passwordVisible}
+                  onChangeText={handleChange('password')}
+                  onBlur={handleBlur('password')}
+                  value={values.password}
+                  activeOutlineColor="#05375a"
+                  outlineColor="#d9d9d9"
+                  style={styles.textInput}
+                />
+                <Text style={styles.errorText}>
+                  {touched.password && errors.password}
+                </Text>
+                <Text
+                  style={{color: '#05375a', fontWeight: '500'}}
+                  onPress={() => console.log('Forgot Password')}>
+                  {' '}
+                  Forgot Password?
+                </Text>
+              </View>
+              <Surface style={[styles.btnCont]}>
+                <Button
+                  loading={loading}
+                  style={styles.submitBtn}
+                  icon="lock"
+                  mode="contained"
+                  onPress={handleSubmit}
+                  title="Submit">
+                  <Text style={styles.button}>Login</Text>
+                </Button>
+              </Surface>
+            </View>
+          )}
+        </Formik>
+      </View>
+    </View>
   );
 }
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#0381d1',
-  },
-  spinnerTextStyle: {
-    color: '#0381d1',
-  },
-  logoView: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: '45%',
-    width: '100%',
-    backgroundColor: '#0381d1',
-  },
-  loginView: {
-    justifyContent: 'center',
-    padding: 20,
-    width: '100%',
-    height: '55%',
-    backgroundColor: 'white',
-    borderTopLeftRadius: 50,
-    borderTopRightRadius: 50,
-  },
-  button: {
-    fontFamily: 'Gibson-Regular',
-    color: 'white',
-  },
-  title: {fontFamily: 'Gibson-Regular', color: 'white', fontSize: 40},
-  checkboxView: {
-    flexDirection: 'row',
-    bottom: 10,
-  },
-  text: {
-    bottom: -5,
-    color: '#0381d1',
-    fontFamily: 'Gibson-Regular',
-    fontSize: 16,
-  },
-  errorText: {
-    color: 'red',
-    fontFamily: 'Gibson-Regular',
-    fontSize: 16,
-  },
-  forgotText: {
-    marginLeft: 10,
-    color: '#0381d1',
-    fontFamily: 'Gibson-Regular',
-    fontSize: 16,
-  },
-  forgotPasswordView: {
-    flexDirection: 'row',
-    top: 5,
-    justifyContent: 'space-between',
-  },
-});
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     backgroundColor: '#0381d1',
+//   },
+//   spinnerTextStyle: {
+//     color: '#0381d1',
+//   },
+//   logoView: {
+//     justifyContent: 'center',
+//     alignItems: 'center',
+//     height: '45%',
+//     width: '100%',
+//     backgroundColor: '#0381d1',
+//   },
+//   loginView: {
+//     justifyContent: 'center',
+//     padding: 20,
+//     width: '100%',
+//     height: '55%',
+//     backgroundColor: 'white',
+//     borderTopLeftRadius: 50,
+//     borderTopRightRadius: 50,
+//   },
+//   button: {
+//     fontFamily: 'Gibson-Regular',
+//     color: 'white',
+//   },
+//   title: {fontFamily: 'Gibson-Regular', color: 'white', fontSize: 40},
+//   checkboxView: {
+//     flexDirection: 'row',
+//     bottom: 10,
+//   },
+//   text: {
+//     bottom: -5,
+//     color: '#0381d1',
+//     fontFamily: 'Gibson-Regular',
+//     fontSize: 16,
+//   },
+//   errorText: {
+//     color: 'red',
+//     fontFamily: 'Gibson-Regular',
+//     fontSize: 16,
+//   },
+//   forgotText: {
+//     marginLeft: 10,
+//     color: '#0381d1',
+//     fontFamily: 'Gibson-Regular',
+//     fontSize: 16,
+//   },
+//   forgotPasswordView: {
+//     flexDirection: 'row',
+//     top: 5,
+//     justifyContent: 'space-between',
+//   },
+// });
 export default LoginScreen;
