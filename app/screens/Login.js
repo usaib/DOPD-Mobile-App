@@ -26,7 +26,7 @@ export const Login = () => {
       <View style={styles.subCont}>
         <Text style={styles.head}>Hey, Welcome Back!</Text>
         <Text style={[styles.subhead, {color: '#a1a1a1'}]}>
-          If you are new /{' '}
+          Not have an Account ?{' '}
           <Text
             onPress={() => console.log('signup screen')}
             style={{fontWeight: '600', color: '#05375a'}}>

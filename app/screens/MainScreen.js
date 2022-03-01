@@ -43,16 +43,7 @@ function MainScreen({navigation}) {
         }}
         onMenuPress={toggle}
       />
-      <View style={styles.cardView}>
-        <TouchableNativeFeedback
-          onPress={() => {
-            setRippleOverflow(!rippleOverflow);
-          }}
-          background={TouchableNativeFeedback.Ripple(
-            '#D3D3D3',
-            rippleOverflow,
-          )}></TouchableNativeFeedback>
-      </View>
+
       <View style={styles.cardView}></View>
       <ScrollView
         style={{
@@ -62,7 +53,7 @@ function MainScreen({navigation}) {
           flexDirection: 'column',
           position: 'relative',
           width: Dimensions.get('window').width,
-          height: Dimensions.get('window').height + 1000,
+          height: Dimensions.get('window').height,
         }}>
         <View style={styles.top}></View>
         <Text

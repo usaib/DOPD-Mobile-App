@@ -9,6 +9,7 @@ import {signIn} from '../services/users';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Spinner from 'react-native-loading-spinner-overlay';
 import {styles} from '../components/RegisterForm';
+import {ErrorSnackbar} from '../components/Snackbar';
 
 const validationSchema = yup.object().shape({
   email: yup
@@ -77,9 +78,6 @@ function LoginScreen({navigation}) {
   return (
     <View style={styles.mainCont}>
       <Spinner visible={loading} textStyle={styles.spinnerTextStyle} />
-      <Snackbar visible={error} onDismiss={onDismissSnackBar} duration={1000}>
-        email or password is invalid
-      </Snackbar>
       <View style={styles.header}>
         <View style={styles.imgCont}>
           <View style={styles.imgContin}>
@@ -93,13 +91,11 @@ function LoginScreen({navigation}) {
       </View>
       <View style={styles.subCont}>
         <Text style={styles.head}>Hey, Welcome Back!</Text>
-        <Text style={[styles.subhead, {color: '#a1a1a1'}]}>
-          If you are new /{' '}
-          <Text
-            onPress={() => navigation.navigate('Signup')}
-            style={{fontWeight: '600', color: '#05375a'}}>
-            Sign up
-          </Text>
+        <Text
+          onPress={() => navigation.navigate('Signup')}
+          style={[styles.subhead, {color: '#a1a1a1'}]}>
+          Not have an Account ?{' '}
+          <Text style={{fontWeight: '600', color: '#05375a'}}>Sign up</Text>
         </Text>
         <Formik
           initialValues={{email: '', password: ''}}
@@ -179,6 +175,9 @@ function LoginScreen({navigation}) {
                   <Text style={styles.button}>Login</Text>
                 </Button>
               </Surface>
+              <ErrorSnackbar
+                message={'Email or Password is Invalid'}
+                error={error}></ErrorSnackbar>
             </View>
           )}
         </Formik>
