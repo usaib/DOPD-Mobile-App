@@ -177,7 +177,8 @@ function LoginScreen({navigation}) {
               </Surface>
               <ErrorSnackbar
                 message={'Email or Password is Invalid'}
-                error={error}></ErrorSnackbar>
+                error={error}
+                setError={setError}></ErrorSnackbar>
             </View>
           )}
         </Formik>

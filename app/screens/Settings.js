@@ -254,7 +254,7 @@ const Settings = ({navigation}) => {
 
   const renderModalWithSymptoms = symptoms => {
     return symptoms.map(symptom => (
-      <List.Item title={`${symptom}`} style={styles.listStyles} />
+      <List.Item title={`${symptom.value}`} style={styles.listStyles} />
     ));
   };
 
@@ -320,7 +320,7 @@ const Settings = ({navigation}) => {
               Select Symptoms from here. Click outside this area to dismiss.
             </Text>
             {renderSelectedSymptoms(symptoms[bodyPart])}
-            {console.log(symptoms[bodyPart])}
+            {/* {console.log(symptoms[bodyPart])} */}
             {/* ;{renderModalWithSymptoms(symptoms[bodyPart])} */}
           </ScrollView>
           <Button onPress={hideModal}>Done</Button>
@@ -362,14 +362,7 @@ const Settings = ({navigation}) => {
           expanded={expanded}
           onPress={handlePress}>
           <ScrollView>
-            <List.Item title="Continouse Sneezing" style={styles.listStyles} />
-            <List.Item title="Sour Throat" style={styles.listStyles} />
-            <List.Item title="Continouse Sneezing" style={styles.listStyles} />
-            <List.Item title="Sour Throat" style={styles.listStyles} />
-            <List.Item title="Continouse Sneezing" style={styles.listStyles} />
-            <List.Item title="Sour Throat" style={styles.listStyles} />
-            <List.Item title="Continouse Sneezing" style={styles.listStyles} />
-            <List.Item title="Sour Throat" style={styles.listStyles} />
+            {renderModalWithSymptoms(selectedSymptoms.selectedList)}
           </ScrollView>
         </List.Accordion>
       </List.Section>
