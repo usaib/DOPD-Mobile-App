@@ -6,6 +6,7 @@ import {List, Button, Menu, Divider, Modal, Portal} from 'react-native-paper';
 import AppBarWrapper from '../components/AppBar';
 import {ScrollView} from 'react-native-gesture-handler';
 import {PaperSelect} from 'react-native-paper-select';
+import {Icon} from 'react-native-elements';
 
 const getRandomColor = () => {
   const letters = '0123456789ABCDEF';
@@ -252,10 +253,31 @@ const Settings = ({navigation}) => {
   };
   const hideModal = () => setVisible(false);
 
+  const onDelete = data => {
+    setSelectedSymptoms(prev => {
+      return {
+        ...prev,
+        selectedList: prev.selectedList.filter(item => {
+          return data._id != item._id;
+        }),
+      };
+    });
+  };
+  const deleteHandler = symptom => (
+    <Icon name="delete" color={'#3498DB'} onPress={() => onDelete(symptom)} />
+  );
   const renderModalWithSymptoms = symptoms => {
-    return symptoms.map(symptom => (
-      <List.Item title={`${symptom.value}`} style={styles.listStyles} />
-    ));
+    return symptoms.map(symptom => {
+      const data = symptom;
+      return (
+        <List.Item
+          title={`${symptom.value}`}
+          style={styles.listStyles}
+          bottomDivider
+          right={props => deleteHandler(data, data)}
+        />
+      );
+    });
   };
 
   renderSelectedSymptoms = symptomsList => (
