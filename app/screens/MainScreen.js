@@ -162,7 +162,7 @@ function MainScreen({navigation}) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFF0',
+    backgroundColor: '#FFFFFF',
     flexDirection: 'column',
   },
   cardView: {

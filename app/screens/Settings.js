@@ -20,16 +20,16 @@ const RECTANGLE_MAP = [
     id: '0',
     name: 'Left Foot',
     shape: 'rectangle',
-    x2: 110,
+    x2: 113,
     y2: 540,
-    x1: 80,
+    x1: 70,
     y1: 500,
   },
   {
     id: '1',
     name: 'Right Foot',
     shape: 'rectangle',
-    x2: 155,
+    x2: 170,
     y2: 540,
     x1: 125,
     y1: 500,
@@ -40,151 +40,183 @@ const RECTANGLE_MAP = [
     shape: 'rectangle',
     x2: 110,
     y2: 400,
-    x1: 80,
-    y1: 370,
+    x1: 65,
+    y1: 362,
   },
   {
     id: '3',
     name: 'Right Knee',
     shape: 'rectangle',
-    x2: 155,
+    x2: 175,
     y2: 400,
     x1: 125,
-    y1: 370,
+    y1: 363,
   },
   {
     id: '4',
     name: 'Stomach',
     shape: 'rectangle',
-    x2: 155,
-    y2: 240,
-    x1: 80,
-    y1: 165,
+    x2: 169,
+    y2: 250,
+    x1: 70,
+    y1: 157,
   },
   {
     id: '5',
     name: 'Left Hand',
     shape: 'rectangle',
     x2: 40,
-    y2: 315,
+    y2: 310,
     x1: 5,
-    y1: 250,
+    y1: 260,
   },
   {
     id: '6',
     name: 'Right Hand',
     shape: 'rectangle',
     x2: 235,
-    y2: 315,
+    y2: 310,
     x1: 200,
-    y1: 250,
+    y1: 260,
   },
   {
     id: '17',
-    name: 'Eyes',
-    shape: 'rectangle',
+    name: 'Right Eye',
+    shape: 'circle',
+    radius: 18,
     x2: 135,
     y2: 38,
-    x1: 100,
-    y1: 28,
+    x1: 96,
+    y1: 36,
+  },
+  {
+    id: '26',
+    name: 'Left Eye',
+    shape: 'circle',
+    radius: 18,
+    x2: 135,
+    y2: 38,
+    x1: 128,
+    y1: 36,
   },
   {
     id: '18',
     name: 'Mouth',
     shape: 'rectangle',
-    x2: 130,
-    y2: 60,
-    x1: 104,
-    y1: 50,
+    x2: 135,
+    y2: 70,
+    x1: 107,
+    y1: 61,
   },
   {
     id: '19',
     name: 'Nose',
     shape: 'rectangle',
-    x2: 123,
-    y2: 50,
-    x1: 110,
-    y1: 37,
+    x2: 127,
+    y2: 59,
+    x1: 115,
+    y1: 45,
   },
   {
     id: '20',
     name: 'Right Ear',
     shape: 'rectangle',
-    x2: 145,
-    y2: 50,
-    x1: 138,
-    y1: 32,
+    x2: 155,
+    y2: 65,
+    x1: 147,
+    y1: 45,
   },
   {
     id: '21',
     name: 'Left Ear',
     shape: 'rectangle',
     x2: 95,
-    y2: 50,
-    x1: 88,
-    y1: 32,
+    y2: 65,
+    x1: 87,
+    y1: 45,
   },
   {
     id: '8',
     name: 'Head',
     shape: 'rectangle',
-    x2: 140,
-    y2: 28,
-    x1: 95,
-    y1: 2,
+    x2: 150,
+    y2: 34,
+    x1: 90,
+    y1: 12,
   },
   {
     id: '9',
     name: 'Right Arm',
     shape: 'rectangle',
-    x2: 210,
-    y2: 255,
-    x1: 175,
+    x2: 225,
+    y2: 210,
+    x1: 181,
     y1: 120,
+  },
+  {
+    id: '22',
+    name: 'Right Arm',
+    shape: 'circle',
+    radius: 45,
+    x2: 225,
+    y2: 210,
+    x1: 193,
+    y1: 205,
+  },
+  {
+    id: '23',
+    name: 'Left Arm',
+    shape: 'circle',
+    radius: 45,
+    x2: 225,
+    y2: 210,
+    x1: 6,
+    y1: 205,
   },
   {
     id: '10',
     name: 'Left Arm',
     shape: 'rectangle',
     x2: 60,
-    y2: 255,
-    x1: 25,
+    y2: 210,
+    x1: 15,
     y1: 120,
   },
   {
     id: '11',
     name: 'Throat',
-    shape: 'rectangle',
+    shape: 'circle',
+    radius: 33,
     x2: 145,
     y2: 90,
-    x1: 90,
-    y1: 65,
+    x1: 105,
+    y1: 73,
   },
   {
     id: '12',
     name: 'Chest',
     shape: 'rectangle',
-    x2: 165,
-    y2: 150,
-    x1: 70,
-    y1: 92,
+    x2: 175,
+    y2: 153,
+    x1: 65,
+    y1: 98,
   },
   {
     id: '13',
     name: 'Left Thigh',
     shape: 'rectangle',
     x2: 110,
-    y2: 360,
-    x1: 70,
+    y2: 357,
+    x1: 57,
     y1: 270,
   },
   {
     id: '14',
     name: 'Right Thigh',
     shape: 'rectangle',
-    x2: 165,
-    y2: 360,
-    x1: 125,
+    x2: 185,
+    y2: 357,
+    x1: 130,
     y1: 270,
   },
   {
@@ -192,7 +224,7 @@ const RECTANGLE_MAP = [
     name: 'Left Shin',
     shape: 'rectangle',
     x2: 110,
-    y2: 490,
+    y2: 495,
     x1: 80,
     y1: 410,
   },
@@ -200,10 +232,30 @@ const RECTANGLE_MAP = [
     id: '16',
     name: 'Right Shin',
     shape: 'rectangle',
+    x2: 160,
+    y2: 495,
+    x1: 135,
+    y1: 410,
+  },
+  {
+    id: '24',
+    name: 'Left Shin',
+    shape: 'circle',
+    radius: 50,
+    x2: 110,
+    y2: 450,
+    x1: 67,
+    y1: 400,
+  },
+  {
+    id: '25',
+    name: 'Right Shin',
+    shape: 'circle',
+    radius: 50,
     x2: 155,
     y2: 490,
     x1: 125,
-    y1: 410,
+    y1: 400,
   },
 ];
 
@@ -231,6 +283,7 @@ const Settings = ({navigation}) => {
   const [visible, setVisible] = useState(false);
   const [bodyPart, setBodyPart] = useState('Nose');
   const [expanded, setExpanded] = useState(true);
+  const [rotated, setRotated] = useState(false);
   const [selectedSymptoms, setSelectedSymptoms] = useState({
     value: '',
     list: [
@@ -348,7 +401,36 @@ const Settings = ({navigation}) => {
           <Button onPress={hideModal}>Done</Button>
         </Modal>
       </Portal>
-      <View style={{flex: 1, alignItems: 'center', padding: 30}}>
+      <View
+        style={{
+          flex: 0.1,
+          alignItems: 'flex-end',
+          justifyContent: 'flex-end',
+          flexDirection: 'row',
+          padding: 0,
+          margin: 0,
+        }}>
+        <Icon
+          name="axis-z-rotate-counterclockwise"
+          type="material-community"
+          size={30}
+          color={'#3498DB'}
+        />
+        <Button
+          style={{
+            alignItems: 'flex-end',
+            justifyContent: 'flex-end',
+            padding: 0,
+            margin: 0,
+          }}
+          onPress={() => {
+            setRotated(prev => !prev);
+            console.log(rotated);
+          }}>
+          Rotate Body
+        </Button>
+      </View>
+      <View style={{flex: 1, alignItems: 'center', padding: 0}}>
         <ReactNativeZoomableView
           maxZoom={1.5}
           minZoom={0.5}
@@ -359,9 +441,11 @@ const Settings = ({navigation}) => {
           <ImageMapper
             imgHeight={551}
             imgWidth={244}
-            imgSource={{
-              uri: 'https://raw.githubusercontent.com/msalo3/react-native-image-mapper/master/Examples/human.png',
-            }}
+            imgSource={
+              rotated
+                ? require('../images/Body.png')
+                : require('../images/bodyBack.jpg')
+            }
             imgMap={RECTANGLE_MAP}
             onPress={(item, idx, event) =>
               mapperAreaClickHandler(item, idx, event)
@@ -395,7 +479,7 @@ const Settings = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#fbfbfb',
     flexDirection: 'column',
   },
   modal: {
