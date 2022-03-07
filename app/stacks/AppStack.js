@@ -3,6 +3,8 @@ import {createDrawerNavigator} from '@react-navigation/drawer';
 import Settings from '../screens/Settings';
 import MainScreen from '../screens/MainScreen';
 import DrawerList from '../components/DrawerList';
+import {Icon} from 'react-native-elements';
+import HomeStack from './HomeStack';
 
 const Drawer = createDrawerNavigator();
 
@@ -30,25 +32,44 @@ const AppStack = () => {
       }}
       drawerContent={props => <DrawerList {...props} />}>
       <Drawer.Screen
-        name="Main"
-        options={{headerShown: false}}
-        component={MainScreen}
+        name="Home"
+        options={{
+          headerShown: false,
+          drawerIcon: () => (
+            <Icon
+              name="home"
+              type="feather"
+              color={'#3498DB'}
+              onPress={() => onDelete(symptom)}
+            />
+          ),
+        }}
+        component={HomeStack}
         labelStyle={{
           activeTintColor: '#e91e63',
           itemStyle: {marginVertical: 5},
           fontFamily: 'Gibson-Regular',
         }}
       />
-      <Drawer.Screen
+      {/* <Drawer.Screen
         name="Settings"
-        options={{headerShown: false}}
+        options={{
+          headerShown: false,
+          drawerIcon: () => (
+            <Icon
+              name="settings"
+              color={'#3498DB'}
+              onPress={() => onDelete(symptom)}
+            />
+          ),
+        }}
         component={Settings}
         labelStyle={{
           activeTintColor: '#e91e63',
           itemStyle: {marginVertical: 5},
           fontFamily: 'Gibson-Regular',
         }}
-      />
+      /> */}
     </Drawer.Navigator>
   );
 };

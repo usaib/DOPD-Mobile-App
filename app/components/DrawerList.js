@@ -13,6 +13,7 @@ import {
   DrawerItemList,
   DrawerItem,
 } from '@react-navigation/drawer';
+import {Icon} from 'react-native-elements';
 
 const DrawerList = props => {
   return (
@@ -36,10 +37,18 @@ const DrawerList = props => {
           labelStyle={{
             fontFamily: 'Gibson-Regular',
           }}
+          icon={() => (
+            <Icon
+              name="world-o"
+              type="fontisto"
+              color={'#3498DB'}
+              onPress={() => onDelete(symptom)}
+            />
+          )}
 
           //   onPress={}
         />
-        <View style={styles.customItem}>
+        {/* <View style={styles.customItem}>
           <Text
             style={{
               fontFamily: 'Gibson-Regular',
@@ -52,7 +61,7 @@ const DrawerList = props => {
             source={require('../images/star.png')}
             style={styles.iconStyle}
           />
-        </View>
+        </View> */}
       </DrawerContentScrollView>
     </SafeAreaView>
   );

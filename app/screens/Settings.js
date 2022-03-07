@@ -7,6 +7,7 @@ import AppBarWrapper from '../components/AppBar';
 import {ScrollView} from 'react-native-gesture-handler';
 import {PaperSelect} from 'react-native-paper-select';
 import {Icon} from 'react-native-elements';
+import {FloatingButton} from '../components/Fab';
 
 const getRandomColor = () => {
   const letters = '0123456789ABCDEF';
@@ -258,6 +259,184 @@ const RECTANGLE_MAP = [
     y1: 400,
   },
 ];
+const BACK_MAP = [
+  {
+    id: '27',
+    name: 'Left Ankle',
+    shape: 'rectangle',
+    x2: 113,
+    y2: 540,
+    x1: 70,
+    y1: 500,
+  },
+  {
+    id: '28',
+    name: 'Right Ankle',
+    shape: 'rectangle',
+    x2: 170,
+    y2: 540,
+    x1: 125,
+    y1: 500,
+  },
+  {
+    id: '2',
+    name: 'Left Knee',
+    shape: 'rectangle',
+    x2: 110,
+    y2: 400,
+    x1: 65,
+    y1: 362,
+  },
+  {
+    id: '3',
+    name: 'Right Knee',
+    shape: 'rectangle',
+    x2: 175,
+    y2: 400,
+    x1: 129,
+    y1: 363,
+  },
+  {
+    id: '29',
+    name: 'Back',
+    shape: 'rectangle',
+    x2: 181,
+    y2: 230,
+    x1: 65,
+    y1: 100,
+  },
+  {
+    id: '5',
+    name: 'Left Hand',
+    shape: 'rectangle',
+    x2: 40,
+    y2: 310,
+    x1: 5,
+    y1: 260,
+  },
+  {
+    id: '6',
+    name: 'Right Hand',
+    shape: 'rectangle',
+    x2: 235,
+    y2: 310,
+    x1: 200,
+    y1: 260,
+  },
+  {
+    id: '8',
+    name: 'Head',
+    shape: 'rectangle',
+    x2: 150,
+    y2: 70,
+    x1: 90,
+    y1: 12,
+  },
+  {
+    id: '9',
+    name: 'Right Arm',
+    shape: 'rectangle',
+    x2: 225,
+    y2: 210,
+    x1: 181,
+    y1: 120,
+  },
+  {
+    id: '22',
+    name: 'Right Arm',
+    shape: 'circle',
+    radius: 45,
+    x2: 225,
+    y2: 210,
+    x1: 193,
+    y1: 205,
+  },
+  {
+    id: '23',
+    name: 'Left Arm',
+    shape: 'circle',
+    radius: 45,
+    x2: 225,
+    y2: 210,
+    x1: 6,
+    y1: 205,
+  },
+  {
+    id: '10',
+    name: 'Left Arm',
+    shape: 'rectangle',
+    x2: 60,
+    y2: 210,
+    x1: 15,
+    y1: 120,
+  },
+  {
+    id: '11',
+    name: 'Throat',
+    shape: 'circle',
+    radius: 34,
+    x2: 145,
+    y2: 90,
+    x1: 105,
+    y1: 73,
+  },
+  {
+    id: '30',
+    name: 'Left Hip',
+    shape: 'rectangle',
+    x2: 120,
+    y2: 327,
+    x1: 57,
+    y1: 230,
+  },
+  {
+    id: '31',
+    name: 'Right Hip',
+    shape: 'rectangle',
+    x2: 185,
+    y2: 327,
+    x1: 121,
+    y1: 230,
+  },
+  {
+    id: '15',
+    name: 'Left Shin',
+    shape: 'rectangle',
+    x2: 110,
+    y2: 495,
+    x1: 80,
+    y1: 410,
+  },
+  {
+    id: '16',
+    name: 'Right Shin',
+    shape: 'rectangle',
+    x2: 160,
+    y2: 495,
+    x1: 135,
+    y1: 410,
+  },
+  {
+    id: '24',
+    name: 'Left Shin',
+    shape: 'circle',
+    radius: 50,
+    x2: 110,
+    y2: 450,
+    x1: 67,
+    y1: 400,
+  },
+  {
+    id: '25',
+    name: 'Right Shin',
+    shape: 'circle',
+    radius: 50,
+    x2: 155,
+    y2: 490,
+    x1: 125,
+    y1: 400,
+  },
+];
 
 const symptoms = {
   Head: [
@@ -283,7 +462,7 @@ const Settings = ({navigation}) => {
   const [visible, setVisible] = useState(false);
   const [bodyPart, setBodyPart] = useState('Nose');
   const [expanded, setExpanded] = useState(true);
-  const [rotated, setRotated] = useState(false);
+  const [rotated, setRotated] = useState(true);
   const [selectedSymptoms, setSelectedSymptoms] = useState({
     value: '',
     list: [
@@ -300,6 +479,7 @@ const Settings = ({navigation}) => {
   const toggle = () => {
     navigation?.toggleDrawer();
   };
+
   const showModal = bodyPart => {
     setVisible(true);
     setBodyPart(bodyPart);
@@ -355,6 +535,10 @@ const Settings = ({navigation}) => {
     />
   );
   logOutZoomState = (event, gestureState, zoomableViewEventObject) => {};
+  const onModelRotate = () => {
+    setRotated(prev => !prev);
+    console.log(rotated);
+  };
 
   const mapperAreaClickHandler = async (item, idx, event) => {
     const currentSelectedAreaId = selectedAreaId;
@@ -383,7 +567,14 @@ const Settings = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      <AppBarWrapper onPress={false} onMenuPress={toggle} />
+      <AppBarWrapper
+        title={'Go Smart'}
+        onPress={() => {
+          navigation.navigate('Main');
+        }}
+        showButton={false}
+        onMenuPress={toggle}
+      />
       <Portal>
         <Modal
           visible={visible}
@@ -403,32 +594,18 @@ const Settings = ({navigation}) => {
       </Portal>
       <View
         style={{
-          flex: 0.1,
           alignItems: 'flex-end',
           justifyContent: 'flex-end',
           flexDirection: 'row',
           padding: 0,
           margin: 0,
         }}>
-        <Icon
-          name="axis-z-rotate-counterclockwise"
-          type="material-community"
-          size={30}
-          color={'#3498DB'}
-        />
-        <Button
-          style={{
-            alignItems: 'flex-end',
-            justifyContent: 'flex-end',
-            padding: 0,
-            margin: 0,
+        <FloatingButton
+          onRotate={onModelRotate}
+          onDone={() => {
+            console.log('Done with Symptoms');
           }}
-          onPress={() => {
-            setRotated(prev => !prev);
-            console.log(rotated);
-          }}>
-          Rotate Body
-        </Button>
+        />
       </View>
       <View style={{flex: 1, alignItems: 'center', padding: 0}}>
         <ReactNativeZoomableView
@@ -446,7 +623,7 @@ const Settings = ({navigation}) => {
                 ? require('../images/Body.png')
                 : require('../images/bodyBack.jpg')
             }
-            imgMap={RECTANGLE_MAP}
+            imgMap={rotated ? RECTANGLE_MAP : BACK_MAP}
             onPress={(item, idx, event) =>
               mapperAreaClickHandler(item, idx, event)
             }
@@ -467,9 +644,7 @@ const Settings = ({navigation}) => {
           left={props => <List.Icon {...props} icon="equal" color="#FFFFFF" />}
           expanded={expanded}
           onPress={handlePress}>
-          <ScrollView>
-            {renderModalWithSymptoms(selectedSymptoms.selectedList)}
-          </ScrollView>
+          {renderModalWithSymptoms(selectedSymptoms.selectedList)}
         </List.Accordion>
       </List.Section>
     </View>
@@ -490,6 +665,8 @@ const styles = StyleSheet.create({
   },
   listStyles: {
     backgroundColor: '#FFFFFF',
+    marginLeft: 0,
+    left: 0,
   },
   listAccordionStyles: {backgroundColor: '#3498DB', color: '#FFFFFF'},
   Text: {

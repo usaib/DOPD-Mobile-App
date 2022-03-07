@@ -4,19 +4,27 @@ import {Platform, StyleSheet} from 'react-native';
 
 const MORE_ICON = Platform.OS === 'ios' ? 'dots-horizontal' : 'dots-vertical';
 
-function AppBarWrapper({onPress, onMenuPress}) {
+function AppBarWrapper({onPress, onMenuPress, showButton, title}) {
   return (
     <Appbar.Header style={styles.header}>
       <Appbar.Action color="#3498DB" icon="menu" onPress={onMenuPress} />
       <Appbar.Content
-        title="Home"
+        title={title}
         subtitleStyle={{
           fontFamily: 'Gibson-Regular',
         }}
         color="#3498DB"
         subtitle={'Digital OPD'}
       />
-      <Appbar.Action color="#3498DB" icon="logout" onPress={onPress} />
+      {showButton ? (
+        <Appbar.Action color="#3498DB" icon="logout" onPress={onPress} />
+      ) : (
+        <Appbar.Action
+          icon="keyboard-backspace"
+          onPress={onPress}
+          color="#3498DB"
+        />
+      )}
     </Appbar.Header>
   );
 }

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   StyleSheet,
@@ -21,6 +21,8 @@ const LeftContent = props => <Avatar.Icon {...props} icon="folder" />;
 function MainScreen({navigation}) {
   const userDispatch = useUserDispatch();
   const [rippleOverflow, setRippleOverflow] = useState(false);
+  const [showFab, setShowFab] = useState(false);
+
   const removeValue = async value => {
     try {
       await AsyncStorage.removeItem(value);
@@ -33,17 +35,21 @@ function MainScreen({navigation}) {
   const toggle = () => {
     navigation?.toggleDrawer();
   };
+  useEffect(() => {
+    console.log(navigation.getState());
+  }, []);
 
   return (
     <View style={styles.container}>
       <AppBarWrapper
+        showButton={true}
+        title={'Home'}
         onPress={async () => {
           userDispatch({type: 'LOGOUT'});
           await removeValue('isAuthenticated');
         }}
         onMenuPress={toggle}
       />
-
       <View style={styles.cardView}></View>
       <ScrollView
         style={{
@@ -68,6 +74,13 @@ function MainScreen({navigation}) {
         </Text>
         <Text style={styles.openText}>How are you today?</Text>
         <CustomCard
+          onPress={() => {
+            setShowFab(true);
+            navigation.navigate('Settings', {
+              showFab,
+              setShowFab,
+            });
+          }}
           width={345}
           height={180}
           backColor="#B5DEFF"
@@ -116,7 +129,7 @@ function MainScreen({navigation}) {
             right={-20}>
             <View style={{marginTop: 55}}>
               <Text style={[styles.cardText, {fontWeight: '700'}]}>
-                Explore pharmacies near you
+                Explore pharmacy near you
               </Text>
             </View>
             <Image

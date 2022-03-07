@@ -9,6 +9,7 @@ const CustomCard = props => {
     <TouchableNativeFeedback
       onPress={() => {
         setRippleOverflow(!rippleOverflow);
+        props.onPress();
       }}
       background={TouchableNativeFeedback.Ripple('#D3D3D3', false)}>
       <View
