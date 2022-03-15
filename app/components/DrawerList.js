@@ -37,14 +37,7 @@ const DrawerList = props => {
           labelStyle={{
             fontFamily: 'Gibson-Regular',
           }}
-          icon={() => (
-            <Icon
-              name="world-o"
-              type="fontisto"
-              color={'#3498DB'}
-              onPress={() => onDelete(symptom)}
-            />
-          )}
+          icon={() => <Icon name="world-o" type="fontisto" color={'#3498DB'} />}
 
           //   onPress={}
         />

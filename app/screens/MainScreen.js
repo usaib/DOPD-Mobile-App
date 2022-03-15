@@ -21,7 +21,7 @@ const LeftContent = props => <Avatar.Icon {...props} icon="folder" />;
 function MainScreen({navigation}) {
   const userDispatch = useUserDispatch();
   const [rippleOverflow, setRippleOverflow] = useState(false);
-  const [showFab, setShowFab] = useState(false);
+  const [showFab, setShowFab] = useState(true);
 
   const removeValue = async value => {
     try {
@@ -48,6 +48,7 @@ function MainScreen({navigation}) {
           userDispatch({type: 'LOGOUT'});
           await removeValue('isAuthenticated');
         }}
+        showMenu={true}
         onMenuPress={toggle}
       />
       <View style={styles.cardView}></View>

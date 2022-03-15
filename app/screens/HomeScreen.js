@@ -136,7 +136,7 @@ export const Home = () => {
   );
 };
 
-const homeStyles = StyleSheet.create({
+export const homeStyles = StyleSheet.create({
   top: {
     height: 170,
     width: Dimensions.get('window').width - 30,

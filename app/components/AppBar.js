@@ -4,10 +4,12 @@ import {Platform, StyleSheet} from 'react-native';
 
 const MORE_ICON = Platform.OS === 'ios' ? 'dots-horizontal' : 'dots-vertical';
 
-function AppBarWrapper({onPress, onMenuPress, showButton, title}) {
+function AppBarWrapper({onPress, onMenuPress, showButton, title, showMenu}) {
   return (
     <Appbar.Header style={styles.header}>
-      <Appbar.Action color="#3498DB" icon="menu" onPress={onMenuPress} />
+      {showMenu && (
+        <Appbar.Action color="#3498DB" icon="menu" onPress={onMenuPress} />
+      )}
       <Appbar.Content
         title={title}
         subtitleStyle={{
