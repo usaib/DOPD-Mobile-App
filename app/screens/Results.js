@@ -1,15 +1,53 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {View, Text, StyleSheet, Dimensions, ScrollView} from 'react-native';
 import {homeStyles} from './HomeScreen';
 import ProgressBar from '../components/ProgressBar';
 import AppBarWrapper from '../components/AppBar';
+import Spinner from 'react-native-loading-spinner-overlay';
+import {prediction} from '../services/models';
 
-export default Results = ({navigation}) => {
+export default Results = ({navigation, route}) => {
+  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState([]);
+  const {symptomsList} = route.params;
   const toggle = () => {
     navigation?.toggleDrawer();
   };
+  useEffect(() => {
+    const getResults = async (values, actions) => {
+      console.log(values);
+      try {
+        const resp = await prediction({
+          symptoms: symptomsList,
+        });
+        console.log('response', resp.data);
+        setData(resp.data.predictions);
+        if (resp) {
+          setTimeout(() => {
+            setLoading(false);
+          }, 500);
+        } else {
+          console.log('failed');
+          setLoading(false);
+        }
+      } catch (e) {
+        console.log('An error has occurred', e);
+        setLoading(false);
+      }
+      setLoading(false);
+    };
+    getResults();
+  }, [symptomsList]);
+
   return (
     <View>
+      <Spinner
+        visible={loading}
+        animation="none"
+        textContent="Analyzing results..."
+        overlayColor="rgba(0, 0, 0, 0.5)"
+        textStyle={resultStyle.spinnerTextStyle}
+      />
       <AppBarWrapper
         title={'Results'}
         onPress={() => {
@@ -27,6 +65,20 @@ export default Results = ({navigation}) => {
           opinion.
         </Text>
         <View style={resultStyle.cardWrapper}>
+          {data &&
+            data.map(obj => (
+              <View style={resultStyle.resCard}>
+                <ProgressBar
+                  percentage={70}
+                  color={'#2ecc71'}
+                  textColor={'#2ecc71'}
+                />
+                <Text
+                  style={[homeStyles.openText, {marginLeft: 15, fontSize: 25}]}>
+                  {obj}
+                </Text>
+              </View>
+            ))}
           <View style={resultStyle.resCard}>
             <ProgressBar
               percentage={70}
@@ -82,6 +134,9 @@ const resultStyle = StyleSheet.create({
   },
   cardWrapper: {
     marginVertical: 50,
+  },
+  spinnerTextStyle: {
+    color: '#000000',
   },
   resCard: {
     backgroundColor: 'white',

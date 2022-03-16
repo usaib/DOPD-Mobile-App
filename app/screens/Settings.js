@@ -774,9 +774,15 @@ const Settings = ({navigation, route}) => {
           <FloatingButton
             onRotate={onModelRotate}
             onDone={() => {
-              console.log('Done with Symptoms');
+              console.log(selectedSymptoms.selectedList);
+              const symptomsList = selectedSymptoms.selectedList.map(
+                obj => obj.slug,
+              );
+              console.log('Done with Symptoms', symptomsList);
               setShowFab(false);
-              navigation.navigate('Results');
+              navigation.navigate('Results', {
+                symptomsList,
+              });
             }}
           />
         )}
