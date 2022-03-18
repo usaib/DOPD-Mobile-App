@@ -9,7 +9,7 @@ import {
   ScrollView,
 } from 'react-native';
 import {Text, Button} from 'react-native-paper';
-import {useUserDispatch} from '../context/userContext';
+import {useUserDispatch, useUserState} from '../context/userContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AppBarWrapper from '../components/AppBar';
 import {Avatar, Card, Title, Paragraph} from 'react-native-paper';
@@ -20,6 +20,8 @@ const LeftContent = props => <Avatar.Icon {...props} icon="folder" />;
 
 function MainScreen({navigation}) {
   const userDispatch = useUserDispatch();
+  const userState = useUserState();
+  console.log('userstate', userState);
   const [rippleOverflow, setRippleOverflow] = useState(false);
   const [showFab, setShowFab] = useState(true);
 
@@ -35,9 +37,6 @@ function MainScreen({navigation}) {
   const toggle = () => {
     navigation?.toggleDrawer();
   };
-  useEffect(() => {
-    console.log(navigation.getState());
-  }, []);
 
   return (
     <View style={styles.container}>
@@ -47,6 +46,7 @@ function MainScreen({navigation}) {
         onPress={async () => {
           userDispatch({type: 'LOGOUT'});
           await removeValue('isAuthenticated');
+          await removeValue('id');
         }}
         showMenu={true}
         onMenuPress={toggle}
@@ -71,7 +71,7 @@ function MainScreen({navigation}) {
             letterSpacing: 0.5,
             fontWeight: '600',
           }}>
-          Good evening, Usaib Khan !
+          Good evening, {userState.user ? userState.user.name : ''} !
         </Text>
         <Text style={styles.openText}>How are you today?</Text>
         <CustomCard

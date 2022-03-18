@@ -1,11 +1,11 @@
 import axios from 'axios';
-const BASE_URL = 'https://cc31-103-196-160-150.ngrok.io';
+const BASE_URL = 'https://bc07-103-196-162-122.ngrok.io';
 const fetchUser = async params => {
   console.log('In service call', params);
   return axios.post(
     BASE_URL + '/me',
     {
-      id: params,
+      id: params.id,
     },
     {
       headers: {
@@ -21,6 +21,23 @@ const signIn = async params => {
     {
       email: params.email,
       password: params.password,
+    },
+    {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    },
+  );
+};
+
+const create = async params => {
+  console.log('In service call', params);
+  return axios.post(
+    BASE_URL + '/user/create',
+    {
+      user: {
+        ...params,
+      },
     },
     {
       headers: {
@@ -50,4 +67,4 @@ const signIn = async params => {
 //   }
 // };
 // fetchuser();
-export {fetchUser, signIn};
+export {fetchUser, signIn, create};

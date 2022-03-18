@@ -14,8 +14,10 @@ import {
   DrawerItem,
 } from '@react-navigation/drawer';
 import {Icon} from 'react-native-elements';
+import {useUserState} from '../context/userContext';
 
 const DrawerList = props => {
+  const userState = useUserState();
   return (
     <SafeAreaView style={{flex: 1}}>
       {/*Top Large Image */}
@@ -27,7 +29,7 @@ const DrawerList = props => {
         <Text
           // onPress={() => {}}
           style={styles.text}>
-          Usaib Khan
+          {userState.user ? userState.user.email : 'DOPD'}
         </Text>
       </View>
       <DrawerContentScrollView {...props}>
@@ -38,7 +40,6 @@ const DrawerList = props => {
             fontFamily: 'Gibson-Regular',
           }}
           icon={() => <Icon name="world-o" type="fontisto" color={'#3498DB'} />}
-
           //   onPress={}
         />
         {/* <View style={styles.customItem}>

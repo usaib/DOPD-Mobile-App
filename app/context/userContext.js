@@ -57,7 +57,8 @@ const UserProvider = ({children}) => {
         dispatch({type: 'LOGOUT'});
       }
       if (isAuthenticated) {
-        const resp = await fetchUser(id);
+        const resp = await fetchUser({id: id});
+        console.log('id 2 fetchesssss', resp.data);
         if (resp) {
           dispatch({type: 'UPDATE_USER', payload: {user: resp.data.data}});
         } else {

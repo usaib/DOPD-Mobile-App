@@ -48,7 +48,7 @@ function LoginScreen({navigation}) {
         setTimeout(() => {
           userDispatch({type: 'LOGIN_SUCCESS'});
           storeData('isAuthenticated', 'true');
-          console.log(resp.data.data.userInfo.id);
+          console.log('userId', resp.data.data.userInfo.id);
           const id = '' + resp.data.data.userInfo.id;
           storeData('id', id);
           setLoading(false);

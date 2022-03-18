@@ -3,21 +3,78 @@ import {View, Text, StyleSheet, Dimensions} from 'react-native';
 import {TextInput, Button, Surface} from 'react-native-paper';
 import {Formik} from 'formik';
 import {registerSchema} from '../auth/FormValidation';
-export const RegisterForm = () => {
+import DropDownPicker from 'react-native-dropdown-picker';
+import {create} from '../services/users';
+import {ErrorSnackbar} from './Snackbar';
+
+export const RegisterForm = ({navigation}) => {
   const [passwordVisible, setPasswordVisible] = useState(true);
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState(null);
+  const [genderSelected, setGenderSelected] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [color, setColor] = useState('#EE4B2B');
+
+  const [gender, setGender] = useState([
+    {label: 'Male', value: 'male'},
+    {label: 'Female', value: 'female'},
+  ]);
+
+  const onSubmit = async (values, actions) => {
+    setLoading(true);
+    console.log(values);
+    try {
+      const resp = await create({
+        email: values.email,
+        password: values.password,
+        name: values.name,
+        fathername: values.fathername,
+        contact_number: values.number,
+        age: values.age,
+        gender: value,
+      });
+
+      if (!resp.data.msg.error) {
+        setTimeout(() => {
+          setColor('#0381d1');
+
+          setErrorMessage(resp.data.msg);
+          setLoading(false);
+          setError(true);
+          console.log(resp.data);
+        }, 700);
+      } else {
+        console.log('Failed To Create User');
+        console.log(resp.data.msg);
+        setErrorMessage(resp.data.msg.msg);
+        setLoading(false);
+        setError(true);
+      }
+    } catch (e) {
+      setErrorMessage(e.msg);
+      console.log(e);
+
+      console.log('An error has occurred', e);
+      setLoading(false);
+      setError(true);
+    }
+    setLoading(false);
+    setColor('#EE4B2B');
+  };
   return (
     <Formik
       initialValues={{
-        FirstName: '',
-        LastName: '',
-        Email: '',
-        Password: '',
-        PhoneNumber: '',
+        name: '',
+        fathername: '',
+        email: '',
+        password: '',
+        number: '',
+        age: '',
       }}
       validationSchema={registerSchema}
-      onSubmit={values => {
-        console.log(values);
-      }}>
+      onSubmit={onSubmit}>
       {props => (
         <View
           style={{
@@ -34,15 +91,15 @@ export const RegisterForm = () => {
               theme={{roundness: 10}}
               mode="outlined"
               label="Email"
-              onChangeText={props.handleChange('Email')}
-              onBlur={props.handleBlur('Email')}
-              value={props.values.Email}
+              onChangeText={props.handleChange('email')}
+              onBlur={props.handleBlur('email')}
+              value={props.values.email}
               activeOutlineColor="#05375a"
               outlineColor="#d9d9d9"
               style={styles.textInput}
             />
             <Text style={styles.errorText}>
-              {props.touched.Email && props.errors.Email}
+              {props.touched.email && props.errors.email}
             </Text>
             <View
               style={{
@@ -54,32 +111,32 @@ export const RegisterForm = () => {
                 <TextInput
                   theme={{roundness: 10}}
                   mode="outlined"
-                  label="First name"
-                  onChangeText={props.handleChange('FirstName')}
-                  onBlur={props.handleBlur('FirstName')}
-                  value={props.values.FirstName}
+                  label="Your name"
+                  onChangeText={props.handleChange('name')}
+                  onBlur={props.handleBlur('name')}
+                  value={props.values.name}
                   activeOutlineColor="#05375a"
                   outlineColor="#d9d9d9"
                   style={styles.textInput}
                 />
                 <Text style={styles.errorText}>
-                  {props.touched.FirstName && props.errors.FirstName}
+                  {props.touched.name && props.errors.name}
                 </Text>
               </View>
               <View style={{flex: 2.5, marginLeft: 10}}>
                 <TextInput
                   theme={{roundness: 10}}
                   mode="outlined"
-                  label="Last name"
-                  onChangeText={props.handleChange('LastName')}
-                  onBlur={props.handleBlur('LastName')}
-                  value={props.values.LastName}
+                  label="Father's Name"
+                  onChangeText={props.handleChange('fathername')}
+                  onBlur={props.handleBlur('fathername')}
+                  value={props.values.fathername}
                   activeOutlineColor="#05375a"
                   outlineColor="#d9d9d9"
                   style={styles.textInput}
                 />
                 <Text style={styles.errorText}>
-                  {props.touched.LastName && props.errors.LastName}
+                  {props.touched.fathername && props.errors.fathername}
                 </Text>
               </View>
             </View>
@@ -96,41 +153,100 @@ export const RegisterForm = () => {
                 />
               }
               secureTextEntry={passwordVisible}
-              onChangeText={props.handleChange('Password')}
-              onBlur={props.handleBlur('Password')}
-              value={props.values.Password}
+              onChangeText={props.handleChange('password')}
+              onBlur={props.handleBlur('password')}
+              value={props.values.password}
               activeOutlineColor="#05375a"
               outlineColor="#d9d9d9"
               style={styles.textInput}
             />
             <Text style={styles.errorText}>
-              {props.touched.Password && props.errors.Password}
+              {props.touched.password && props.errors.password}
             </Text>
-            <TextInput
-              theme={{roundness: 10}}
-              mode="outlined"
-              label="PhoneNumber"
-              keyboardType="numeric"
-              onChangeText={props.handleChange('PhoneNumber')}
-              onBlur={props.handleBlur('PhoneNumber')}
-              value={props.values.PhoneNumber}
-              activeOutlineColor="#05375a"
-              outlineColor="#d9d9d9"
-              style={styles.textInput}
+            <View
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+              }}>
+              <View style={{flex: 3.5, marginRight: 10}}>
+                <TextInput
+                  theme={{roundness: 10}}
+                  mode="outlined"
+                  label="Phone Number"
+                  keyboardType="numeric"
+                  onChangeText={props.handleChange('number')}
+                  onBlur={props.handleBlur('number')}
+                  value={props.values.number}
+                  activeOutlineColor="#05375a"
+                  outlineColor="#d9d9d9"
+                  style={styles.textInput}
+                />
+                <Text style={styles.errorText}>
+                  {props.touched.number && props.errors.number}
+                </Text>
+              </View>
+              <View style={{flex: 1.5, marginRight: 10}}>
+                <TextInput
+                  theme={{roundness: 10}}
+                  mode="outlined"
+                  label="Age"
+                  keyboardType="numeric"
+                  onChangeText={props.handleChange('age')}
+                  onBlur={props.handleBlur('age')}
+                  value={props.values.age}
+                  activeOutlineColor="#05375a"
+                  outlineColor="#d9d9d9"
+                  style={styles.textInput}
+                />
+                <Text style={styles.errorText}>
+                  {props.touched.age && props.errors.age}
+                </Text>
+              </View>
+            </View>
+            <DropDownPicker
+              open={open}
+              value={value}
+              placeholder="Gender"
+              items={gender}
+              setOpen={setOpen}
+              style={{
+                borderColor: '#c9c9c9',
+              }}
+              setValue={setValue}
+              setItems={setGender}
+              onChangeValue={value => {
+                setGenderSelected(false);
+              }}
+              onClose={() => {
+                if (value) {
+                  setGenderSelected(false);
+                } else {
+                  setGenderSelected(true);
+                }
+              }}
+              labelProps={{
+                label: 'Gender',
+              }}
             />
-            <Text style={styles.errorText}>
-              {props.touched.PhoneNumber && props.errors.PhoneNumber}
-            </Text>
+            {genderSelected && (
+              <Text style={styles.errorText}>Gender is required</Text>
+            )}
           </View>
           <Surface style={[styles.btnCont]}>
             <Button
               mode="contained"
-              // loading="true"
+              loading={loading}
               onPress={props.handleSubmit}
               style={styles.submitBtn}>
               Sign up
             </Button>
           </Surface>
+          <ErrorSnackbar
+            message={errorMessage}
+            error={error}
+            color={color}
+            setError={setError}></ErrorSnackbar>
         </View>
       )}
     </Formik>

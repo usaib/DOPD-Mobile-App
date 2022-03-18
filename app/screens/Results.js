@@ -66,49 +66,38 @@ export default Results = ({navigation, route}) => {
         </Text>
         <View style={resultStyle.cardWrapper}>
           {data &&
-            data.map(obj => (
-              <View style={resultStyle.resCard}>
-                <ProgressBar
-                  percentage={70}
-                  color={'#2ecc71'}
-                  textColor={'#2ecc71'}
-                />
-                <Text
-                  style={[homeStyles.openText, {marginLeft: 15, fontSize: 25}]}>
-                  {obj}
-                </Text>
-              </View>
-            ))}
-          <View style={resultStyle.resCard}>
-            <ProgressBar
-              percentage={70}
-              color={'#2ecc71'}
-              textColor={'#2ecc71'}
-            />
-            <Text style={[homeStyles.openText, {marginLeft: 15, fontSize: 25}]}>
-              Headache
-            </Text>
-          </View>
-          <View style={resultStyle.resCard}>
-            <ProgressBar
-              percentage={20}
-              color={'#fec901'}
-              textColor={'#fec901'}
-            />
-            <Text style={[homeStyles.openText, {marginLeft: 15, fontSize: 25}]}>
-              Fever
-            </Text>
-          </View>
-          <View style={resultStyle.resCard}>
-            <ProgressBar
-              percentage={10}
-              color={'#d03423'}
-              textColor={'#d03423'}
-            />
-            <Text style={[homeStyles.openText, {marginLeft: 15, fontSize: 25}]}>
-              Pneumonia
-            </Text>
-          </View>
+            data.map((obj, index) => {
+              let percentage = 0;
+              let color = '#FFFF';
+              if (index == 0) {
+                percentage = 70;
+                color = '#2ecc71';
+              }
+              if (index == 1) {
+                percentage = 30;
+                color = '#fec901';
+              }
+              if (index == 2) {
+                percentage = 10;
+                color = '#d03423';
+              }
+              return (
+                <View style={resultStyle.resCard}>
+                  <ProgressBar
+                    percentage={percentage}
+                    color={color}
+                    textColor={color}
+                  />
+                  <Text
+                    style={[
+                      homeStyles.openText,
+                      {marginLeft: 15, fontSize: 25},
+                    ]}>
+                    {obj}
+                  </Text>
+                </View>
+              );
+            })}
         </View>
       </ScrollView>
     </View>

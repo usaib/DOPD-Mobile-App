@@ -450,11 +450,11 @@ const symptoms = {
     {_id: 5, slug: 'headache', value: 'Headache'},
     {_id: 6, slug: 'mild_fever', value: 'Mild Fever'},
     {_id: 7, slug: 'sinus_pressure', value: 'Sinus Pressure'},
-    {_id: 8, slugs: 'dizziness', value: 'Dizziness'},
+    {_id: 8, slug: 'dizziness', value: 'Dizziness'},
     {_id: 9, slug: 'depression', value: 'Depression'},
     {_id: 10, slug: 'lack_of_concentration', value: 'Lack Of Concentration'},
     {_id: 11, slug: 'coma', value: 'Coma'},
-    {_id: 12, slugs: 'altered_sensorium', value: 'Altered Sensorium'},
+    {_id: 12, slug: 'altered_sensorium', value: 'Altered Sensorium'},
   ],
 
   Nose: [

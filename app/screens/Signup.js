@@ -2,7 +2,7 @@ import React from 'react';
 import {View, Text, StyleSheet, Image, Dimensions} from 'react-native';
 import {RegisterForm} from '../components/RegisterForm';
 
-export const Signup = () => {
+export const Signup = ({navigation}) => {
   return (
     <View style={styles.mainCont}>
       <View style={styles.header}>
@@ -21,7 +21,7 @@ export const Signup = () => {
         <Text style={styles.subhead}>
           First, create your DigitalOPD account
         </Text>
-        <RegisterForm />
+        <RegisterForm navigation={navigation} />
       </View>
     </View>
   );

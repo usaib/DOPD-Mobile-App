@@ -2,7 +2,7 @@ import * as React from 'react';
 import {View, StyleSheet} from 'react-native';
 import {Button, Snackbar} from 'react-native-paper';
 
-export const ErrorSnackbar = ({error, message, setError}) => {
+export const ErrorSnackbar = ({error, message, setError, color}) => {
   const [visible, setVisible] = React.useState(false);
 
   const onToggleSnackBar = () => setVisible(!visible);
@@ -16,7 +16,7 @@ export const ErrorSnackbar = ({error, message, setError}) => {
         visible={error}
         onDismiss={onDismissSnackBar}
         duration={1500}
-        style={{backgroundColor: '#EE4B2B', display: 'flex'}}>
+        style={{backgroundColor: color || '#EE4B2B', display: 'flex'}}>
         {message}
       </Snackbar>
     </View>
