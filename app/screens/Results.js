@@ -21,11 +21,11 @@ export default Results = ({navigation, route}) => {
           symptoms: symptomsList,
         });
         console.log('response', resp.data);
-        setData(resp.data.predictions);
         if (resp) {
           setTimeout(() => {
             setLoading(false);
-          }, 500);
+            setData(resp.data.predictions);
+          }, 2000);
         } else {
           console.log('failed');
           setLoading(false);
@@ -34,7 +34,6 @@ export default Results = ({navigation, route}) => {
         console.log('An error has occurred', e);
         setLoading(false);
       }
-      setLoading(false);
     };
     getResults();
   }, [symptomsList]);

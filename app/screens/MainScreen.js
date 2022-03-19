@@ -109,7 +109,13 @@ function MainScreen({navigation}) {
             flexDirection: 'row',
             justifyContent: 'space-between',
           }}>
-          <CustomCard width={175} height={270} backColor="#053F5E">
+          <CustomCard
+            onPress={() => {
+              console.log('Check Doctors in your Area');
+            }}
+            width={175}
+            height={270}
+            backColor="#053F5E">
             <View style={{marginTop: 55}}>
               <Text
                 style={[styles.cardText, {fontWeight: '700', color: '#fff'}]}>
@@ -122,6 +128,9 @@ function MainScreen({navigation}) {
             />
           </CustomCard>
           <CustomCard
+            onPress={() => {
+              console.log('Explore pharmacy near you');
+            }}
             width={160}
             height={270}
             backColor="#D3E4CD"
@@ -148,6 +157,9 @@ function MainScreen({navigation}) {
           </CustomCard>
         </View>
         <CustomCard
+          onPress={() => {
+            console.log('In-person or online video appointment');
+          }}
           width={345}
           height={180}
           backColor="#FFE194"

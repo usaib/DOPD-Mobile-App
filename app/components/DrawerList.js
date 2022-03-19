@@ -40,7 +40,9 @@ const DrawerList = props => {
             fontFamily: 'Gibson-Regular',
           }}
           icon={() => <Icon name="world-o" type="fontisto" color={'#3498DB'} />}
-          //   onPress={}
+          onPress={() => {
+            Linking.openURL('https://c2a6-103-196-162-11.ngrok.io');
+          }}
         />
         {/* <View style={styles.customItem}>
           <Text

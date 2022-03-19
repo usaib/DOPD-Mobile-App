@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, View, Image} from 'react-native';
+import {StyleSheet, View, Image, Text} from 'react-native';
 
 const Splash = () => {
   return (
@@ -8,6 +8,7 @@ const Splash = () => {
         source={require('../images/logoWhite.png')}
         style={{height: 200, width: 200}}
       />
+      <Text style={styles.Text}>DIGITAL OUTPATIENT DEPARTMENT</Text>
     </View>
   );
 };
@@ -19,10 +20,16 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   horizontal: {
-    flexDirection: 'row',
+    flexDirection: 'column',
     alignItems: 'center',
-    justifyContent: 'space-around',
+    justifyContent: 'space-evenly',
     padding: 10,
+  },
+  Text: {
+    marginLeft: 10,
+    color: '#FFFFFF',
+    fontFamily: 'Gibson-BoldItalic',
+    fontSize: 17,
   },
 });
 

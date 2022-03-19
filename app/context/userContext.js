@@ -12,6 +12,7 @@ const userReducer = (state, action) => {
       return {
         ...state,
         isAuthenticated: true,
+        user: action.payload.user,
       };
     case 'UPDATE_USER':
       return {...state, isAuthenticated: true, user: action.payload.user};
@@ -54,15 +55,21 @@ const UserProvider = ({children}) => {
       const isAuthenticated = !!(await getData('isAuthenticated'));
       const id = await getData('id');
       if (isAuthenticated === false) {
-        dispatch({type: 'LOGOUT'});
+        setTimeout(() => {
+          dispatch({type: 'LOGOUT'});
+        }, 2000);
       }
       if (isAuthenticated) {
         const resp = await fetchUser({id: id});
         console.log('id 2 fetchesssss', resp.data);
         if (resp) {
-          dispatch({type: 'UPDATE_USER', payload: {user: resp.data.data}});
+          setTimeout(() => {
+            dispatch({type: 'UPDATE_USER', payload: {user: resp.data.data}});
+          }, 500);
         } else {
-          dispatch({type: 'LOGOUT'});
+          setTimeout(() => {
+            dispatch({type: 'LOGOUT'});
+          }, 500);
         }
       }
     }
