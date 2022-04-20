@@ -11,16 +11,29 @@ export const History = ({navigation}) => {
 
   return (
     <View style={homeStyles.container}>
-      <AppBarWrapper
-        title={'Appointment History'}
-        onPress={() => {
-          navigation.navigate('Main');
-        }}
-        showMenu={true}
-        showButton={false}
-        onMenuPress={toggle}
-      />
+      <View style={{marginBottom: 20}}>
+        <AppBarWrapper
+          title={'Appointment History'}
+          onPress={() => {
+            navigation.navigate('Main');
+          }}
+          showMenu={true}
+          showButton={false}
+          onMenuPress={toggle}
+        />
+      </View>
       <Wrapper>
+        <HistoryItems />
+        <HistoryItems />
+        <HistoryItems />
+        <HistoryItems />
+        <HistoryItems />
+        <HistoryItems />
+        <HistoryItems />
+        <HistoryItems />
+        <HistoryItems />
+        <HistoryItems />
+        <HistoryItems />
         <HistoryItems />
       </Wrapper>
     </View>

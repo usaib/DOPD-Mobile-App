@@ -13,7 +13,7 @@ export default function HistoryItems() {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        marginTop: 30,
+        marginTop: 10,
       }}>
       <View style={styles.cardContainer}>
         <View style={styles.iconContainer}>
