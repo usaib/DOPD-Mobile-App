@@ -31,8 +31,7 @@ function MainScreen({navigation}) {
     } catch (e) {
       console.log('Error in removing', e);
     }
-
-    console.log('Done.');
+    console.log('Done');
   };
   const toggle = () => {
     navigation?.toggleDrawer();
@@ -71,7 +70,7 @@ function MainScreen({navigation}) {
             letterSpacing: 0.5,
             fontWeight: '600',
           }}>
-          Good evening, {userState.user ? userState.user.name : ''} !
+          Good afternoon, {userState.user ? userState.user.name : ''} !
         </Text>
         <Text style={styles.openText}>How are you today?</Text>
         <CustomCard

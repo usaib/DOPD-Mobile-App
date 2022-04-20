@@ -32,7 +32,6 @@ function LoginScreen({navigation}) {
       console.log('Error in saving', e);
     }
   };
-  const onDismissSnackBar = () => setError(false);
 
   const onSubmit = async (values, actions) => {
     setLoading(true);
@@ -43,7 +42,6 @@ function LoginScreen({navigation}) {
         password: values.password,
         rememberMe: values.rememberMe,
       });
-
       if (resp) {
         setTimeout(() => {
           userDispatch({
@@ -101,7 +99,7 @@ function LoginScreen({navigation}) {
           <Text style={{fontWeight: '600', color: '#05375a'}}>Sign up</Text>
         </Text>
         <Formik
-          initialValues={{email: '', password: ''}}
+          initialValues={{email:'', password:''}}
           validationSchema={validationSchema}
           onSubmit={onSubmit}>
           {({

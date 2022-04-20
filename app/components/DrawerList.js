@@ -20,7 +20,7 @@ const DrawerList = props => {
   const userState = useUserState();
   return (
     <SafeAreaView style={{flex: 1}}>
-      {/*Top Large Image */}
+      {/*Top Large Image*/}
       <View style={styles.porfileView}>
         <Image
           source={require('../images/user.png')}
@@ -41,7 +41,7 @@ const DrawerList = props => {
           }}
           icon={() => <Icon name="world-o" type="fontisto" color={'#3498DB'} />}
           onPress={() => {
-            Linking.openURL('https://c2a6-103-196-162-11.ngrok.io');
+            Linking.openURL('https://lucky-eagle-93.loca.lt');
           }}
         />
         {/* <View style={styles.customItem}>

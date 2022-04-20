@@ -5,6 +5,7 @@ import MainScreen from '../screens/MainScreen';
 import DrawerList from '../components/DrawerList';
 import {Icon} from 'react-native-elements';
 import HomeStack from './HomeStack';
+import History from '../screens/History';
 
 const Drawer = createDrawerNavigator();
 
@@ -45,6 +46,25 @@ const AppStack = () => {
           ),
         }}
         component={HomeStack}
+        labelStyle={{
+          activeTintColor: '#e91e63',
+          itemStyle: {marginVertical: 5},
+          fontFamily: 'Gibson-Regular',
+        }}
+      />
+      <Drawer.Screen
+        name="Appointment History"
+        options={{
+          headerShown: false,
+          drawerIcon: () => (
+            <Icon
+              name="history"
+              color={'#3498DB'}
+              onPress={() => onDelete(symptom)}
+            />
+          ),
+        }}
+        component={History}
         labelStyle={{
           activeTintColor: '#e91e63',
           itemStyle: {marginVertical: 5},
