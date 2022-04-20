@@ -1,20 +1,28 @@
 import React from 'react';
-import {View, StyleSheet} from 'react-native';
+import {View, StyleSheet, TouchableNativeFeedback} from 'react-native';
 
 export const HistoryCard = ({minHeight, width, children, style}) => {
+  const [rippleOverflow, setRippleOverflow] = React.useState(false);
+
   return (
-    <View
-      style={[
-        cardStyle.card,
-        {
-          minHeight: minHeight,
-          width: width,
-          backgroundColor: '#fff',
-          ...style,
-        },
-      ]}>
-      {children}
-    </View>
+    <TouchableNativeFeedback
+      onPress={() => {
+        setRippleOverflow(!rippleOverflow);
+      }}
+      background={TouchableNativeFeedback.Ripple('#D3D3D3', false)}>
+      <View
+        style={[
+          cardStyle.card,
+          {
+            minHeight: minHeight,
+            width: width,
+            backgroundColor: '#fff',
+            ...style,
+          },
+        ]}>
+        {children}
+      </View>
+    </TouchableNativeFeedback>
   );
 };
 
