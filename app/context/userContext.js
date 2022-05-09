@@ -64,7 +64,7 @@ const UserProvider = ({children}) => {
         console.log('id 2 fetchesssss', resp.data);
         if (resp) {
           setTimeout(() => {
-            dispatch({type: 'UPDATE_USER', payload: {user: resp.data.data}});
+            dispatch({type: 'UPDATE_USER', payload: {user: resp.data.data.data[0]}});
           }, 500);
         } else {
           setTimeout(() => {

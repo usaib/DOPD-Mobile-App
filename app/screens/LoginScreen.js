@@ -46,11 +46,11 @@ function LoginScreen({navigation}) {
         setTimeout(() => {
           userDispatch({
             type: 'LOGIN_SUCCESS',
-            payload: {user: resp.data.data.userInfo},
+            payload: {user: resp.data.data},
           });
           storeData('isAuthenticated', 'true');
-          console.log('userId', resp.data.data.userInfo.id, resp.data);
-          const id = '' + resp.data.data.userInfo.id;
+          console.log('userId', resp.data.data.id, resp.data);
+          const id = '' + resp.data.data.id;
           storeData('id', id);
           setLoading(false);
         }, 500);
@@ -99,7 +99,7 @@ function LoginScreen({navigation}) {
           <Text style={{fontWeight: '600', color: '#05375a'}}>Sign up</Text>
         </Text>
         <Formik
-          initialValues={{email:'', password:''}}
+          initialValues={{email: '', password: ''}}
           validationSchema={validationSchema}
           onSubmit={onSubmit}>
           {({

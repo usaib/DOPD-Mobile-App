@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {View, Text, StyleSheet, Dimensions, ScrollView} from 'react-native';
-import {homeStyles} from './HomeScreen';
+import {styles} from './MainScreen';
 import ProgressBar from '../components/ProgressBar';
 import AppBarWrapper from '../components/AppBar';
 import Spinner from 'react-native-loading-spinner-overlay';
@@ -56,8 +56,8 @@ export default Results = ({navigation, route}) => {
         onMenuPress={toggle}
       />
       <ScrollView style={resultStyle.scrollView}>
-        <View style={[homeStyles.top, {height: 225}]}></View>
-        <Text style={[homeStyles.openText, {marginTop: 100}]}>Results</Text>
+        <View style={[styles.top, {height: 225}]}></View>
+        <Text style={[styles.openText, {marginTop: 100}]}>Results</Text>
         <Text style={resultStyle.openText}>
           Please note that the list below may not be complete and is provided
           solely for informational purposes and is not a qualified medical
@@ -89,7 +89,7 @@ export default Results = ({navigation, route}) => {
                   />
                   <Text
                     style={[
-                      homeStyles.openText,
+                      styles.openText,
                       {marginLeft: 15, fontSize: 25},
                     ]}>
                     {obj}

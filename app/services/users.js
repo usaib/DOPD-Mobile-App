@@ -1,9 +1,10 @@
 import axios from 'axios';
-const BASE_URL = 'https://502f-27-96-92-136.ngrok.io';
+const BASE_URL =
+  'http://ec2-3-145-193-221.us-east-2.compute.amazonaws.com:5001';
 const fetchUser = async params => {
   console.log('In service call', params);
   return axios.post(
-    BASE_URL + '/me',
+    BASE_URL + '/user/me',
     {
       id: params.id,
     },
@@ -17,7 +18,7 @@ const fetchUser = async params => {
 const signIn = async params => {
   console.log('In service call', params);
   return axios.post(
-    BASE_URL + '/signIn',
+    BASE_URL + '/auth/SignIn',
     {
       email: params.email,
       password: params.password,

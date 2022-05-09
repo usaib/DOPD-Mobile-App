@@ -13,7 +13,6 @@ const AppStack = () => {
   return (
     <Drawer.Navigator
       drawerContentOptions={{
-        activeTintColor: '#e91e63',
         itemStyle: {marginVertical: 5},
         fontFamily: 'Gibson-Regular',
       }}
@@ -27,7 +26,6 @@ const AppStack = () => {
         fontFamily: 'Gibson-Regular',
       }}
       style={{
-        activeTintColor: '#e91e63',
         itemStyle: {marginVertical: 5},
         fontFamily: 'Gibson-Regular',
       }}
@@ -47,7 +45,6 @@ const AppStack = () => {
         }}
         component={HomeStack}
         labelStyle={{
-          activeTintColor: '#e91e63',
           itemStyle: {marginVertical: 5},
           fontFamily: 'Gibson-Regular',
         }}
@@ -66,7 +63,6 @@ const AppStack = () => {
         }}
         component={History}
         labelStyle={{
-          activeTintColor: '#e91e63',
           itemStyle: {marginVertical: 5},
           fontFamily: 'Gibson-Regular',
         }}
@@ -85,7 +81,7 @@ const AppStack = () => {
         }}
         component={Settings}
         labelStyle={{
-          activeTintColor: '#e91e63',
+         
           itemStyle: {marginVertical: 5},
           fontFamily: 'Gibson-Regular',
         }}
