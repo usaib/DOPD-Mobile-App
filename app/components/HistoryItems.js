@@ -3,7 +3,50 @@ import React from 'react';
 import {HistoryCard} from './HistoryCard';
 import {IconButton} from 'react-native-paper';
 
-export default function HistoryItems() {
+export default function HistoryItems({
+  doctorName,
+  patientName,
+  appointmentType,
+  dateTime,
+  appointmentStatus,
+}) {
+  const monthNames = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ];
+  var days = [
+    'Sunday',
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+  ];
+  const setColour = status => {
+    if (status == 'cancelled') {
+      return '#FF0000';
+    }
+    if (status == 'pending') {
+      return '#FFA500';
+    }
+    if (status == 'completed') {
+      return '#90EE90';
+    }
+    if (status == 'confirmed') {
+      return '#0381d1';
+    }
+  };
   return (
     <HistoryCard
       minHeight={80}
@@ -30,19 +73,19 @@ export default function HistoryItems() {
             }}>
             <Text
               style={[styles.cardTitle, {alignSelf: 'center', fontSize: 20}]}>
-              20
+              {new Date(dateTime).getDate().toString()}
             </Text>
             <Text
               style={[
                 styles.cardTitle,
                 {alignSelf: 'center', fontWeight: '400'},
               ]}>
-              April
+              {monthNames[new Date(dateTime).getMonth().toString()]}
             </Text>
           </View>
         </View>
         <View style={styles.cardTitleContainer}>
-          <Text style={styles.cardTitle}>Dr. Paresh Rawal</Text>
+          <Text style={styles.cardTitle}>{doctorName}</Text>
 
           <Text
             style={[
@@ -54,7 +97,8 @@ export default function HistoryItems() {
                 fontWeight: '000',
               },
             ]}>
-            Monday, 5:40 pm
+            {days[new Date(dateTime).getDay().toString()]} ,
+            {new Date(dateTime).toLocaleTimeString()}
           </Text>
           <Text
             style={[
@@ -66,7 +110,7 @@ export default function HistoryItems() {
                 fontWeight: '000',
               },
             ]}>
-            In-Person Appointment
+            {appointmentType} Appointment
           </Text>
           <Text
             style={[
@@ -78,16 +122,28 @@ export default function HistoryItems() {
                 fontWeight: '000',
               },
             ]}>
-            Patient Name: Shehzer Abbasi
+            Patient Name: {patientName}
           </Text>
         </View>
         <View style={styles.buttonContainer}>
-          <IconButton
+          {/* <IconButton
             icon="account-details"
             color={'#0381d1'}
             size={30}
             onPress={() => console.log('Pressed')}
-          />
+          /> */}
+          <Text
+            style={[
+              styles.cardTitle,
+              {
+                fontSize: 14,
+                color: setColour(appointmentStatus),
+                alignSelf: 'flex-start',
+                fontWeight: '000',
+              },
+            ]}>
+            {appointmentStatus}
+          </Text>
         </View>
       </View>
     </HistoryCard>
@@ -100,7 +156,6 @@ const styles = StyleSheet.create({
     width: '35%',
     flexDirection: 'column',
     marginTop: 10,
-    // backgroundColor: '#ff12',
   },
   cardContainer: {
     flex: 1,

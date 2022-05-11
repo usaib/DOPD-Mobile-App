@@ -1,13 +1,34 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, StyleSheet, Dimensions} from 'react-native';
 import AppBarWrapper from '../components/AppBar';
 import {Wrapper} from '../components/Wrapper';
 import HistoryItems from '../components/HistoryItems';
+import {fetchAppointments} from '../services/appointments';
+import {ActivityIndicator} from 'react-native-paper';
 
 export const History = ({navigation}) => {
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState([]);
+
   const toggle = () => {
     navigation?.toggleDrawer();
   };
+
+  useEffect(() => {
+    const getData = async () => {
+      setLoading(true);
+      try {
+        const resp = await fetchAppointments();
+        setData(resp.data.data.data.rows);
+        setLoading(false);
+        console.log(resp.data.data.data.rows);
+      } catch (e) {
+        console.log('error', e);
+        setLoading(false);
+      }
+    };
+    getData();
+  }, []);
 
   return (
     <View style={homeStyles.container}>
@@ -22,19 +43,29 @@ export const History = ({navigation}) => {
           onMenuPress={toggle}
         />
       </View>
+
       <Wrapper>
-        <HistoryItems />
-        <HistoryItems />
-        <HistoryItems />
-        <HistoryItems />
-        <HistoryItems />
-        <HistoryItems />
-        <HistoryItems />
-        <HistoryItems />
-        <HistoryItems />
-        <HistoryItems />
-        <HistoryItems />
-        <HistoryItems />
+        {loading ? (
+          <ActivityIndicator
+            animating={true}
+            style={{
+              marginTop: 250,
+            }}
+            color={'#3498DB'}
+            size="small"
+          />
+        ) : (
+          data.length &&
+          data.map(obj => (
+            <HistoryItems
+              doctorName={obj.doctor.name}
+              patientName={obj.user.name}
+              dateTime={obj.dateTime}
+              appointmentType={obj.type}
+              appointmentStatus={obj.status}
+            />
+          ))
+        )}
       </Wrapper>
     </View>
   );
