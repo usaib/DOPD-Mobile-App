@@ -6,6 +6,7 @@ import DrawerList from '../components/DrawerList';
 import {Icon} from 'react-native-elements';
 import HomeStack from './HomeStack';
 import History from '../screens/History';
+import HistoryStack from './HistoryStack';
 
 const Drawer = createDrawerNavigator();
 
@@ -61,7 +62,7 @@ const AppStack = () => {
             />
           ),
         }}
-        component={History}
+        component={HistoryStack}
         labelStyle={{
           itemStyle: {marginVertical: 5},
           fontFamily: 'Gibson-Regular',

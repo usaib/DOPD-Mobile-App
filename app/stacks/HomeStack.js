@@ -3,6 +3,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Settings from '../screens/Settings';
 import MainScreen from '../screens/MainScreen';
 import Results from '../screens/Results';
+import AppointmentDetails from '../screens/AppointmentDetails';
 
 const Stack = createNativeStackNavigator();
 
@@ -22,6 +23,11 @@ const HomeStack = () => {
       <Stack.Screen
         name="Results"
         component={Results}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="AppointmentDetails"
+        component={AppointmentDetails}
         options={{headerShown: false}}
       />
     </Stack.Navigator>
