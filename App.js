@@ -21,4 +21,4 @@ export default function App() {
   );
 }
 
-export const BASE_URL = 'https://15cf-103-196-160-58.ngrok.io';
+export const BASE_URL = 'https://sharp-cars-matter-103-26-83-55.loca.lt';
