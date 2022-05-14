@@ -12,8 +12,10 @@ function AppBarWrapper({onPress, onMenuPress, showButton, title, showMenu}) {
       )}
       <Appbar.Content
         title={title}
+        titleStyle={{fontWeight: '700'}}
         subtitleStyle={{
-          fontFamily: 'Gibson-Regular',
+          fontFamily: 'Gibson',
+          fontWeight: '500',
         }}
         color="#3498DB"
         subtitle={'Digital OPD'}

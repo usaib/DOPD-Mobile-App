@@ -49,6 +49,7 @@ const AppStack = () => {
           fontFamily: 'Gibson-Regular',
         }}
       />
+
       <Drawer.Screen
         name="Appointment History"
         options={{

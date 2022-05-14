@@ -15,7 +15,8 @@ const theme = {
     ...DefaultTheme.colors,
     primary: '#0381d1',
     accent: '#0381d1',
-    background: '#F0F3F4',
+    textColor: '#2a3d53',
+    background: '#F9F9F9',
   },
 };
 export default function Main() {

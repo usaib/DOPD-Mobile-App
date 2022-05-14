@@ -1,19 +1,10 @@
-import React, {useState, useEffect} from 'react';
-import {
-  View,
-  StyleSheet,
-  Image,
-  TouchableOpacity,
-  Pressable,
-  Dimensions,
-  ScrollView,
-} from 'react-native';
-import {Text, Button} from 'react-native-paper';
+import React, {useState} from 'react';
+import {View, StyleSheet, Image, Dimensions, ScrollView} from 'react-native';
+import {Text} from 'react-native-paper';
 import {useUserDispatch, useUserState} from '../context/userContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AppBarWrapper from '../components/AppBar';
-import {Avatar, Card, Title, Paragraph} from 'react-native-paper';
-import {TouchableNativeFeedback} from 'react-native-gesture-handler';
+import {Avatar} from 'react-native-paper';
 import CustomCard from '../components/Card';
 
 const LeftContent = props => <Avatar.Icon {...props} icon="folder" />;
@@ -110,7 +101,7 @@ function MainScreen({navigation}) {
           }}>
           <CustomCard
             onPress={() => {
-              console.log('Check Doctors in your Area');
+              navigation.navigate('FindDoctors');
             }}
             width={175}
             height={270}

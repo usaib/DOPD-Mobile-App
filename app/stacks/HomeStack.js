@@ -3,7 +3,8 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Settings from '../screens/Settings';
 import MainScreen from '../screens/MainScreen';
 import Results from '../screens/Results';
-
+import {DcotorsScreen} from '../screens/DcotorsScreen';
+import {SearchFilter} from '../screens/SearchFilter';
 const Stack = createNativeStackNavigator();
 
 const HomeStack = () => {
@@ -12,6 +13,16 @@ const HomeStack = () => {
       <Stack.Screen
         name="Main"
         component={MainScreen}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="FindDoctors"
+        component={DcotorsScreen}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="SearchFilter"
+        component={SearchFilter}
         options={{headerShown: false}}
       />
       <Stack.Screen

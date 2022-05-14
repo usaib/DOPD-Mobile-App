@@ -19,7 +19,7 @@ const wrapper = StyleSheet.create({
     paddingBottom: 60,
     width: Dimensions.get('screen').width,
     height: Dimensions.get('screen').height,
-    backgroundColor: '#fff',
+    backgroundColor: '#f9f9f9',
   },
   wrapper: {
     display: 'flex',
