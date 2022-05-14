@@ -22,6 +22,7 @@ export const History = ({navigation}) => {
       try {
         const resp = await fetchAppointments();
         setData(resp.data.data.data.rows);
+        console.log(resp.data.data.data.rows);
         setLoading(false);
       } catch (e) {
         console.log('error', e);
@@ -60,6 +61,7 @@ export const History = ({navigation}) => {
           data.map(obj => (
             <HistoryItems
               doctorName={obj.doctor.name}
+              appointmentId={obj.id}
               patientName={obj.user.name}
               dateTime={obj.dateTime}
               appointmentType={obj.type}

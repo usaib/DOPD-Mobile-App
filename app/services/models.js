@@ -1,5 +1,5 @@
 import axios from 'axios';
-const BASE_URL = 'https://weak-corners-nail-103-196-160-58.loca.lt';
+const BASE_URL = 'https://easy-tips-raise-103-196-161-153.loca.lt';
 const prediction = async params => {
   console.log('In service call', params);
   return axios.post(

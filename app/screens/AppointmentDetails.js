@@ -3,19 +3,38 @@ import {View, StyleSheet, Dimensions, Text} from 'react-native';
 import AppBarWrapper from '../components/AppBar';
 import {Wrapper} from '../components/Wrapper';
 import ProgressBar from '../components/ProgressBar';
+import {fetchDiagnosedDiseaseDetails} from '../services/diagnose';
+import {Button} from 'react-native-paper';
 
 export const AppointmentDetails = ({navigation, route}) => {
   const [data, setData] = useState([]);
-  const [loading, setLoading] = useState([]);
+  const [loading, setLoading] = useState(false);
   const {appointmentType} = route.params;
+  const {appointmentId} = route.params;
 
   const toggle = () => {
     navigation?.toggleDrawer();
   };
+  const titleCase = s =>
+    s.replace(/^_*(.)|_+(.)/g, (s, c, d) =>
+      c ? c.toUpperCase() : ' ' + d.toUpperCase(),
+    );
 
   useEffect(() => {
-    const getData = async () => {};
-    getData();
+    const getDataForSmartAppointment = async () => {
+      try {
+        const resp = await fetchDiagnosedDiseaseDetails({
+          appointmentId,
+        });
+        console.log(resp.data.data.data.rows[0]);
+        setData(resp.data.data.data.rows);
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    if (appointmentType == 'Smart') {
+      getDataForSmartAppointment();
+    }
   }, []);
 
   const dynamicDetailsRendering = appointmentType => {
@@ -68,22 +87,64 @@ export const AppointmentDetails = ({navigation, route}) => {
               According to our MDT you are diagnosed with following dieseases
               with chances of.
             </Text>
-            <View style={styles.resCard}>
-              <ProgressBar
-                color={'#FFF123'}
-                textColor={'#FFF123'}
-                radius={30}
-                percentage={60}
-              />
-              <Text style={[styles.openText, {fontSize: 25}]}>Influenza</Text>
-            </View>
+            {!!data.length &&
+              !data[0].wantExtraInfo &&
+              data[0].diagnosedDisease.split(',').map((obj, index) => {
+                let percentage = 0;
+                let color = '#FFFF';
+                if (index == 0) {
+                  percentage = 70;
+                  color = '#2ecc71';
+                }
+                if (index == 1) {
+                  percentage = 20;
+                  color = '#fec901';
+                }
+                if (index == 2) {
+                  percentage = 10;
+                  color = '#d03423';
+                }
+                return (
+                  <View style={styles.resCard}>
+                    <ProgressBar
+                      percentage={percentage}
+                      color={color}
+                      textColor={color}
+                      radius={28}
+                    />
+                    <Text style={[styles.openText, {fontSize: 19}]}>{obj}</Text>
+                  </View>
+                );
+              })}
+            {!!data.length && data[0].wantExtraInfo && (
+              <View style={{flex: 1}}>
+                <Text style={[styles.paragraphText]}>
+                  {!!data.length && data[0].otherDetails}
+                </Text>
+                <Button
+                  loading={false}
+                  style={styles.button}
+                  icon="camera"
+                  mode="contained"
+                  title="Submit">
+                  <Text style={styles.button}>Upload</Text>
+                </Button>
+              </View>
+            )}
             <Text style={[styles.openText]}>Provided Symptoms</Text>
-            <Text style={[styles.paragraphText]}>1. Continous Sneezing</Text>
-            <Text style={[styles.paragraphText]}>2. Headache</Text>
-            <Text style={[styles.paragraphText]}>3. High Fever</Text>
+            {!!data.length &&
+              data[0].providedSymptoms.split(',').map((obj, index) => {
+                return (
+                  <View style={styles.resCard}>
+                    <Text style={[styles.openText, {fontSize: 19}]}>
+                      {index + 1 + '. ' + titleCase(obj)}
+                    </Text>
+                  </View>
+                );
+              })}
             <Text style={[styles.openText]}>Recomendations</Text>
             <Text style={[styles.paragraphText]}>
-              Visit our ENT specialist Dr. Anees Allana
+              {!!data.length && data[0].otherDetails}
             </Text>
           </Wrapper>
         </View>
@@ -117,7 +178,7 @@ export const styles = StyleSheet.create({
   },
   resCard: {
     backgroundColor: 'white',
-    height: 70,
+    height: 75,
     marginVertical: 12,
     display: 'flex',
     flexDirection: 'row',
@@ -139,6 +200,10 @@ export const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFFFFF',
+  },
+  button: {
+    fontFamily: 'Gibson-Regular',
+    color: 'white',
   },
   cardHeading: {
     fontSize: 18,

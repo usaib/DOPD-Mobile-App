@@ -1,11 +1,8 @@
 import React from 'react';
 import {createDrawerNavigator} from '@react-navigation/drawer';
-import Settings from '../screens/Settings';
-import MainScreen from '../screens/MainScreen';
 import DrawerList from '../components/DrawerList';
 import {Icon} from 'react-native-elements';
 import HomeStack from './HomeStack';
-import History from '../screens/History';
 import HistoryStack from './HistoryStack';
 
 const Drawer = createDrawerNavigator();

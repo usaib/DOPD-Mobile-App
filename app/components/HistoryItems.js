@@ -10,6 +10,7 @@ export default function HistoryItems({
   dateTime,
   appointmentStatus,
   navigation,
+  appointmentId,
 }) {
   const monthNames = [
     'January',
@@ -52,6 +53,7 @@ export default function HistoryItems({
   const onPress = () => {
     navigation.navigate('Appointment Details', {
       appointmentType,
+      appointmentId,
     });
   };
   return (

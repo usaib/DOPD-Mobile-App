@@ -7,6 +7,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import {prediction} from '../services/models';
 import {useUserState} from '../context/userContext';
 import {createAppointment} from '../services/appointments';
+import {createDiagnosedDisease} from '../services/diagnose';
 
 export default Results = ({navigation, route}) => {
   const [loading, setLoading] = useState(true);
@@ -32,6 +33,15 @@ export default Results = ({navigation, route}) => {
           status: 'completed',
           createdAt: new Date(),
           updatedAt: new Date(),
+        });
+        console.log(appointment.data);
+        const diagnosedDisease = await createDiagnosedDisease({
+          appointmentId: appointment.data.data.data,
+          providedSymptoms: symptomsList.toString(),
+          diagnosedDisease: resp.data.predictions.toString(),
+          wantExtraInfo: false,
+          givenExtraInfo: false,
+          otherDetails: 'Please refer to our doctors',
         });
         if (resp) {
           setTimeout(() => {
