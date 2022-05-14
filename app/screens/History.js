@@ -5,10 +5,12 @@ import {Wrapper} from '../components/Wrapper';
 import HistoryItems from '../components/HistoryItems';
 import {fetchAppointments} from '../services/appointments';
 import {ActivityIndicator} from 'react-native-paper';
+import {useIsFocused} from '@react-navigation/native';
 
 export const History = ({navigation}) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState([]);
+  const isVisible = useIsFocused();
 
   const toggle = () => {
     navigation?.toggleDrawer();
@@ -21,14 +23,13 @@ export const History = ({navigation}) => {
         const resp = await fetchAppointments();
         setData(resp.data.data.data.rows);
         setLoading(false);
-        console.log(resp.data.data.data.rows);
       } catch (e) {
         console.log('error', e);
         setLoading(false);
       }
     };
     getData();
-  }, []);
+  }, [isVisible]);
 
   return (
     <View style={homeStyles.container}>
@@ -63,6 +64,7 @@ export const History = ({navigation}) => {
               dateTime={obj.dateTime}
               appointmentType={obj.type}
               appointmentStatus={obj.status}
+              navigation={navigation}
             />
           ))
         )}

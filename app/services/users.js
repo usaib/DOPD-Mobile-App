@@ -1,5 +1,5 @@
 import axios from 'axios';
-const BASE_URL = 'https://07d3-103-196-161-237.ngrok.io';
+import {BASE_URL} from '../../App';
 const fetchUser = async params => {
   console.log('In service call', params);
   return axios.post(

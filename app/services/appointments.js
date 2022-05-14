@@ -1,5 +1,5 @@
 import axios from 'axios';
-const BASE_URL = 'https://07d3-103-196-161-237.ngrok.io';
+import {BASE_URL} from '../../App';
 const fetchAppointments = async params => {
   return axios.post(
     BASE_URL + '/appointment/getAppointments',
@@ -15,4 +15,13 @@ const fetchAppointments = async params => {
   );
 };
 
-export {fetchAppointments};
+const createAppointment = async params => {
+  console.log(params);
+  return axios.post(BASE_URL + '/appointment/create', params, {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+};
+
+export {fetchAppointments, createAppointment};

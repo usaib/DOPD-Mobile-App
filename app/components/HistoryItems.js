@@ -9,6 +9,7 @@ export default function HistoryItems({
   appointmentType,
   dateTime,
   appointmentStatus,
+  navigation,
 }) {
   const monthNames = [
     'January',
@@ -47,10 +48,17 @@ export default function HistoryItems({
       return '#0381d1';
     }
   };
+
+  const onPress = () => {
+    navigation.navigate('Appointment Details', {
+      appointmentType,
+    });
+  };
   return (
     <HistoryCard
       minHeight={80}
       width={'95%'}
+      onPressCard={onPress}
       style={{
         display: 'flex',
         flexDirection: 'column',

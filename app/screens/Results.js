@@ -5,11 +5,14 @@ import ProgressBar from '../components/ProgressBar';
 import AppBarWrapper from '../components/AppBar';
 import Spinner from 'react-native-loading-spinner-overlay';
 import {prediction} from '../services/models';
+import {useUserState} from '../context/userContext';
+import {createAppointment} from '../services/appointments';
 
 export default Results = ({navigation, route}) => {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
   const {symptomsList} = route.params;
+  const userState = useUserState();
   const toggle = () => {
     navigation?.toggleDrawer();
   };
@@ -21,6 +24,15 @@ export default Results = ({navigation, route}) => {
           symptoms: symptomsList,
         });
         console.log('response', resp.data);
+        const appointment = await createAppointment({
+          userId: userState.user.id,
+          doctorName: 'Smart',
+          dateTime: new Date(),
+          type: 'Smart',
+          status: 'completed',
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        });
         if (resp) {
           setTimeout(() => {
             setLoading(false);
@@ -73,7 +85,7 @@ export default Results = ({navigation, route}) => {
                 color = '#2ecc71';
               }
               if (index == 1) {
-                percentage = 30;
+                percentage = 20;
                 color = '#fec901';
               }
               if (index == 2) {
@@ -88,10 +100,7 @@ export default Results = ({navigation, route}) => {
                     textColor={color}
                   />
                   <Text
-                    style={[
-                      styles.openText,
-                      {marginLeft: 15, fontSize: 25},
-                    ]}>
+                    style={[styles.openText, {marginLeft: 15, fontSize: 25}]}>
                     {obj}
                   </Text>
                 </View>
