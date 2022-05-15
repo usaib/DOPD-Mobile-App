@@ -1,14 +1,24 @@
 import React, {useEffect, useState} from 'react';
-import {View, StyleSheet, Dimensions, Text} from 'react-native';
+import {
+  View,
+  StyleSheet,
+  Dimensions,
+  Text,
+  Image,
+  Platform,
+} from 'react-native';
 import AppBarWrapper from '../components/AppBar';
 import {Wrapper} from '../components/Wrapper';
 import ProgressBar from '../components/ProgressBar';
 import {fetchDiagnosedDiseaseDetails} from '../services/diagnose';
 import {Button} from 'react-native-paper';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import axios from 'axios';
+import {BASE_URL} from '../../App';
 
 export const AppointmentDetails = ({navigation, route}) => {
   const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [photo, setPhoto] = useState(false);
   const {appointmentType} = route.params;
   const {appointmentId} = route.params;
 
@@ -19,7 +29,41 @@ export const AppointmentDetails = ({navigation, route}) => {
     s.replace(/^_*(.)|_+(.)/g, (s, c, d) =>
       c ? c.toUpperCase() : ' ' + d.toUpperCase(),
     );
+  const createFormData = (photo, body = {}) => {
+    const data = new FormData();
 
+    data.append('photo', {
+      name: photo.fileName,
+      type: photo.type,
+      uri: Platform.OS === 'ios' ? photo.uri.replace('file://', '') : photo.uri,
+    });
+
+    Object.keys(body).forEach(key => {
+      data.append(key, body[key]);
+    });
+    console.log(data);
+
+    return data;
+  };
+
+  const handleUploadPhoto = async () => {
+    try {
+      const resp = await axios.post(
+        `https://nine-parks-return-103-196-160-81.loca.lt/api/model/uploadImage`,
+        createFormData(photo, {userId: '1'}),
+      );
+      console.log(resp.data);
+      setData([
+        {
+          diagnosedDisease: resp.data.disease,
+          providedSymptoms: data[0].providedSymptoms,
+          wantExtraInfo: false,
+        },
+      ]);
+    } catch (e) {
+      console.log(e);
+    }
+  };
   useEffect(() => {
     const getDataForSmartAppointment = async () => {
       try {
@@ -36,6 +80,20 @@ export const AppointmentDetails = ({navigation, route}) => {
       getDataForSmartAppointment();
     }
   }, []);
+
+  const handleChoosePhoto = () => {
+    const options = {
+      mediaType: 'photo',
+      includeExtra: true,
+      includeBase64: true,
+    };
+    launchImageLibrary(options, response => {
+      console.log('Response', response.assets[0].base64.slice(0, 10));
+      if (response.assets[0]) {
+        setPhoto(response.assets[0]);
+      }
+    });
+  };
 
   const dynamicDetailsRendering = appointmentType => {
     if (appointmentType == 'In-person') {
@@ -116,21 +174,36 @@ export const AppointmentDetails = ({navigation, route}) => {
                   </View>
                 );
               })}
+            {photo && (
+              <Image
+                source={{uri: photo.uri}}
+                style={{height: 300, width: 300}}></Image>
+            )}
             {!!data.length && data[0].wantExtraInfo && (
-              <View style={{flex: 1}}>
-                <Text style={[styles.paragraphText]}>
-                  {!!data.length && data[0].otherDetails}
-                </Text>
+              <View style={{flex: 1, marginTop: 10}}>
                 <Button
                   loading={false}
                   style={styles.button}
                   icon="camera"
                   mode="contained"
+                  onPress={handleChoosePhoto}
                   title="Submit">
+                  <Text style={styles.button}>Choose Image</Text>
+                </Button>
+                <Button
+                  mode="contained"
+                  style={styles.button}
+                  title="Choose Photo"
+                  onPress={handleUploadPhoto}>
+                  {' '}
                   <Text style={styles.button}>Upload</Text>
                 </Button>
               </View>
             )}
+            <Text style={[styles.openText]}>Recomendations</Text>
+            <Text style={[styles.paragraphText]}>
+              {!!data.length && data[0].otherDetails}
+            </Text>
             <Text style={[styles.openText]}>Provided Symptoms</Text>
             {!!data.length &&
               data[0].providedSymptoms.split(',').map((obj, index) => {
@@ -142,10 +215,6 @@ export const AppointmentDetails = ({navigation, route}) => {
                   </View>
                 );
               })}
-            <Text style={[styles.openText]}>Recomendations</Text>
-            <Text style={[styles.paragraphText]}>
-              {!!data.length && data[0].otherDetails}
-            </Text>
           </Wrapper>
         </View>
       );
