@@ -1,7 +1,6 @@
 import React from 'react';
 import {View, StyleSheet, Image, Text} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-//import {Button} from 'react-native-paper';
 import {globalStyles} from '../styles/globalStyles';
 
 const Button = ({onPress, style, title, icon}) => {
@@ -44,7 +43,12 @@ export const DoctorsCard = ({doctor}) => {
               source={{
                 uri: doctor.imageUrl,
               }}
-              style={{height: 88, width: 88, marginTop: 1.5}}
+              style={{
+                marginTop: 1.5,
+                objectFit: 'contain',
+                width: 90,
+                height: 90,
+              }}
             />
           </View>
           <View
@@ -60,7 +64,7 @@ export const DoctorsCard = ({doctor}) => {
                 globalStyles.cardsubHeading,
                 {color: '#0381d1', marginTop: 7, fontSize: 15},
               ]}>
-              {doctor.specialty}
+              {doctor.specialization}
             </Text>
             <View
               style={{
@@ -89,7 +93,7 @@ export const DoctorsCard = ({doctor}) => {
                   globalStyles.cardsubHeading,
                   {color: '#A9A9A9', fontSize: 15},
                 ]}>
-                {doctor.experience}
+                {doctor.experience} years
               </Text>
             </View>
           </View>

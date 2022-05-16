@@ -10,6 +10,7 @@ export default function HistoryItems({
   dateTime,
   appointmentStatus,
   navigation,
+  appointmentId,
 }) {
   const monthNames = [
     'January',
@@ -52,6 +53,7 @@ export default function HistoryItems({
   const onPress = () => {
     navigation.navigate('Appointment Details', {
       appointmentType,
+      appointmentId,
     });
   };
   return (
@@ -61,98 +63,98 @@ export default function HistoryItems({
       onPressCard={onPress}
       style={{
         display: 'flex',
-        flexDirection: 'column',
+        flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'center',
-        marginTop: 10,
       }}>
-      <View style={styles.cardContainer}>
-        <View style={styles.iconContainer}>
-          <View
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'flex-start',
-              justifyContent: 'center',
-              backgroundColor: '#B5DEFF4F',
-              borderRadius: 10,
-              width: 60,
-              height: 60,
-            }}>
-            <Text
-              style={[styles.cardTitle, {alignSelf: 'center', fontSize: 20}]}>
-              {new Date(dateTime).getDate().toString()}
-            </Text>
-            <Text
-              style={[
-                styles.cardTitle,
-                {alignSelf: 'center', fontWeight: '400'},
-              ]}>
-              {monthNames[new Date(dateTime).getMonth().toString()]}
-            </Text>
-          </View>
-        </View>
-        <View style={styles.cardTitleContainer}>
-          <Text style={styles.cardTitle}>{doctorName}</Text>
+      <View
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'flex-start',
+          justifyContent: 'center',
+          backgroundColor: '#B5DEFF4F',
+          borderRadius: 10,
+          width: 60,
+          height: 60,
+          marginRight: 15,
+        }}>
+        <Text style={[styles.cardTitle, {alignSelf: 'center', fontSize: 20}]}>
+          {new Date(dateTime).getDate().toString()}
+        </Text>
+        <Text
+          style={[styles.cardTitle, {alignSelf: 'center', fontWeight: '400'}]}>
+          {monthNames[new Date(dateTime).getMonth().toString()]}
+        </Text>
+      </View>
+      <View style={styles.cardTitleContainer}>
+        <Text style={styles.cardTitle}>{doctorName}</Text>
 
-          <Text
-            style={[
-              styles.cardTitle,
-              {
-                fontSize: 13,
-                color: '#c4c4c4',
-                alignSelf: 'flex-start',
-                fontWeight: '000',
-              },
-            ]}>
-            {days[new Date(dateTime).getDay().toString()]} ,
-            {new Date(dateTime).toLocaleTimeString()}
-          </Text>
-          <Text
-            style={[
-              styles.cardTitle,
-              {
-                fontSize: 13,
-                color: '#c4c4c4',
-                alignSelf: 'flex-start',
-                fontWeight: '000',
-              },
-            ]}>
-            {appointmentType} Appointment
-          </Text>
-          <Text
-            style={[
-              styles.cardTitle,
-              {
-                fontSize: 13,
-                color: '#c4c4c4',
-                alignSelf: 'flex-start',
-                fontWeight: '000',
-              },
-            ]}>
-            Patient Name: {patientName}
-          </Text>
-        </View>
-        <View style={styles.buttonContainer}>
-          {/* <IconButton
+        <Text
+          style={[
+            styles.cardTitle,
+            {
+              fontSize: 15,
+              color: '#a9a9a9',
+              alignSelf: 'flex-start',
+              fontWeight: '500',
+            },
+          ]}>
+          {days[new Date(dateTime).getDay().toString()]} ,
+          {new Date(dateTime).toLocaleTimeString()}
+        </Text>
+        <Text
+          style={[
+            styles.cardTitle,
+            {
+              fontSize: 15,
+              color: '#a9a9a9',
+              alignSelf: 'flex-start',
+              fontWeight: '500',
+            },
+          ]}>
+          {appointmentType} Appointment
+        </Text>
+        <Text
+          style={[
+            styles.cardTitle,
+            {
+              fontSize: 15,
+              color: '#a9a9a9',
+              alignSelf: 'flex-start',
+              fontWeight: '500',
+            },
+          ]}>
+          Patient Name: {patientName}
+        </Text>
+      </View>
+      <View
+        style={{
+          height: 30,
+          paddingVertical: 6,
+          paddingHorizontal: 6,
+          marginTop: 'auto',
+          marginBottom: 'auto',
+          marginLeft: 'auto',
+          borderRadius: 5,
+          backgroundColor: setColour(appointmentStatus),
+        }}>
+        {/* <IconButton
             icon="account-details"
             color={'#0381d1'}
             size={30}
             onPress={() => console.log('Pressed')}
           /> */}
-          <Text
-            style={[
-              styles.cardTitle,
-              {
-                fontSize: 14,
-                color: setColour(appointmentStatus),
-                alignSelf: 'flex-start',
-                fontWeight: '000',
-              },
-            ]}>
-            {appointmentStatus}
-          </Text>
-        </View>
+        <Text
+          style={[
+            styles.cardTitle,
+            {
+              fontSize: 14,
+              color: '#fff',
+              fontWeight: '700',
+            },
+          ]}>
+          {appointmentStatus}
+        </Text>
       </View>
     </HistoryCard>
   );
@@ -166,9 +168,8 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   cardContainer: {
-    flex: 1,
     flexDirection: 'row',
-    width: '100%',
+    justifyContent: 'space-between',
   },
   iconContainer: {
     flex: 1,
@@ -178,9 +179,8 @@ const styles = StyleSheet.create({
   },
 
   cardTitleContainer: {
-    width: '60%',
     flexDirection: 'column',
-    alignItems: 'flex-end',
+    alignItems: 'flex-start',
     justifyContent: 'center',
   },
   cardTitle: {
@@ -188,6 +188,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Nunito',
     fontWeight: '800',
     alignSelf: 'flex-start',
-    fontSize: 16,
+    fontSize: 18,
   },
 });

@@ -13,7 +13,7 @@ function Router() {
   }
   return (
     <NavigationContainer>
-      {true ? <AppStack /> : <AuthStack />}
+      {userState.isAuthenticated ? <AppStack /> : <AuthStack />}
     </NavigationContainer>
   );
 }

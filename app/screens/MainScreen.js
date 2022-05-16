@@ -46,11 +46,6 @@ function MainScreen({navigation}) {
         style={{
           paddingHorizontal: 20,
           marginTop: 0,
-          display: 'flex',
-          flexDirection: 'column',
-          position: 'relative',
-          width: Dimensions.get('window').width,
-          height: Dimensions.get('window').height,
         }}>
         <View style={styles.top}></View>
         <Text

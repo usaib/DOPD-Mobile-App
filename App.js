@@ -21,4 +21,4 @@ export default function App() {
   );
 }
 
-export const BASE_URL = 'https://sharp-cars-matter-103-26-83-55.loca.lt';
+export const BASE_URL = 'https://soft-crabs-rule-182-190-194-88.loca.lt';
