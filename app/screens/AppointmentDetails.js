@@ -49,7 +49,7 @@ export const AppointmentDetails = ({navigation, route}) => {
   const handleUploadPhoto = async () => {
     try {
       const resp = await axios.post(
-        `https://nine-parks-return-103-196-160-81.loca.lt/api/model/uploadImage`,
+        `https://mean-tips-repair-27-96-94-243.loca.lt/api/model/uploadImage`,
         createFormData(photo, {userId: '1'}),
       );
       console.log(resp.data);
