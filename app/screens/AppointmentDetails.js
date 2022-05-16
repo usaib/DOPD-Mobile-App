@@ -4,19 +4,27 @@ import {
   StyleSheet,
   Dimensions,
   Text,
+<<<<<<< HEAD
   TouchableOpacity,
   Image,
   ScrollView,
   Linking,
+=======
+  Image,
+  Platform,
+>>>>>>> f584e96cd9a2a9d6bbab28e7e4f4fa0367186ed3
 } from 'react-native';
 import AppBarWrapper from '../components/AppBar';
 import ProgressBar from '../components/ProgressBar';
 import {fetchDiagnosedDiseaseDetails} from '../services/diagnose';
 import {Button} from 'react-native-paper';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import axios from 'axios';
+import {BASE_URL} from '../../App';
 
 export const AppointmentDetails = ({navigation, route}) => {
   const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [photo, setPhoto] = useState(false);
   const {appointmentType} = route.params;
   const {appointmentId} = route.params;
 
@@ -27,7 +35,41 @@ export const AppointmentDetails = ({navigation, route}) => {
     s.replace(/^_*(.)|_+(.)/g, (s, c, d) =>
       c ? c.toUpperCase() : ' ' + d.toUpperCase(),
     );
+  const createFormData = (photo, body = {}) => {
+    const data = new FormData();
 
+    data.append('photo', {
+      name: photo.fileName,
+      type: photo.type,
+      uri: Platform.OS === 'ios' ? photo.uri.replace('file://', '') : photo.uri,
+    });
+
+    Object.keys(body).forEach(key => {
+      data.append(key, body[key]);
+    });
+    console.log(data);
+
+    return data;
+  };
+
+  const handleUploadPhoto = async () => {
+    try {
+      const resp = await axios.post(
+        `https://nine-parks-return-103-196-160-81.loca.lt/api/model/uploadImage`,
+        createFormData(photo, {userId: '1'}),
+      );
+      console.log(resp.data);
+      setData([
+        {
+          diagnosedDisease: resp.data.disease,
+          providedSymptoms: data[0].providedSymptoms,
+          wantExtraInfo: false,
+        },
+      ]);
+    } catch (e) {
+      console.log(e);
+    }
+  };
   useEffect(() => {
     const getDataForSmartAppointment = async () => {
       try {
@@ -44,6 +86,20 @@ export const AppointmentDetails = ({navigation, route}) => {
       getDataForSmartAppointment();
     }
   }, []);
+
+  const handleChoosePhoto = () => {
+    const options = {
+      mediaType: 'photo',
+      includeExtra: true,
+      includeBase64: true,
+    };
+    launchImageLibrary(options, response => {
+      console.log('Response', response.assets[0].base64.slice(0, 10));
+      if (response.assets[0]) {
+        setPhoto(response.assets[0]);
+      }
+    });
+  };
 
   const dynamicDetailsRendering = appointmentType => {
     if (appointmentType == 'In-person') {
