@@ -21,8 +21,4 @@ export default function App() {
   );
 }
 
-<<<<<<< HEAD
 export const BASE_URL = 'https://soft-crabs-rule-182-190-194-88.loca.lt';
-=======
-export const BASE_URL = 'https://20d2-103-196-160-81.ngrok.io';
->>>>>>> f584e96cd9a2a9d6bbab28e7e4f4fa0367186ed3

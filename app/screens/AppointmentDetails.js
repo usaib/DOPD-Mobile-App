@@ -4,15 +4,10 @@ import {
   StyleSheet,
   Dimensions,
   Text,
-<<<<<<< HEAD
   TouchableOpacity,
   Image,
   ScrollView,
   Linking,
-=======
-  Image,
-  Platform,
->>>>>>> f584e96cd9a2a9d6bbab28e7e4f4fa0367186ed3
 } from 'react-native';
 import AppBarWrapper from '../components/AppBar';
 import ProgressBar from '../components/ProgressBar';
