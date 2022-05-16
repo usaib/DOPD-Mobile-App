@@ -4,7 +4,7 @@ const fetchAppointments = async params => {
   return axios.post(
     BASE_URL + '/appointment/getAppointments',
     {
-      limit: 10,
+      limit: 100,
       offset: 0,
     },
     {

@@ -43,7 +43,12 @@ export const DoctorsCard = ({doctor}) => {
               source={{
                 uri: doctor.imageUrl,
               }}
-              style={{height: 88, width: 88, marginTop: 1.5}}
+              style={{
+                marginTop: 1.5,
+                objectFit: 'contain',
+                width: 90,
+                height: 90,
+              }}
             />
           </View>
           <View
@@ -88,7 +93,7 @@ export const DoctorsCard = ({doctor}) => {
                   globalStyles.cardsubHeading,
                   {color: '#A9A9A9', fontSize: 15},
                 ]}>
-                {doctor.experience}
+                {doctor.experience} years
               </Text>
             </View>
           </View>

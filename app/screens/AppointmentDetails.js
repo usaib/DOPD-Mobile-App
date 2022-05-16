@@ -4,11 +4,12 @@ import {
   StyleSheet,
   Dimensions,
   Text,
+  TouchableOpacity,
   Image,
-  Platform,
+  ScrollView,
+  Linking,
 } from 'react-native';
 import AppBarWrapper from '../components/AppBar';
-import {Wrapper} from '../components/Wrapper';
 import ProgressBar from '../components/ProgressBar';
 import {fetchDiagnosedDiseaseDetails} from '../services/diagnose';
 import {Button} from 'react-native-paper';
@@ -19,6 +20,7 @@ import {BASE_URL} from '../../App';
 export const AppointmentDetails = ({navigation, route}) => {
   const [data, setData] = useState([]);
   const [photo, setPhoto] = useState(false);
+  const [choosed, setChoosed] = useState(false);
   const {appointmentType} = route.params;
   const {appointmentId} = route.params;
 
@@ -49,7 +51,7 @@ export const AppointmentDetails = ({navigation, route}) => {
   const handleUploadPhoto = async () => {
     try {
       const resp = await axios.post(
-        `https://mean-tips-repair-27-96-94-243.loca.lt/api/model/uploadImage`,
+        `https://curvy-kids-fall-27-96-94-143.loca.lt/api/model/uploadImage`,
         createFormData(photo, {userId: '1'}),
       );
       console.log(resp.data);
@@ -91,6 +93,7 @@ export const AppointmentDetails = ({navigation, route}) => {
       console.log('Response', response.assets[0].base64.slice(0, 10));
       if (response.assets[0]) {
         setPhoto(response.assets[0]);
+        setChoosed(true);
       }
     });
   };
@@ -98,125 +101,344 @@ export const AppointmentDetails = ({navigation, route}) => {
   const dynamicDetailsRendering = appointmentType => {
     if (appointmentType == 'In-person') {
       return (
-        <Wrapper>
-          <Text style={[styles.openText]}>E-Prescription</Text>
-          <Text style={[styles.paragraphText]}>
-            1. Tab Panadol 2 Tablets (twice a day)
-          </Text>
-          <Text style={[styles.paragraphText]}>
-            2. Tab Jardin-D once daily (at night)
-          </Text>
-          <Text style={[styles.paragraphText]}>
-            3. Take Steam 1-2 times a day
-          </Text>
-          <Text style={[styles.openText]}>Recomendations</Text>
-          <Text style={[styles.paragraphText]}>Visit again after one week</Text>
-          <Text style={[styles.openText]}>Appointment Slip</Text>
-        </Wrapper>
+        <ScrollView contentContainerStyle={{paddingHorizontal: 15}}>
+          <View style={{marginBottom: 15}}>
+            <Text style={[styles.openText, {marginBottom: 20}]}>
+              E-Prescription
+            </Text>
+            <View style={styles.pdfCard}>
+              <Image
+                source={require('../images/pdfIcon.png')}
+                style={{height: 50, width: 50}}
+              />
+              <Text style={{fontSize: 16, fontWeight: '400', marginLeft: 15}}>
+                E-prescription
+              </Text>
+              <TouchableOpacity
+                style={{
+                  marginLeft: 'auto',
+                }}
+                onPress={() => {
+                  console.log('Downloading prescription');
+                }}>
+                <Image
+                  source={require('../images/downloadIcon.png')}
+                  style={{height: 45, width: 45}}
+                />
+              </TouchableOpacity>
+            </View>
+          </View>
+          <View style={{marginBottom: 15}}>
+            <Text style={[styles.openText, {marginBottom: 20}]}>
+              Description
+            </Text>
+            <View
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
+                marginLeft: 6,
+                marginBottom: 20,
+              }}>
+              <Image
+                source={require('../images/calendar.png')}
+                style={{height: 20, width: 20}}
+              />
+              <Text
+                style={[styles.paragraphText, {marginLeft: 13, fontSize: 16}]}>
+                Wednesday, 11 March
+              </Text>
+            </View>
+            <View
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
+                marginLeft: 6,
+                marginBottom: 20,
+              }}>
+              <Image
+                source={require('../images/clock.png')}
+                style={{height: 20, width: 20}}
+              />
+              <Text
+                style={[styles.paragraphText, {marginLeft: 13, fontSize: 16}]}>
+                5:00pm
+              </Text>
+            </View>
+            <View
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
+                marginLeft: 6,
+              }}>
+              <Image
+                source={require('../images/locationIcon.png')}
+                style={{height: 20, width: 20}}
+              />
+              <Text
+                style={[styles.paragraphText, {marginLeft: 13, fontSize: 16}]}>
+                Liaquat National Hospital, Karachi
+              </Text>
+            </View>
+          </View>
+
+          <View style={{marginBottom: 15}}>
+            <Text style={[styles.openText, {marginBottom: 20}]}>
+              Appointment Fee
+            </Text>
+            <View style={styles.pdfCard}>
+              <Image
+                source={require('../images/pdfIcon.png')}
+                style={{height: 50, width: 50}}
+              />
+              <Text style={{fontSize: 16, fontWeight: '400', marginLeft: 15}}>
+                Appointment Fee
+              </Text>
+              <TouchableOpacity
+                style={{
+                  marginLeft: 'auto',
+                }}
+                onPress={() => {
+                  console.log('Downloading Appointment Fee');
+                }}>
+                <Image
+                  source={require('../images/downloadIcon.png')}
+                  style={{height: 45, width: 45}}
+                />
+              </TouchableOpacity>
+            </View>
+          </View>
+          <View>
+            <Text style={[styles.openText]}>Recomendations</Text>
+            <Text style={[styles.paragraphText]}>
+              Visit again after one week
+            </Text>
+          </View>
+        </ScrollView>
       );
     }
     if (appointmentType == 'Online') {
       return (
-        <Wrapper>
-          <Text style={[styles.openText]}>E-Prescription</Text>
-          <Text style={[styles.paragraphText]}>
-            1. Tab Panadol 2 Tablets (twice a day)
-          </Text>
-          <Text style={[styles.paragraphText]}>
-            2. Tab Jardin-D once daily (at night)
-          </Text>
-          <Text style={[styles.paragraphText]}>
-            3. Take Steam 1-2 times a day
-          </Text>
-          <Text style={[styles.openText]}>Description</Text>
-          <Text style={[styles.paragraphText]}>
-            11 March @ 5:00pm with Dr. Anees Allana
-          </Text>
-          <Text style={[styles.openText]}>Appointment Link</Text>
-          <Text style={[styles.openText]}>Appointment Fee</Text>
-        </Wrapper>
+        <ScrollView contentContainerStyle={{paddingHorizontal: 15}}>
+          <View style={{marginBottom: 15}}>
+            <Text style={[styles.openText, {marginBottom: 20}]}>
+              E-Prescription
+            </Text>
+            <View style={styles.pdfCard}>
+              <Image
+                source={require('../images/pdfIcon.png')}
+                style={{height: 50, width: 50}}
+              />
+              <Text style={{fontSize: 16, fontWeight: '400', marginLeft: 15}}>
+                E-prescription
+              </Text>
+              <TouchableOpacity
+                style={{
+                  marginLeft: 'auto',
+                }}
+                onPress={() => {
+                  console.log('Downloading prescription');
+                }}>
+                <Image
+                  source={require('../images/downloadIcon.png')}
+                  style={{height: 45, width: 45}}
+                />
+              </TouchableOpacity>
+            </View>
+          </View>
+          <View style={{marginBottom: 15}}>
+            <Text style={[styles.openText, {marginBottom: 20}]}>
+              Description
+            </Text>
+            <View
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
+                marginLeft: 6,
+                marginBottom: 20,
+              }}>
+              <Image
+                source={require('../images/calendar.png')}
+                style={{height: 20, width: 20}}
+              />
+              <Text
+                style={[styles.paragraphText, {marginLeft: 13, fontSize: 16}]}>
+                Wednesday, 11 March
+              </Text>
+            </View>
+            <View
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
+                marginLeft: 6,
+              }}>
+              <Image
+                source={require('../images/clock.png')}
+                style={{height: 20, width: 20}}
+              />
+              <Text
+                style={[styles.paragraphText, {marginLeft: 13, fontSize: 16}]}>
+                5:00pm
+              </Text>
+            </View>
+          </View>
+          <View style={{marginBottom: 15}}>
+            <Text style={[styles.openText, {marginBottom: 20}]}>
+              Appointment Link
+            </Text>
+            <Text style={styles.paragraphText}>
+              Join the following link on time for the meeting.
+            </Text>
+            <Text
+              style={{
+                textDecorationLine: 'underline',
+                color: '#0000EE',
+                marginLeft: 6,
+                marginTop: 5,
+              }}
+              onPress={() => {
+                Linking.openURL('https://www.google.com/');
+              }}>
+              https://www.google.com/
+            </Text>
+          </View>
+          <View style={{marginBottom: 15}}>
+            <Text style={[styles.openText, {marginBottom: 20}]}>
+              Appointment Fee
+            </Text>
+            <View style={styles.pdfCard}>
+              <Image
+                source={require('../images/pdfIcon.png')}
+                style={{height: 50, width: 50}}
+              />
+              <Text style={{fontSize: 16, fontWeight: '400', marginLeft: 15}}>
+                Appointment Fee
+              </Text>
+              <TouchableOpacity
+                style={{
+                  marginLeft: 'auto',
+                }}
+                onPress={() => {
+                  console.log('Downloading Appointment Fee');
+                }}>
+                <Image
+                  source={require('../images/downloadIcon.png')}
+                  style={{height: 45, width: 45}}
+                />
+              </TouchableOpacity>
+            </View>
+          </View>
+          <View>
+            <Text style={[styles.openText]}>Recomendations</Text>
+            <Text style={[styles.paragraphText]}>
+              Visit again after one week
+            </Text>
+          </View>
+        </ScrollView>
       );
     } else {
       return (
-        <View style={{flex: 1}}>
-          <Wrapper>
-            <Text style={[styles.openText]}>Description</Text>
-            <Text style={styles.paragraphText}>
-              According to our MDT you are diagnosed with following dieseases
-              with chances of.
-            </Text>
-            {!!data.length &&
-              !data[0].wantExtraInfo &&
-              data[0].diagnosedDisease.split(',').map((obj, index) => {
-                let percentage = 0;
-                let color = '#FFFF';
-                if (index == 0) {
-                  percentage = 70;
-                  color = '#2ecc71';
-                }
-                if (index == 1) {
-                  percentage = 20;
-                  color = '#fec901';
-                }
-                if (index == 2) {
-                  percentage = 10;
-                  color = '#d03423';
-                }
-                return (
-                  <View style={styles.resCard}>
-                    <ProgressBar
-                      percentage={percentage}
-                      color={color}
-                      textColor={color}
-                      radius={28}
-                    />
-                    <Text style={[styles.openText, {fontSize: 19}]}>{obj}</Text>
-                  </View>
-                );
-              })}
-            {photo && (
-              <Image
-                source={{uri: photo.uri}}
-                style={{height: 300, width: 300}}></Image>
-            )}
-            {!!data.length && data[0].wantExtraInfo && (
-              <View style={{flex: 1, marginTop: 10}}>
+        <ScrollView contentContainerStyle={{paddingHorizontal: 15}}>
+          <Text style={[styles.openText]}>Description</Text>
+          <Text style={styles.paragraphText}>
+            According to our MDT you are diagnosed with following dieseases with
+            chances of.
+          </Text>
+          {!!data.length &&
+            !data[0].wantExtraInfo &&
+            data[0].diagnosedDisease.split(',').map((obj, index) => {
+              let percentage = 0;
+              let color = '#FFFF';
+              if (index == 0) {
+                percentage = 70;
+                color = '#2ecc71';
+              }
+              if (index == 1) {
+                percentage = 20;
+                color = '#fec901';
+              }
+              if (index == 2) {
+                percentage = 10;
+                color = '#d03423';
+              }
+              return (
+                <View style={styles.resCard}>
+                  <ProgressBar
+                    percentage={percentage}
+                    color={color}
+                    textColor={color}
+                    radius={30}
+                  />
+                  <Text style={[styles.openText, {fontSize: 19}]}>{obj}</Text>
+                </View>
+              );
+            })}
+          {photo && (
+            <Image source={{uri: photo.uri}} style={{height: 300}}></Image>
+          )}
+          {!!data.length && data[0].wantExtraInfo && (
+            <View
+              style={{
+                flex: 1,
+                marginTop: 10,
+                flexDirection: 'column',
+                justifyContent: 'space-around',
+              }}>
+              <Button
+                loading={false}
+                style={styles.button}
+                icon="camera"
+                mode="contained"
+                onPress={handleChoosePhoto}
+                title="Submit">
+                <Text style={styles.button}>Choose Image</Text>
+              </Button>
+              {choosed && (
                 <Button
-                  loading={false}
-                  style={styles.button}
-                  icon="camera"
-                  mode="contained"
-                  onPress={handleChoosePhoto}
-                  title="Submit">
-                  <Text style={styles.button}>Choose Image</Text>
-                </Button>
-                <Button
                   mode="contained"
                   style={styles.button}
-                  title="Choose Photo"
+                  icon="upload"
+                  labelStyle={{fontWeight: '700', fontSize: 14.5}}
                   onPress={handleUploadPhoto}>
-                  {' '}
                   <Text style={styles.button}>Upload</Text>
                 </Button>
-              </View>
-            )}
-            <Text style={[styles.openText]}>Recomendations</Text>
-            <Text style={[styles.paragraphText]}>
-              {!!data.length && data[0].otherDetails}
-            </Text>
-            <Text style={[styles.openText]}>Provided Symptoms</Text>
+              )}
+            </View>
+          )}
+          <Text style={[styles.openText]}>Recomendations</Text>
+          <Text style={[styles.paragraphText]}>
+            {!!data.length && data[0].otherDetails}
+          </Text>
+          <Text style={[styles.openText]}>Provided Symptoms</Text>
+          <View
+            style={{display: 'flex', flexDirection: 'row', flexWrap: 'wrap'}}>
             {!!data.length &&
-              data[0].providedSymptoms.split(',').map((obj, index) => {
-                return (
-                  <View style={styles.resCard}>
-                    <Text style={[styles.openText, {fontSize: 19}]}>
-                      {index + 1 + '. ' + titleCase(obj)}
-                    </Text>
-                  </View>
-                );
-              })}
-          </Wrapper>
-        </View>
+              data[0].providedSymptoms
+                .split(',')
+                .sort((a, b) => a.length - b.length)
+                .map((obj, index) => {
+                  return (
+                    <View style={styles.symptomCard}>
+                      <Text
+                        style={[
+                          {
+                            fontSize: 14,
+                            fontWeight: '500',
+                            color: '#FFFFFF',
+                            letterSpacing: 0.5,
+                          },
+                        ]}>
+                        {titleCase(obj)}
+                      </Text>
+                    </View>
+                  );
+                })}
+          </View>
+        </ScrollView>
       );
     }
   };
@@ -248,7 +470,7 @@ export const styles = StyleSheet.create({
   resCard: {
     backgroundColor: 'white',
     height: 75,
-    marginVertical: 12,
+    marginVertical: 8,
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'flex-start',
@@ -273,6 +495,8 @@ export const styles = StyleSheet.create({
   button: {
     fontFamily: 'Gibson-Regular',
     color: 'white',
+    paddingVertical: 5,
+    marginVertical: 5,
   },
   cardHeading: {
     fontSize: 18,
@@ -304,7 +528,7 @@ export const styles = StyleSheet.create({
     marginVertical: 12,
     letterSpacing: 0.5,
     alignSelf: 'flex-start',
-    marginLeft: 8,
+    marginLeft: 6,
   },
   paragraphText: {
     fontSize: 15,
@@ -330,6 +554,28 @@ export const styles = StyleSheet.create({
     position: 'absolute',
     right: 5,
     bottom: 0,
+  },
+  symptomCard: {
+    height: 30,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#3498DB',
+    borderRadius: 14,
+    paddingHorizontal: 12,
+    marginHorizontal: 8,
+    marginVertical: 8,
+  },
+  pdfCard: {
+    backgroundColor: '#d3d3d346',
+    display: 'flex',
+    alignItems: 'center',
+
+    flexDirection: 'row',
+    height: 70,
+    paddingHorizontal: 12,
+    paddingVertical: 12,
+    borderRadius: 8,
   },
 });
 

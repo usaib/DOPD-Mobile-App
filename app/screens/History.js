@@ -6,6 +6,7 @@ import HistoryItems from '../components/HistoryItems';
 import {fetchAppointments} from '../services/appointments';
 import {ActivityIndicator} from 'react-native-paper';
 import {useIsFocused} from '@react-navigation/native';
+import {ScrollView} from 'react-native-gesture-handler';
 
 export const History = ({navigation}) => {
   const [data, setData] = useState([]);
@@ -34,19 +35,16 @@ export const History = ({navigation}) => {
 
   return (
     <View style={homeStyles.container}>
-      <View style={{marginBottom: 20}}>
-        <AppBarWrapper
-          title={'Appointment History'}
-          onPress={() => {
-            navigation.navigate('Main');
-          }}
-          showMenu={true}
-          showButton={false}
-          onMenuPress={toggle}
-        />
-      </View>
-
-      <Wrapper>
+      <AppBarWrapper
+        title={'Appointment History'}
+        onPress={() => {
+          navigation.navigate('Main');
+        }}
+        showMenu={true}
+        showButton={false}
+        onMenuPress={toggle}
+      />
+      <ScrollView contentContainerStyle={{marginTop: 5, paddingLeft: 15}}>
         {loading ? (
           <ActivityIndicator
             animating={true}
@@ -70,7 +68,7 @@ export const History = ({navigation}) => {
             />
           ))
         )}
-      </Wrapper>
+      </ScrollView>
     </View>
   );
 };

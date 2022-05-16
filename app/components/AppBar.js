@@ -35,7 +35,6 @@ function AppBarWrapper({onPress, onMenuPress, showButton, title, showMenu}) {
 const styles = StyleSheet.create({
   header: {
     backgroundColor: '#FFFFFF',
-
     fontFamily: 'Gibson-Regular',
   },
   logoView: {
