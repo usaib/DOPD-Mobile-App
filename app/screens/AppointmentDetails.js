@@ -11,7 +11,10 @@ import {
 } from 'react-native';
 import AppBarWrapper from '../components/AppBar';
 import ProgressBar from '../components/ProgressBar';
-import {fetchDiagnosedDiseaseDetails} from '../services/diagnose';
+import {
+  fetchDiagnosedDiseaseDetails,
+  updateDiagnosedDisease,
+} from '../services/diagnose';
 import {Button} from 'react-native-paper';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import axios from 'axios';
@@ -21,6 +24,7 @@ export const AppointmentDetails = ({navigation, route}) => {
   const [data, setData] = useState([]);
   const [photo, setPhoto] = useState(false);
   const [choosed, setChoosed] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const {appointmentType} = route.params;
   const {appointmentId} = route.params;
 
@@ -47,11 +51,20 @@ export const AppointmentDetails = ({navigation, route}) => {
 
     return data;
   };
-
+  const updateDiseases = async params => {
+    try {
+      console.log('these are parms', params);
+      const resp = await updateDiagnosedDisease(params);
+      console.log('these are resp', resp);
+    } catch (e) {
+      console.log(e);
+    }
+  };
   const handleUploadPhoto = async () => {
     try {
+      setUploading(true);
       const resp = await axios.post(
-        `https://curvy-kids-fall-27-96-94-143.loca.lt/api/model/uploadImage`,
+        `https://puny-suits-fetch-103-196-160-155.loca.lt/api/model/uploadImage`,
         createFormData(photo, {userId: '1'}),
       );
       console.log(resp.data);
@@ -62,8 +75,16 @@ export const AppointmentDetails = ({navigation, route}) => {
           wantExtraInfo: false,
         },
       ]);
+      await updateDiseases({
+        id: appointmentId,
+        diagnosedDisease: resp.data.disease,
+        wantExtraInfo: false,
+        otherDetails: 'Please refer to our doctors',
+      });
+      setUploading(false);
     } catch (e) {
       console.log(e);
+      setUploading(false);
     }
   };
   useEffect(() => {
@@ -343,11 +364,15 @@ export const AppointmentDetails = ({navigation, route}) => {
     } else {
       return (
         <ScrollView contentContainerStyle={{paddingHorizontal: 15}}>
-          <Text style={[styles.openText]}>Description</Text>
-          <Text style={styles.paragraphText}>
-            According to our MDT you are diagnosed with following dieseases with
-            chances of.
-          </Text>
+          {!!data.length && !data[0].wantExtraInfo && (
+            <View style={{flex: 1}}>
+              <Text style={[styles.openText]}>Description</Text>
+              <Text style={styles.paragraphText}>
+                According to our MDT you are diagnosed with following dieseases
+                with chances of.
+              </Text>
+            </View>
+          )}
           {!!data.length &&
             !data[0].wantExtraInfo &&
             data[0].diagnosedDisease.split(',').map((obj, index) => {
@@ -377,6 +402,10 @@ export const AppointmentDetails = ({navigation, route}) => {
                 </View>
               );
             })}
+          <Text style={[styles.openText]}>Recomendations</Text>
+          <Text style={[styles.paragraphText]}>
+            {!!data.length && data[0].otherDetails}
+          </Text>
           {photo && (
             <Image source={{uri: photo.uri}} style={{height: 300}}></Image>
           )}
@@ -388,31 +417,33 @@ export const AppointmentDetails = ({navigation, route}) => {
                 flexDirection: 'column',
                 justifyContent: 'space-around',
               }}>
-              <Button
-                loading={false}
-                style={styles.button}
-                icon="camera"
-                mode="contained"
-                onPress={handleChoosePhoto}
-                title="Submit">
-                <Text style={styles.button}>Choose Image</Text>
-              </Button>
+              {!uploading && (
+                <Button
+                  loading={false}
+                  style={styles.button}
+                  icon="camera"
+                  mode="contained"
+                  onPress={handleChoosePhoto}
+                  title="Submit">
+                  <Text style={styles.button}>Choose Image</Text>
+                </Button>
+              )}
               {choosed && (
                 <Button
+                  loading={uploading}
                   mode="contained"
                   style={styles.button}
                   icon="upload"
                   labelStyle={{fontWeight: '700', fontSize: 14.5}}
                   onPress={handleUploadPhoto}>
-                  <Text style={styles.button}>Upload</Text>
+                  <Text style={styles.button}>
+                    {uploading ? 'Uploading...' : 'Upload'}
+                  </Text>
                 </Button>
               )}
             </View>
           )}
-          <Text style={[styles.openText]}>Recomendations</Text>
-          <Text style={[styles.paragraphText]}>
-            {!!data.length && data[0].otherDetails}
-          </Text>
+
           <Text style={[styles.openText]}>Provided Symptoms</Text>
           <View
             style={{display: 'flex', flexDirection: 'row', flexWrap: 'wrap'}}>

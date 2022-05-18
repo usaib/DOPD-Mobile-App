@@ -14,9 +14,14 @@ export default Results = ({navigation, route}) => {
   const [data, setData] = useState([]);
   const {symptomsList} = route.params;
   const userState = useUserState();
+  const [wantInfo, setWantInfo] = useState(false);
   const toggle = () => {
     navigation?.toggleDrawer();
   };
+  const titleCase = s =>
+    s.replace(/^_*(.)|_+(.)/g, (s, c, d) =>
+      c ? c.toUpperCase() : ' ' + d.toUpperCase(),
+    );
   useEffect(() => {
     const getResults = async (values, actions) => {
       console.log(values);
@@ -35,13 +40,26 @@ export default Results = ({navigation, route}) => {
           updatedAt: new Date(),
         });
         console.log(appointment.data);
+        let wantImageInput = resp.data.predictions.some(data => {
+          if (
+            titleCase(data) == 'Pneumonia' ||
+            titleCase(data) == 'Tuberculosis' ||
+            titleCase(data) == 'Covid-19' ||
+            titleCase(data) == 'Osteoarthritis'
+          ) {
+            return true;
+          } else return false;
+        });
+        setWantInfo(wantImageInput);
         const diagnosedDisease = await createDiagnosedDisease({
           appointmentId: appointment.data.data.data,
           providedSymptoms: symptomsList.toString(),
           diagnosedDisease: resp.data.predictions.toString(),
-          wantExtraInfo: false,
+          wantExtraInfo: wantImageInput,
           givenExtraInfo: false,
-          otherDetails: 'Please refer to our doctors',
+          otherDetails: wantImageInput
+            ? 'Upload Image of you X-ray for further Inquiry'
+            : 'Please refer to our doctors',
         });
         if (resp) {
           setTimeout(() => {
@@ -80,13 +98,20 @@ export default Results = ({navigation, route}) => {
       <ScrollView style={resultStyle.scrollView}>
         <View style={[styles.top, {height: 225}]}></View>
         <Text style={[styles.openText, {marginTop: 100}]}>Results</Text>
-        <Text style={resultStyle.openText}>
-          Please note that the list below may not be complete and is provided
-          solely for informational purposes and is not a qualified medical
-          opinion.
-        </Text>
+        {!wantInfo ? (
+          <Text style={resultStyle.openText}>
+            Please note that the list below may not be complete and is provided
+            solely for informational purposes and is not a qualified medical
+            opinion.
+          </Text>
+        ) : (
+          <Text style={resultStyle.openText}>
+            Please go to Appointment History and check further details.
+          </Text>
+        )}
         <View style={resultStyle.cardWrapper}>
           {data &&
+            !wantInfo &&
             data.map((obj, index) => {
               let percentage = 0;
               let color = '#FFFF';

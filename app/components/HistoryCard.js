@@ -36,7 +36,7 @@ export const HistoryCard = ({
 const cardStyle = StyleSheet.create({
   card: {
     position: 'relative',
-    marginTop: 20,
+    marginTop: 14,
     borderRadius: 8,
     paddingVertical: 13,
     paddingHorizontal: 13,

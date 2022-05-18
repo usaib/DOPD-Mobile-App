@@ -135,7 +135,6 @@ function LoginScreen({navigation}) {
                 <Text style={styles.errorText}>
                   {touched.email && errors.email}
                 </Text>
-
                 <TextInput
                   theme={{roundness: 10}}
                   label="Password"

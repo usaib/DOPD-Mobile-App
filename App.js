@@ -21,4 +21,4 @@ export default function App() {
   );
 }
 
-export const BASE_URL = 'https://fc07-27-96-94-143.ngrok.io';
+export const BASE_URL = 'http://0a83-103-196-160-155.ngrok.io';

@@ -1,22 +1,31 @@
 import React, {useEffect, useState} from 'react';
-import {View, StyleSheet, Dimensions} from 'react-native';
+import {
+  View,
+  StyleSheet,
+  Dimensions,
+  FlatList,
+  RefreshControl,
+  Text,
+} from 'react-native';
 import AppBarWrapper from '../components/AppBar';
-import {Wrapper} from '../components/Wrapper';
 import HistoryItems from '../components/HistoryItems';
 import {fetchAppointments} from '../services/appointments';
 import {ActivityIndicator} from 'react-native-paper';
-import {useIsFocused} from '@react-navigation/native';
 import {ScrollView} from 'react-native-gesture-handler';
 
 export const History = ({navigation}) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState([]);
-  const isVisible = useIsFocused();
+  const [refreshing, setRefreshing] = useState(true);
+  const [refreshed, setRefreshed] = useState(true);
 
   const toggle = () => {
     navigation?.toggleDrawer();
   };
-
+  const onRefresh = () => {
+    setData([]);
+    setRefreshed(prev => !prev);
+  };
   useEffect(() => {
     const getData = async () => {
       setLoading(true);
@@ -25,13 +34,28 @@ export const History = ({navigation}) => {
         setData(resp.data.data.data.rows);
         console.log(resp.data.data.data.rows);
         setLoading(false);
+        setRefreshing(false);
       } catch (e) {
         console.log('error', e);
         setLoading(false);
       }
     };
     getData();
-  }, [isVisible]);
+  }, [refreshed]);
+  const ItemView = obj => {
+    return (
+      // Flat List Item
+      <HistoryItems
+        doctorName={obj.item.doctor.name}
+        appointmentId={obj.item.id}
+        patientName={obj.item.user.name}
+        dateTime={obj.item.dateTime}
+        appointmentType={obj.item.type}
+        appointmentStatus={obj.item.status}
+        navigation={navigation}
+      />
+    );
+  };
 
   return (
     <View style={homeStyles.container}>
@@ -44,8 +68,9 @@ export const History = ({navigation}) => {
         showButton={false}
         onMenuPress={toggle}
       />
-      <ScrollView contentContainerStyle={{marginTop: 5, paddingLeft: 15}}>
-        {loading ? (
+      <ScrollView
+        contentContainerStyle={{flex: 1, marginTop: 5, paddingLeft: 15}}>
+        {/* {loading ? (
           <ActivityIndicator
             animating={true}
             style={{
@@ -67,7 +92,21 @@ export const History = ({navigation}) => {
               navigation={navigation}
             />
           ))
-        )}
+        )} */}
+        {refreshing ? <ActivityIndicator /> : null}
+        <FlatList
+          data={data}
+          keyExtractor={(obj, index) => index.toString()}
+          enableEmptySections={true}
+          renderItem={ItemView}
+          refreshControl={
+            <RefreshControl
+              //refresh control used for the Pull to Refresh
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+            />
+          }
+        />
       </ScrollView>
     </View>
   );
@@ -129,6 +168,10 @@ export const homeStyles = StyleSheet.create({
     position: 'absolute',
     right: 5,
     bottom: 0,
+  },
+  itemStyle: {
+    fontSize: 20,
+    padding: 10,
   },
 });
 

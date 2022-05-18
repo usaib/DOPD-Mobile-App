@@ -10,6 +10,15 @@ const createDiagnosedDisease = async params => {
   });
 };
 
+const updateDiagnosedDisease = async params => {
+  console.log(params);
+  return axios.post(BASE_URL + '/diagnosedDisease/update', params, {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+};
+
 const fetchDiagnosedDiseaseDetails = async params => {
   return axios.post(
     BASE_URL + '/diagnosedDisease/getDiagnosedDiseaseDetails',
@@ -22,4 +31,8 @@ const fetchDiagnosedDiseaseDetails = async params => {
   );
 };
 
-export {createDiagnosedDisease, fetchDiagnosedDiseaseDetails};
+export {
+  createDiagnosedDisease,
+  fetchDiagnosedDiseaseDetails,
+  updateDiagnosedDisease,
+};
