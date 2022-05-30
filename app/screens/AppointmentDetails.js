@@ -18,7 +18,6 @@ import {
 import {Button} from 'react-native-paper';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import axios from 'axios';
-import {BASE_URL} from '../../App';
 
 export const AppointmentDetails = ({navigation, route}) => {
   const [data, setData] = useState([]);
@@ -601,7 +600,6 @@ export const styles = StyleSheet.create({
     backgroundColor: '#d3d3d346',
     display: 'flex',
     alignItems: 'center',
-
     flexDirection: 'row',
     height: 70,
     paddingHorizontal: 12,

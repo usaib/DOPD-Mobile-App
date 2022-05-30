@@ -17,7 +17,7 @@ export const globalStyles = StyleSheet.create({
   },
   cardHeading: {
     fontSize: 20,
-    fontWeight: '500',
+    fontWeight: '600',
     color: '#2a3d53',
     fontFamily: 'Roboto-Medium',
   },

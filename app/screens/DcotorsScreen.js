@@ -50,7 +50,9 @@ export const DcotorsScreen = ({navigation}) => {
           paddingBottom: 40,
         }}>
         {!!data.length ? (
-          data.map((item, key) => <DoctorsCard doctor={item} key={key} />)
+          data.map((item, key) => (
+            <DoctorsCard doctor={item} key={key} navigation={navigation} />
+          ))
         ) : (
           <ActivityIndicator
             animating={true}
