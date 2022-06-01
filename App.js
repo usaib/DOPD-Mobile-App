@@ -21,4 +21,4 @@ export default function App() {
   );
 }
 
-export const BASE_URL = 'https://loose-geese-study-182-190-204-214.loca.lt';
+export const BASE_URL = 'https://soft-games-take-103-26-83-31.loca.lt';

@@ -42,6 +42,13 @@ export const Appointment = ({navigation}) => {
     {
       id: '1',
       doctorId: '1',
+      weekday: 'Wednesday',
+      startTime: '05:00',
+      endTime: '08:00',
+    },
+    {
+      id: '1',
+      doctorId: '1',
       weekday: 'Friday',
       startTime: '04:00',
       endTime: '08:00',
@@ -66,14 +73,27 @@ export const Appointment = ({navigation}) => {
   };
 
   const dayHandler = item => {
+    console.log('item', item);
     const filter = docDetails.filter(doc => doc.weekday === item.weekday);
     const slots = createTimeSlots(filter[0].startTime, filter[0].endTime);
-    setTime(slots);
-    setAppointment({
-      day: filter[0].weekday,
-      time: filter[0].startTime,
-      date: item.date,
-    });
+    let currentDate = moment().format('DD-MM-YYYY');
+    if (currentDate === item.date) {
+      let currentTime = moment().add(30, 'minutes').format('hh:mm');
+      let availableSlots = slots.filter(time => time > currentTime);
+      setTime(availableSlots);
+      setAppointment({
+        day: filter[0].weekday,
+        time: availableSlots[0],
+        date: item.date,
+      });
+    } else {
+      setTime(slots);
+      setAppointment({
+        day: filter[0].weekday,
+        time: filter[0].startTime,
+        date: item.date,
+      });
+    }
   };
   const submitHandler = time => {
     setAppointment(prevState => {
@@ -81,11 +101,6 @@ export const Appointment = ({navigation}) => {
     });
   };
   useEffect(() => {
-    const slots = createTimeSlots(
-      docDetails[0].startTime,
-      docDetails[0].endTime,
-    );
-    setTime(slots);
     let dates = [];
     var startdate = moment().format('DD-MM-YYYY');
     for (let i = 0; i < 20; i++) {
@@ -94,19 +109,43 @@ export const Appointment = ({navigation}) => {
       for (let j = 0; j < docDetails.length; j++) {
         if (docDetails[j].weekday == weekDayName) {
           const date = new_date.format('DD-MM-YYYY');
-          dates.push({weekday: weekDayName, date: date});
+          dates.push({
+            weekday: weekDayName,
+            date: date,
+            startTime: docDetails[j].startTime,
+            endTime: docDetails[j].endTime,
+          });
         }
       }
     }
-    setSchedules(dates);
-    setAppointment(prevState => {
-      return {
-        ...prevState,
-        date: dates[0].date,
-        day: dates[0].weekday,
-        time: slots[0],
-      };
-    });
+
+    const slots = createTimeSlots(dates[0].startTime, dates[0].endTime);
+
+    if (startdate === dates[0].date) {
+      let currentTime = moment().add(30, 'minutes').format('hh:mm');
+      let availableSlots = slots.filter(time => time > currentTime);
+      setTime(availableSlots);
+      setSchedules(dates);
+      setAppointment(prevState => {
+        return {
+          ...prevState,
+          date: dates[0].date,
+          day: dates[0].weekday,
+          time: availableSlots[0],
+        };
+      });
+    } else {
+      setTime(slots);
+      setSchedules(dates);
+      setAppointment(prevState => {
+        return {
+          ...prevState,
+          date: dates[0].date,
+          day: dates[0].weekday,
+          time: slots[0],
+        };
+      });
+    }
   }, []);
 
   return (
@@ -246,43 +285,57 @@ export const Appointment = ({navigation}) => {
             marginTop: 30,
           }}>
           <Text style={[globalStyles.cardHeading, {fontSize: 22}]}>
-            Working Hours
+            Available Slots
           </Text>
-          <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-            <View
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                flexWrap: 'nowrap',
-              }}>
-              {time.map((time, key) => (
-                <TouchableOpacity
-                  key={key}
-                  onPress={() => {
-                    submitHandler(time);
-                  }}>
-                  <View
-                    style={[
-                      appointmentStyles.time,
-                      {
-                        backgroundColor:
-                          time === appointment.time ? '#0381d1' : 'transparent',
-                      },
-                    ]}>
-                    <Text
-                      style={{
-                        fontSize: 15,
-                        fontWeight: '600',
-                        color: time === appointment.time ? '#fff' : '#2a3d539f',
-                        letterSpacing: 0.5,
-                      }}>
-                      {time}
-                    </Text>
-                  </View>
-                </TouchableOpacity>
-              ))}
+          {time && (
+            <ScrollView
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}>
+              <View
+                style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  flexWrap: 'nowrap',
+                }}>
+                {time.map((time, key) => (
+                  <TouchableOpacity
+                    key={key}
+                    onPress={() => {
+                      submitHandler(time);
+                    }}>
+                    <View
+                      style={[
+                        appointmentStyles.time,
+                        {
+                          backgroundColor:
+                            time === appointment.time
+                              ? '#0381d1'
+                              : 'transparent',
+                        },
+                      ]}>
+                      <Text
+                        style={{
+                          fontSize: 15,
+                          fontWeight: '600',
+                          color:
+                            time === appointment.time ? '#fff' : '#2a3d539f',
+                          letterSpacing: 0.5,
+                        }}>
+                        {time}
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            </ScrollView>
+          )}
+          {time.length === 0 && (
+            <View style={{marginTop: 15}}>
+              <Text style={[globalStyles.cardsubHeading]}>
+                No available slots for today.
+              </Text>
             </View>
-          </ScrollView>
+          )}
         </View>
       </ScrollView>
       <Surface style={[appointmentStyles.btnCont]}>
@@ -336,9 +389,9 @@ const appointmentStyles = StyleSheet.create({
     justifyContent: 'center',
   },
   day: {
-    height: 70,
+    height: 75,
     borderRadius: 8,
-    width: 85,
+    width: 90,
     borderColor: '#d9d9d9',
     borderWidth: 1,
     paddingHorizontal: 25,
