@@ -16,9 +16,9 @@ import {
   updateDiagnosedDisease,
 } from '../services/diagnose';
 import {Button} from 'react-native-paper';
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import {launchImageLibrary} from 'react-native-image-picker';
 import axios from 'axios';
-import {BASE_URL} from '../../App';
+import RNHTMLtoPDF from 'react-native-html-to-pdf';
 
 export const AppointmentDetails = ({navigation, route}) => {
   const [data, setData] = useState([]);
@@ -27,6 +27,17 @@ export const AppointmentDetails = ({navigation, route}) => {
   const [uploading, setUploading] = useState(false);
   const {appointmentType} = route.params;
   const {appointmentId} = route.params;
+
+  const createPDF = async () => {
+    let options = {
+      html: '<h1>PDF TEST</h1>',
+      fileName: 'test',
+      directory: 'Documents',
+    };
+    let file = await RNHTMLtoPDF.convert(options);
+    console.log(file.filePath);
+    alert(file.filePath);
+  };
 
   const toggle = () => {
     navigation?.toggleDrawer();
@@ -261,6 +272,7 @@ export const AppointmentDetails = ({navigation, route}) => {
                 }}
                 onPress={() => {
                   console.log('Downloading prescription');
+                  createPDF()
                 }}>
                 <Image
                   source={require('../images/downloadIcon.png')}
