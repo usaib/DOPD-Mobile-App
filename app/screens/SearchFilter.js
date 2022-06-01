@@ -47,12 +47,17 @@ export const SearchFilter = ({navigation}) => {
         <Surface style={[searcFilterStyles.btnCont]}>
           <Button
             mode="contained"
+            labelStyle={{
+              textTransform: 'capitalize',
+              fontWeight: '600',
+              fontSize: 16,
+            }}
             onPress={filterSearch}
-            style={styles.submitBtn}
+            style={searcFilterStyles.submitBtn}
             disabled={
               !(Object.values(sortBy).some(item => item === true) && filterBy)
             }>
-            Apply
+            Apply Filter
           </Button>
         </Surface>
       </ScrollView>
@@ -60,12 +65,11 @@ export const SearchFilter = ({navigation}) => {
   );
 };
 const searcFilterStyles = StyleSheet.create({
-  buttonCont: {
+  btnCont: {
+    height: 100,
     alignItems: 'center',
     justifyContent: 'center',
     shadowColor: '#c9c9c9',
-    width: Dimensions.get('window').width,
-    bottom: 0,
     backgroundColor: '#fff',
     borderTopWidth: 1,
     borderTopColor: '#d4d4d4',
@@ -76,6 +80,14 @@ const searcFilterStyles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 2,
-    paddingVertical: 10,
+  },
+  submitBtn: {
+    padding: 8.5,
+    borderRadius: 12,
+    marginVertical: 10,
+    marginHorizontal: 20,
+    backgroundColor: '#0381d1',
+    alignSelf: 'stretch',
+    shadowColor: 'transparent',
   },
 });

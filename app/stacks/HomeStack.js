@@ -6,7 +6,7 @@ import Results from '../screens/Results';
 import {DcotorsScreen} from '../screens/DcotorsScreen';
 import {SearchFilter} from '../screens/SearchFilter';
 import AppointmentDetails from '../screens/AppointmentDetails';
-
+import {Appointment} from '../screens/Appointment';
 const Stack = createNativeStackNavigator();
 
 const HomeStack = () => {
@@ -40,6 +40,11 @@ const HomeStack = () => {
       <Stack.Screen
         name="AppointmentDetails"
         component={AppointmentDetails}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="Appointment"
+        component={Appointment}
         options={{headerShown: false}}
       />
     </Stack.Navigator>

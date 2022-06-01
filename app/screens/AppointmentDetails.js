@@ -613,7 +613,6 @@ export const styles = StyleSheet.create({
     backgroundColor: '#d3d3d346',
     display: 'flex',
     alignItems: 'center',
-
     flexDirection: 'row',
     height: 70,
     paddingHorizontal: 12,

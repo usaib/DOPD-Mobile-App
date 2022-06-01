@@ -33,7 +33,7 @@ const Button = ({onPress, style, title, icon}) => {
     </TouchableOpacity>
   );
 };
-export const DoctorsCard = ({doctor}) => {
+export const DoctorsCard = ({doctor, navigation}) => {
   return (
     <View style={doctorCard.card}>
       <View style={{marginTop: 15}}>
@@ -58,7 +58,7 @@ export const DoctorsCard = ({doctor}) => {
               marginLeft: 15,
               marginTop: 5,
             }}>
-            <Text style={globalStyles.cardHeading}>{doctor.name}</Text>
+            <Text style={globalStyles.cardHeading}>Dr. {doctor.name}</Text>
             <Text
               style={[
                 globalStyles.cardsubHeading,
@@ -109,7 +109,12 @@ export const DoctorsCard = ({doctor}) => {
           }}>
           <Button
             icon={require('../images/videocall.png')}
-            onPress={() => console.log('Video Consultation with', doctor.name)}
+            onPress={() =>
+              navigation.navigate('Appointment', {
+                doctor,
+                online: false,
+              })
+            }
             title="Video Consultation"
             style={{
               backgroundColor: '#fff',
@@ -118,7 +123,12 @@ export const DoctorsCard = ({doctor}) => {
             }}
           />
           <Button
-            onPress={() => console.log('Book Appointment with', doctor.name)}
+            onPress={() =>
+              navigation.navigate('Appointment', {
+                doctor,
+                online: true,
+              })
+            }
             title="Book Appoinment"
             style={{
               backgroundColor: '#0381d1',
