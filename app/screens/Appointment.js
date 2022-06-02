@@ -23,6 +23,7 @@ export const Appointment = ({navigation, route}) => {
   const userState = useUserState();
   const {doctor, online, appointmentType} = route.params;
   const [time, setTime] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [docDetails, setDocDetails] = useState([]);
   const [appointment, setAppointment] = useState({
     day: '',
@@ -42,6 +43,7 @@ export const Appointment = ({navigation, route}) => {
   };
 
   const onSubmit = async () => {
+    setLoading(true);
     console.log('Appointment', appointment);
     let date = new Date(appointment.date.split('-').reverse().join('-'))
       .toISOString()
@@ -61,6 +63,9 @@ export const Appointment = ({navigation, route}) => {
       const appointment = await createAppointment({
         ...payload,
       });
+      setTimeout(() => {
+        navigation.navigate('Appointment History');
+      }, 2000);
     } catch (e) {
       console.log(e);
     }
@@ -368,13 +373,16 @@ export const Appointment = ({navigation, route}) => {
           labelStyle={{textTransform: 'capitalize'}}
           mode="contained"
           onPress={onSubmit}
+          loading={loading}
+          disabled={loading}
           title="Submit">
           <Text
             style={[
               globalStyles.cardsubHeading,
               {color: '#fff', fontWeight: '500'},
             ]}>
-            {online ? 'Book an Appointment' : 'Book an Online Appointment'}
+            {!loading &&
+              (online ? 'Book an Appointment' : 'Book an Online Appointment')}
           </Text>
         </Button>
       </Surface>

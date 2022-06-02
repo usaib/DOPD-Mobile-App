@@ -10,7 +10,6 @@ import {
 import AppBarWrapper from '../components/AppBar';
 import HistoryItems from '../components/HistoryItems';
 import {fetchAppointments} from '../services/appointments';
-import {ActivityIndicator} from 'react-native-paper';
 import {ScrollView} from 'react-native-gesture-handler';
 
 export const History = ({navigation}) => {
@@ -50,6 +49,7 @@ export const History = ({navigation}) => {
         appointmentId={obj.item.id}
         patientName={obj.item.user.name}
         dateTime={obj.item.dateTime}
+        createdAt={obj.item.createdAt}
         appointmentType={obj.item.type}
         appointmentStatus={obj.item.status}
         navigation={navigation}
@@ -93,7 +93,6 @@ export const History = ({navigation}) => {
             />
           ))
         )} */}
-        {refreshing ? <ActivityIndicator /> : null}
         <FlatList
           data={data}
           keyExtractor={(obj, index) => index.toString()}

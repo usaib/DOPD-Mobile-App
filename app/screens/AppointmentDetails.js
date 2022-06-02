@@ -25,8 +25,7 @@ export const AppointmentDetails = ({navigation, route}) => {
   const [photo, setPhoto] = useState(false);
   const [choosed, setChoosed] = useState(false);
   const [uploading, setUploading] = useState(false);
-  const {appointmentType} = route.params;
-  const {appointmentId} = route.params;
+  const {appointmentId, dateTime, appointmentType} = route.params;
 
   const createPDF = async () => {
     let options = {
@@ -178,7 +177,7 @@ export const AppointmentDetails = ({navigation, route}) => {
               />
               <Text
                 style={[styles.paragraphText, {marginLeft: 13, fontSize: 16}]}>
-                Wednesday, 11 March
+                {new Date(dateTime).toDateString()}
               </Text>
             </View>
             <View
@@ -195,10 +194,10 @@ export const AppointmentDetails = ({navigation, route}) => {
               />
               <Text
                 style={[styles.paragraphText, {marginLeft: 13, fontSize: 16}]}>
-                5:00pm
+                {new Date(dateTime).toLocaleTimeString()}
               </Text>
             </View>
-            <View
+            {/* <View
               style={{
                 display: 'flex',
                 flexDirection: 'row',
@@ -213,7 +212,7 @@ export const AppointmentDetails = ({navigation, route}) => {
                 style={[styles.paragraphText, {marginLeft: 13, fontSize: 16}]}>
                 Liaquat National Hospital, Karachi
               </Text>
-            </View>
+            </View> */}
           </View>
 
           <View style={{marginBottom: 15}}>
@@ -245,7 +244,7 @@ export const AppointmentDetails = ({navigation, route}) => {
           <View>
             <Text style={[styles.openText]}>Recomendations</Text>
             <Text style={[styles.paragraphText]}>
-              Visit again after one week
+              {!!data.length && data[0].otherDetails}
             </Text>
           </View>
         </ScrollView>
@@ -272,7 +271,7 @@ export const AppointmentDetails = ({navigation, route}) => {
                 }}
                 onPress={() => {
                   console.log('Downloading prescription');
-                  createPDF()
+                  createPDF();
                 }}>
                 <Image
                   source={require('../images/downloadIcon.png')}
@@ -299,7 +298,7 @@ export const AppointmentDetails = ({navigation, route}) => {
               />
               <Text
                 style={[styles.paragraphText, {marginLeft: 13, fontSize: 16}]}>
-                Wednesday, 11 March
+                {new Date(dateTime).toDateString()}
               </Text>
             </View>
             <View
@@ -315,7 +314,7 @@ export const AppointmentDetails = ({navigation, route}) => {
               />
               <Text
                 style={[styles.paragraphText, {marginLeft: 13, fontSize: 16}]}>
-                5:00pm
+                {new Date(dateTime).toLocaleTimeString()}
               </Text>
             </View>
           </View>
@@ -368,7 +367,7 @@ export const AppointmentDetails = ({navigation, route}) => {
           <View>
             <Text style={[styles.openText]}>Recomendations</Text>
             <Text style={[styles.paragraphText]}>
-              Visit again after one week
+              {!!data.length && data[0].otherDetails}
             </Text>
           </View>
         </ScrollView>
