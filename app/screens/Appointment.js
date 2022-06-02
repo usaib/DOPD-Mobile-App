@@ -13,12 +13,15 @@ import AppBarWrapper from '../components/AppBar';
 import moment from 'moment';
 import {fetchDoctorAvailability} from '../services/doctors';
 import {ActivityIndicator} from 'react-native-paper';
+import {useUserState} from '../context/userContext';
+import {createAppointment} from '../services/appointments';
 
 export const Appointment = ({navigation, route}) => {
   const toggle = () => {
     navigation?.toggleDrawer();
   };
-  const {doctor, online} = route.params;
+  const userState = useUserState();
+  const {doctor, online, appointmentType} = route.params;
   const [time, setTime] = useState([]);
   const [docDetails, setDocDetails] = useState([]);
   const [appointment, setAppointment] = useState({
@@ -36,6 +39,31 @@ export const Appointment = ({navigation, route}) => {
       startTime.add(30, 'minutes');
     }
     return arr;
+  };
+
+  const onSubmit = async () => {
+    console.log('Appointment', appointment);
+    let date = new Date(appointment.date.split('-').reverse().join('-'))
+      .toISOString()
+      .split('T');
+    let configDate = date[0] + 'T' + appointment.time + ':00';
+    console.log(configDate);
+    let appointmentDate = new Date(configDate.toString());
+    let payload = {
+      dateTime: appointmentDate,
+      doctorId: doctor.id,
+      userId: userState.user.id,
+      type: appointmentType,
+      status: 'pending',
+    };
+    console.log(payload);
+    try {
+      const appointment = await createAppointment({
+        ...payload,
+      });
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const dayHandler = item => {
@@ -339,9 +367,7 @@ export const Appointment = ({navigation, route}) => {
           style={appointmentStyles.submitBtn}
           labelStyle={{textTransform: 'capitalize'}}
           mode="contained"
-          onPress={() => {
-            console.log('Appointment', appointment);
-          }}
+          onPress={onSubmit}
           title="Submit">
           <Text
             style={[

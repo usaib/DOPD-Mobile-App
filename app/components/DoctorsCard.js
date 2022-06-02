@@ -113,6 +113,7 @@ export const DoctorsCard = ({doctor, navigation}) => {
               navigation.navigate('Appointment', {
                 doctor,
                 online: false,
+                appointmentType: 'Online',
               })
             }
             title="Video Consultation"
@@ -127,6 +128,7 @@ export const DoctorsCard = ({doctor, navigation}) => {
               navigation.navigate('Appointment', {
                 doctor,
                 online: true,
+                appointmentType: 'In-person',
               })
             }
             title="Book Appoinment"
