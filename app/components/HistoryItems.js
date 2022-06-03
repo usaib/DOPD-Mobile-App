@@ -56,6 +56,8 @@ export default function HistoryItems({
       appointmentType,
       appointmentId,
       dateTime,
+      doctorName,
+      patientName,
     });
   };
   return (
@@ -109,9 +111,9 @@ export default function HistoryItems({
             styles.cardTitle,
             {
               fontSize: 15,
-              color: '#a9a9a9',
+              color: '#0381d1',
               alignSelf: 'flex-start',
-              fontWeight: '500',
+              fontWeight: '900',
             },
           ]}>
           {appointmentType} Appointment

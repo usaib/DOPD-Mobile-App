@@ -42,7 +42,7 @@ function LoginScreen({navigation}) {
         password: values.password,
         rememberMe: values.rememberMe,
       });
-      if (resp) {
+      if (resp.data.data.success) {
         setTimeout(() => {
           userDispatch({
             type: 'LOGIN_SUCCESS',
@@ -56,6 +56,7 @@ function LoginScreen({navigation}) {
         }, 500);
       } else {
         console.log('login failed');
+        setError(true);
         setLoading(false);
         actions.resetForm({
           values: {

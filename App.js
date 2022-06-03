@@ -21,4 +21,7 @@ export default function App() {
   );
 }
 
-export const BASE_URL = 'https://bc61-27-96-93-36.ngrok.io';
+export const BASE_URL = 'https://a494-27-96-92-98.ngrok.io';
+export const apiKey = 'AIzaSyDOnDGRjNJ3eMpOBaer0vbiOBPL0XeUvYU';
+export const clientId =
+  '64977015729-be5uljopoveh0lc9paatmqf4tgthh2sq.apps.googleusercontent.com';
