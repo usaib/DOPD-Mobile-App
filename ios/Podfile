@@ -20,6 +20,8 @@ target 'PracticeProject' do
 
   pod 'RNCAsyncStorage', :path => '../node_modules/@react-native-async-storage/async-storage'
 
+  pod 'RNFileViewer', :path => '../node_modules/react-native-file-viewer'
+
   target 'PracticeProjectTests' do
     inherit! :complete
     # Pods for testing
