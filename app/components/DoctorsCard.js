@@ -109,7 +109,13 @@ export const DoctorsCard = ({doctor, navigation}) => {
           }}>
           <Button
             icon={require('../images/videocall.png')}
-            onPress={() => navigation.navigate('Appointment')}
+            onPress={() =>
+              navigation.navigate('Appointment', {
+                doctor,
+                online: false,
+                appointmentType: 'Online',
+              })
+            }
             title="Video Consultation"
             style={{
               backgroundColor: '#fff',
@@ -118,7 +124,13 @@ export const DoctorsCard = ({doctor, navigation}) => {
             }}
           />
           <Button
-            onPress={() => navigation.navigate('Appointment')}
+            onPress={() =>
+              navigation.navigate('Appointment', {
+                doctor,
+                online: true,
+                appointmentType: 'In-person',
+              })
+            }
             title="Book Appoinment"
             style={{
               backgroundColor: '#0381d1',

@@ -21,4 +21,4 @@ export default function App() {
   );
 }
 
-export const BASE_URL = 'https://dry-areas-pull-103-26-83-31.loca.lt';
+export const BASE_URL = 'https://bc61-27-96-93-36.ngrok.io';

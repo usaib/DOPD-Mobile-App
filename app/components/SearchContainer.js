@@ -21,7 +21,7 @@ export const SearchContainer = ({navigation}) => {
       </TouchableOpacity>
       <View style={searchBarStyles.searchBar}>
         <Searchbar
-          placeholder="Search for Doctors, Hospitals, Specialists"
+          placeholder="Search for Doctors..."
           onChangeText={onChangeSearch}
           value={searchQuery}
           style={{

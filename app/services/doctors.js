@@ -9,4 +9,16 @@ const fetchDoctors = async params => {
   });
 };
 
-export {fetchDoctors};
+const fetchDoctorAvailability = async params => {
+  return axios.post(
+    BASE_URL + '/doctorAvailability/getDoctorAvailability',
+    params,
+    {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    },
+  );
+};
+
+export {fetchDoctors, fetchDoctorAvailability};

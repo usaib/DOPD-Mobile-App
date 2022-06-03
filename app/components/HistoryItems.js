@@ -11,6 +11,7 @@ export default function HistoryItems({
   appointmentStatus,
   navigation,
   appointmentId,
+  createdAt,
 }) {
   const monthNames = [
     'January',
@@ -54,6 +55,7 @@ export default function HistoryItems({
     navigation.navigate('Appointment Details', {
       appointmentType,
       appointmentId,
+      dateTime,
     });
   };
   return (
@@ -79,11 +81,11 @@ export default function HistoryItems({
           marginRight: 15,
         }}>
         <Text style={[styles.cardTitle, {alignSelf: 'center', fontSize: 20}]}>
-          {new Date(dateTime).getDate().toString()}
+          {new Date(createdAt).getDate().toString()}
         </Text>
         <Text
           style={[styles.cardTitle, {alignSelf: 'center', fontWeight: '400'}]}>
-          {monthNames[new Date(dateTime).getMonth().toString()]}
+          {monthNames[new Date(createdAt).getMonth().toString()]}
         </Text>
       </View>
       <View style={styles.cardTitleContainer}>
@@ -99,8 +101,8 @@ export default function HistoryItems({
               fontWeight: '500',
             },
           ]}>
-          {days[new Date(dateTime).getDay().toString()]} ,
-          {new Date(dateTime).toLocaleTimeString()}
+          {days[new Date(createdAt).getDay().toString()]} ,
+          {new Date(createdAt).toLocaleTimeString()}
         </Text>
         <Text
           style={[

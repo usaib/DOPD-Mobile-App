@@ -11,50 +11,20 @@ import {Button, Surface} from 'react-native-paper';
 import {globalStyles} from '../styles/globalStyles';
 import AppBarWrapper from '../components/AppBar';
 import moment from 'moment';
-export const Appointment = ({navigation}) => {
+import {fetchDoctorAvailability} from '../services/doctors';
+import {ActivityIndicator} from 'react-native-paper';
+import {useUserState} from '../context/userContext';
+import {createAppointment} from '../services/appointments';
+
+export const Appointment = ({navigation, route}) => {
   const toggle = () => {
     navigation?.toggleDrawer();
   };
-  const doctor = {
-    imageUrl:
-      'https://res.cloudinary.com/drl7zvkyf/image/upload/v1651947848/digitalOPD/doctor-removebg-preview_xx3ij1.png',
-    name: 'Anees Allana',
-    rating: '4.1',
-    specialization: 'ENT',
-    locatedAt: 'Liaquat National Hospital',
-    workingHours: ['8:00', '10:00', '13:00', '15:00'],
-  };
-  const docDetails = [
-    {
-      id: '1',
-      doctorId: '1',
-      weekday: 'Monday',
-      startTime: '05:00',
-      endTime: '08:00',
-    },
-    {
-      id: '1',
-      doctorId: '1',
-      weekday: 'Tuesday',
-      startTime: '05:00',
-      endTime: '08:00',
-    },
-    {
-      id: '1',
-      doctorId: '1',
-      weekday: 'Wednesday',
-      startTime: '05:00',
-      endTime: '08:00',
-    },
-    {
-      id: '1',
-      doctorId: '1',
-      weekday: 'Friday',
-      startTime: '04:00',
-      endTime: '08:00',
-    },
-  ];
+  const userState = useUserState();
+  const {doctor, online, appointmentType} = route.params;
   const [time, setTime] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [docDetails, setDocDetails] = useState([]);
   const [appointment, setAppointment] = useState({
     day: '',
     time: '',
@@ -70,6 +40,35 @@ export const Appointment = ({navigation}) => {
       startTime.add(30, 'minutes');
     }
     return arr;
+  };
+
+  const onSubmit = async () => {
+    setLoading(true);
+    console.log('Appointment', appointment);
+    let date = new Date(appointment.date.split('-').reverse().join('-'))
+      .toISOString()
+      .split('T');
+    let configDate = date[0] + 'T' + appointment.time + ':00';
+    console.log(configDate);
+    let appointmentDate = new Date(configDate.toString());
+    let payload = {
+      dateTime: appointmentDate,
+      doctorId: doctor.id,
+      userId: userState.user.id,
+      type: appointmentType,
+      status: 'pending',
+    };
+    console.log(payload);
+    try {
+      const appointment = await createAppointment({
+        ...payload,
+      });
+      setTimeout(() => {
+        navigation.navigate('Appointment History');
+      }, 2000);
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const dayHandler = item => {
@@ -101,51 +100,65 @@ export const Appointment = ({navigation}) => {
     });
   };
   useEffect(() => {
-    let dates = [];
-    var startdate = moment().format('DD-MM-YYYY');
-    for (let i = 0; i < 20; i++) {
-      var new_date = moment(startdate, 'DD-MM-YYYY').add(i, 'days');
-      var weekDayName = moment(new_date).format('dddd');
-      for (let j = 0; j < docDetails.length; j++) {
-        if (docDetails[j].weekday == weekDayName) {
-          const date = new_date.format('DD-MM-YYYY');
-          dates.push({
-            weekday: weekDayName,
-            date: date,
-            startTime: docDetails[j].startTime,
-            endTime: docDetails[j].endTime,
+    const getDoctorAvailability = async () => {
+      try {
+        const resp = await fetchDoctorAvailability({
+          doctorId: doctor.id,
+        });
+        console.log('doc detailss', resp.data.data.data.rows);
+        setDocDetails(resp.data.data.data.rows);
+        let docDetails = resp.data.data.data.rows;
+        console.log('here first');
+        let dates = [];
+        var startdate = moment().format('DD-MM-YYYY');
+        for (let i = 0; i < 20; i++) {
+          var new_date = moment(startdate, 'DD-MM-YYYY').add(i, 'days');
+          var weekDayName = moment(new_date).format('dddd');
+          for (let j = 0; j < docDetails.length; j++) {
+            if (docDetails[j].weekday == weekDayName) {
+              const date = new_date.format('DD-MM-YYYY');
+              dates.push({
+                weekday: weekDayName,
+                date: date,
+                startTime: docDetails[j].startTime,
+                endTime: docDetails[j].endTime,
+              });
+            }
+          }
+        }
+
+        const slots = createTimeSlots(dates[0].startTime, dates[0].endTime);
+
+        if (startdate === dates[0].date) {
+          let currentTime = moment().add(30, 'minutes').format('hh:mm');
+          let availableSlots = slots.filter(time => time > currentTime);
+          setTime(availableSlots);
+          setSchedules(dates);
+          setAppointment(prevState => {
+            return {
+              ...prevState,
+              date: dates[0].date,
+              day: dates[0].weekday,
+              time: availableSlots[0],
+            };
+          });
+        } else {
+          setTime(slots);
+          setSchedules(dates);
+          setAppointment(prevState => {
+            return {
+              ...prevState,
+              date: dates[0].date,
+              day: dates[0].weekday,
+              time: slots[0],
+            };
           });
         }
+      } catch (e) {
+        console.log(e);
       }
-    }
-
-    const slots = createTimeSlots(dates[0].startTime, dates[0].endTime);
-
-    if (startdate === dates[0].date) {
-      let currentTime = moment().add(30, 'minutes').format('hh:mm');
-      let availableSlots = slots.filter(time => time > currentTime);
-      setTime(availableSlots);
-      setSchedules(dates);
-      setAppointment(prevState => {
-        return {
-          ...prevState,
-          date: dates[0].date,
-          day: dates[0].weekday,
-          time: availableSlots[0],
-        };
-      });
-    } else {
-      setTime(slots);
-      setSchedules(dates);
-      setAppointment(prevState => {
-        return {
-          ...prevState,
-          date: dates[0].date,
-          day: dates[0].weekday,
-          time: slots[0],
-        };
-      });
-    }
+    };
+    getDoctorAvailability();
   }, []);
 
   return (
@@ -214,7 +227,7 @@ export const Appointment = ({navigation}) => {
                   fontWeight: '600',
                 },
               ]}>
-              {doctor.locatedAt}
+              {doctor.qualification}
             </Text>
           </View>
         </View>
@@ -233,50 +246,66 @@ export const Appointment = ({navigation}) => {
                 flexDirection: 'row',
                 flexWrap: 'nowrap',
               }}>
-              {schedules.map((item, key) => (
-                <TouchableOpacity
-                  key={key}
-                  onPress={() => {
-                    dayHandler(item);
-                  }}>
-                  <View
-                    style={[
-                      appointmentStyles.day,
-                      {
-                        backgroundColor:
-                          item.date === appointment.date
-                            ? '#0381d1'
-                            : 'transparent',
-                        borderColor:
-                          item.date === appointment.date
-                            ? 'transparent'
-                            : '#d9d9d9',
-                      },
-                    ]}>
-                    <Text
-                      style={{
-                        fontSize: 15,
-                        fontWeight: '600',
-                        color:
-                          item.date === appointment.date ? '#fff' : '#2a3d539f',
-                        letterSpacing: 0.5,
-                      }}>
-                      {item.weekday.slice(0, 3)}
-                    </Text>
-                    <Text
-                      style={{
-                        fontSize: 15,
-                        fontWeight: '600',
-                        color:
-                          item.date === appointment.date ? '#fff' : '#2a3d539f',
-                        marginTop: 10,
-                        letterSpacing: 0.5,
-                      }}>
-                      {item.date.slice(0, 2)}
-                    </Text>
-                  </View>
-                </TouchableOpacity>
-              ))}
+              {!!schedules.length ? (
+                schedules.map((item, key) => (
+                  <TouchableOpacity
+                    key={key}
+                    onPress={() => {
+                      dayHandler(item);
+                    }}>
+                    <View
+                      style={[
+                        appointmentStyles.day,
+                        {
+                          backgroundColor:
+                            item.date === appointment.date
+                              ? '#0381d1'
+                              : 'transparent',
+                          borderColor:
+                            item.date === appointment.date
+                              ? 'transparent'
+                              : '#d9d9d9',
+                        },
+                      ]}>
+                      <Text
+                        style={{
+                          fontSize: 15,
+                          fontWeight: '600',
+                          color:
+                            item.date === appointment.date
+                              ? '#fff'
+                              : '#2a3d539f',
+                          letterSpacing: 0.5,
+                        }}>
+                        {item.weekday.slice(0, 3)}
+                      </Text>
+                      <Text
+                        style={{
+                          fontSize: 15,
+                          fontWeight: '600',
+                          color:
+                            item.date === appointment.date
+                              ? '#fff'
+                              : '#2a3d539f',
+                          marginTop: 10,
+                          letterSpacing: 0.5,
+                        }}>
+                        {item.date.slice(0, 2)}
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
+                ))
+              ) : (
+                <ActivityIndicator
+                  animating={true}
+                  style={{
+                    marginTop: 10,
+                    marginHorizontal: 100,
+                  }}
+                  color={'#3498DB'}
+                  size="small"
+                />
+              )}
             </View>
           </ScrollView>
         </View>
@@ -287,7 +316,7 @@ export const Appointment = ({navigation}) => {
           <Text style={[globalStyles.cardHeading, {fontSize: 22}]}>
             Available Slots
           </Text>
-          {time && (
+          {!!time.length && time && (
             <ScrollView
               horizontal={true}
               showsHorizontalScrollIndicator={false}>
@@ -343,16 +372,17 @@ export const Appointment = ({navigation}) => {
           style={appointmentStyles.submitBtn}
           labelStyle={{textTransform: 'capitalize'}}
           mode="contained"
-          onPress={() => {
-            console.log('Appointment', appointment);
-          }}
+          onPress={onSubmit}
+          loading={loading}
+          disabled={loading}
           title="Submit">
           <Text
             style={[
               globalStyles.cardsubHeading,
               {color: '#fff', fontWeight: '500'},
             ]}>
-            Book an Appointment
+            {!loading &&
+              (online ? 'Book an Appointment' : 'Book an Online Appointment')}
           </Text>
         </Button>
       </Surface>
