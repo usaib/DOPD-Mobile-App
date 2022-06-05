@@ -11,6 +11,7 @@ export default function HistoryItems({
   appointmentStatus,
   navigation,
   appointmentId,
+  appointmentLink,
   createdAt,
 }) {
   const monthNames = [
@@ -58,6 +59,7 @@ export default function HistoryItems({
       dateTime,
       doctorName,
       patientName,
+      appointmentLink,
     });
   };
   return (

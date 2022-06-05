@@ -28,8 +28,14 @@ export const AppointmentDetails = ({navigation, route}) => {
   const [choosed, setChoosed] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [source, setSource] = useState(false);
-  const {appointmentId, dateTime, appointmentType, doctorName, patientName} =
-    route.params;
+  const {
+    appointmentId,
+    dateTime,
+    appointmentType,
+    doctorName,
+    patientName,
+    appointmentLink,
+  } = route.params;
   const userState = useUserState();
 
   const htmlStyles = `.header {
@@ -474,9 +480,11 @@ export const AppointmentDetails = ({navigation, route}) => {
                 marginTop: 5,
               }}
               onPress={() => {
-                Linking.openURL('https://www.google.com/');
+                Linking.openURL(
+                  appointmentLink ? appointmentLink : 'https://www.google.com/',
+                );
               }}>
-              https://www.google.com/
+              {appointmentLink ? appointmentLink : 'https://www.google.com/'}
             </Text>
           </View>
           <View style={{marginBottom: 15}}>

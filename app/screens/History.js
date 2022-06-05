@@ -47,6 +47,7 @@ export const History = ({navigation}) => {
       <HistoryItems
         doctorName={obj.item.doctor.name}
         appointmentId={obj.item.id}
+        appointmentLink={obj.item.appointmentLink}
         patientName={obj.item.user.name}
         dateTime={obj.item.dateTime}
         createdAt={obj.item.createdAt}
