@@ -21,4 +21,4 @@ export default function App() {
   );
 }
 
-export const BASE_URL = 'https://bc61-27-96-93-36.ngrok.io';
+export const BASE_URL = 'https://hip-queens-repair-39-34-146-8.loca.lt';

@@ -41,7 +41,7 @@ function MainScreen({navigation}) {
         showMenu={true}
         onMenuPress={toggle}
       />
-      <View style={styles.cardView}></View>
+
       <ScrollView
         style={{
           paddingHorizontal: 20,
@@ -175,10 +175,6 @@ export const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FFFFFF',
     flexDirection: 'column',
-  },
-  cardView: {
-    flex: 1,
-    margin: 10,
   },
   Text: {
     marginLeft: 10,
