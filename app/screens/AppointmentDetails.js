@@ -250,7 +250,6 @@ export const AppointmentDetails = ({navigation, route}) => {
         </main>
       </body>
     </html>`;
-
   const appointment_slip = `<html>
   <head>
     <meta charset="UTF-8" />
@@ -343,6 +342,7 @@ export const AppointmentDetails = ({navigation, route}) => {
       <span>Specialist:</span>
       <span>Dr. Anees Allana</span>
     </div>
+    <!----Appointment Type!-->
     <div>
       <span>Type of Appointment:</span>
       <span>In-person</span>
