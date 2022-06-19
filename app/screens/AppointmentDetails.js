@@ -159,7 +159,7 @@ export const AppointmentDetails = ({navigation, route}) => {
     display: inline-block;
     margin: 0 -1px;
   }
-  .patientInfo,
+  .patientInfoAS,
   .appointmentInfo {
     display: flex;
     width: 600px;
@@ -167,7 +167,7 @@ export const AppointmentDetails = ({navigation, route}) => {
     flex-direction: column;
     justify-content: flex-start;
   }
-  .patientInfo div,
+  .patientInfoAS div,
   .appointmentInfo div {
     display: flex;
     justify-content: space-between;
@@ -175,7 +175,7 @@ export const AppointmentDetails = ({navigation, route}) => {
     padding: 8px 0;
     border-top: 2px solid #a4a4a488;
   }
-  .patientInfo div span,
+  .patientInfoAS div span,
   .appointmentInfo div span {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
       sans-serif;
@@ -297,7 +297,7 @@ export const AppointmentDetails = ({navigation, route}) => {
     <span></span>
     <span></span>
   </div>
-  <section class="patientInfo">
+  <section class="patientInfoAS">
     <div>
       <span>Patient Name:</span>
       <span>Shehzer Aurangzeb Abbasi</span>
