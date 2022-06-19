@@ -21,4 +21,4 @@ export default function App() {
   );
 }
 
-export const BASE_URL = 'https://b29f-27-96-94-207.ngrok.io';
+export const BASE_URL = 'https://dull-wings-sort-103-196-161-95.loca.lt';

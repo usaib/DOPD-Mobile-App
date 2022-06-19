@@ -28,6 +28,8 @@ export const AppointmentDetails = ({navigation, route}) => {
   const [choosed, setChoosed] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [source, setSource] = useState(false);
+  const [downloaded, setDownloaded] = useState(false);
+
   const {
     appointmentId,
     dateTime,
@@ -156,13 +158,14 @@ export const AppointmentDetails = ({navigation, route}) => {
   const createPDF = async () => {
     let options = {
       html: E_prescription,
-      fileName: 'E-Prescription',
+      fileName: 'E-Prescription' + appointmentId,
       directory: 'Documents',
     };
     let file = await RNHTMLtoPDF.convert(options);
     console.log(file.filePath);
     const source = {uri: `${file.filePath}`};
     setSource(source);
+    console.log(source);
     alert(file.filePath);
   };
   const toggle = () => {
@@ -239,6 +242,16 @@ export const AppointmentDetails = ({navigation, route}) => {
     if (appointmentType == 'Smart') {
       getDataForSmartAppointment();
     }
+  }, []);
+  useEffect(() => {
+    if (!source) {
+      setSource({
+        uri: `/storage/emulated/0/Android/data/com.practiceproject/files/Documents/E-Prescription${appointmentId}.pdf`,
+      });
+      setDownloaded(true);
+      return;
+    }
+    return;
   }, []);
 
   const handleChoosePhoto = () => {
@@ -344,7 +357,7 @@ export const AppointmentDetails = ({navigation, route}) => {
 
           <View style={{marginBottom: 15}}>
             <Text style={[styles.openText, {marginBottom: 20}]}>
-              Appointment Fee
+              Appointment Slip
             </Text>
             <View style={styles.pdfCard}>
               <Image
@@ -352,14 +365,14 @@ export const AppointmentDetails = ({navigation, route}) => {
                 style={{height: 50, width: 50}}
               />
               <Text style={{fontSize: 16, fontWeight: '400', marginLeft: 15}}>
-                Appointment Fee
+                Appointment Slip
               </Text>
               <TouchableOpacity
                 style={{
                   marginLeft: 'auto',
                 }}
                 onPress={() => {
-                  console.log('Downloading Appointment Fee');
+                  console.log('Downloading Appointment Slip');
                 }}>
                 <Image
                   source={require('../images/downloadIcon.png')}
@@ -371,7 +384,9 @@ export const AppointmentDetails = ({navigation, route}) => {
           <View>
             <Text style={[styles.openText]}>Recomendations</Text>
             <Text style={[styles.paragraphText]}>
-              {!!data.length && data[0].otherDetails}
+              {!!data.length && data[0].otherDetails
+                ? data[0].otherDetails
+                : 'will be highlighted after your appointment'}
             </Text>
           </View>
         </ScrollView>
@@ -397,13 +412,27 @@ export const AppointmentDetails = ({navigation, route}) => {
                   marginLeft: 'auto',
                 }}
                 onPress={() => {
-                  console.log('Downloading prescription');
-                  createPDF();
+                  if (!downloaded) {
+                    console.log('Downloading prescription');
+                    createPDF();
+                    setDownloaded(true);
+                    return;
+                  }
+                  setSource({
+                    uri: `/storage/emulated/0/Android/data/com.practiceproject/files/Documents/E-Prescription${appointmentId}.pdf`,
+                  });
                 }}>
-                <Image
-                  source={require('../images/downloadIcon.png')}
-                  style={{height: 45, width: 45}}
-                />
+                {!downloaded ? (
+                  <Image
+                    source={require('../images/downloadIcon.png')}
+                    style={{height: 45, width: 45}}
+                  />
+                ) : (
+                  <Image
+                    source={require('../images/check.png')}
+                    style={{height: 45, width: 45}}
+                  />
+                )}
               </TouchableOpacity>
             </View>
             {source && (
@@ -418,6 +447,8 @@ export const AppointmentDetails = ({navigation, route}) => {
                   }}
                   onError={error => {
                     console.log(error);
+                    setSource(false);
+                    setDownloaded(false);
                   }}
                   onPressLink={uri => {
                     console.log(`Link pressed: ${uri}`);
@@ -484,12 +515,14 @@ export const AppointmentDetails = ({navigation, route}) => {
                   appointmentLink ? appointmentLink : 'https://www.google.com/',
                 );
               }}>
-              {appointmentLink ? appointmentLink : 'https://www.google.com/'}
+              {appointmentLink
+                ? appointmentLink
+                : 'Link will be here after confirmation of an appointment'}
             </Text>
           </View>
           <View style={{marginBottom: 15}}>
             <Text style={[styles.openText, {marginBottom: 20}]}>
-              Appointment Fee
+              Appointment Slip
             </Text>
             <View style={styles.pdfCard}>
               <Image
@@ -497,7 +530,7 @@ export const AppointmentDetails = ({navigation, route}) => {
                 style={{height: 50, width: 50}}
               />
               <Text style={{fontSize: 16, fontWeight: '400', marginLeft: 15}}>
-                Appointment Fee
+                Appointment Slip
               </Text>
               <TouchableOpacity
                 style={{
@@ -516,7 +549,9 @@ export const AppointmentDetails = ({navigation, route}) => {
           <View>
             <Text style={[styles.openText]}>Recomendations</Text>
             <Text style={[styles.paragraphText]}>
-              {!!data.length && data[0].otherDetails}
+              {!!data.length && data[0].otherDetails
+                ? data[0].otherDetails
+                : 'will be highlighted after your appointment'}
             </Text>
           </View>
         </ScrollView>
@@ -564,7 +599,9 @@ export const AppointmentDetails = ({navigation, route}) => {
             })}
           <Text style={[styles.openText]}>Recomendations</Text>
           <Text style={[styles.paragraphText]}>
-            {!!data.length && data[0].otherDetails}
+            {!!data.length && data[0].otherDetails
+              ? data[0].otherDetails
+              : 'will be highlighted if there is any'}
           </Text>
           {photo && (
             <Image source={{uri: photo.uri}} style={{height: 300}}></Image>
