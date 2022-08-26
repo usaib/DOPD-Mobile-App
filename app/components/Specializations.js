@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {TouchableOpacity, Text, StyleSheet, View, Image} from 'react-native';
 import {globalStyles} from '../styles/globalStyles';
-export const Specializations = ({filterBy, setFilterBy}) => {
+export const Specializations = ({filterBy, setFilterBy, setFilter}) => {
   const specializations = [
     {feild: 'Skin Specialist', icon: require('../images/dermatology.png')},
     {feild: 'Gynecologist', icon: require('../images/gynecologist.png')},
@@ -14,6 +14,7 @@ export const Specializations = ({filterBy, setFilterBy}) => {
     {feild: 'Eye Specialist', icon: require('../images/eye-open.png')},
     {feild: 'Heart Specialist', icon: require('../images/heart.png')},
     {feild: 'Dentist', icon: require('../images/dentist.png')},
+    {feild: 'All', icon: require('../images/doctors.png')},
   ];
 
   return (
@@ -28,7 +29,10 @@ export const Specializations = ({filterBy, setFilterBy}) => {
             },
           ]}
           key={key}
-          onPress={() => setFilterBy(data.feild)}>
+          onPress={() => {
+            setFilterBy(data.feild);
+            setFilter(data.feild);
+          }}>
           <View style={specializationStyles.imgCont}>
             <Image source={data.icon} style={{height: 25, width: 25}} />
           </View>

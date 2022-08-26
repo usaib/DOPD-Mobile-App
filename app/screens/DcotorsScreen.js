@@ -7,7 +7,7 @@ import {ScrollView} from 'react-native';
 import {globalStyles} from '../styles/globalStyles';
 import {useIsFocused} from '@react-navigation/native';
 import {fetchDoctors} from '../services/doctors';
-import {ActivityIndicator} from 'react-native-paper';
+import {ActivityIndicator, Text} from 'react-native-paper';
 
 export const DcotorsScreen = ({navigation}) => {
   const toggle = () => {
@@ -15,22 +15,28 @@ export const DcotorsScreen = ({navigation}) => {
   };
   const [data, setData] = useState([]);
   const isVisible = useIsFocused();
+  const [filterBy, setFilterBy] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    setLoading(true);
     const getData = async () => {
       try {
         const resp = await fetchDoctors({
-          limit: 10,
+          limit: 1000,
           offset: 0,
+          filter: filterBy,
         });
         setData(resp.data.data.data.rows);
+        setLoading(false);
         console.log(resp.data.data.data.rows);
       } catch (e) {
+        setLoading(false);
         console.log('error', e);
       }
     };
     getData();
-  }, [isVisible]);
+  }, [isVisible, filterBy]);
   return (
     <View style={globalStyles.container}>
       <AppBarWrapper
@@ -42,18 +48,22 @@ export const DcotorsScreen = ({navigation}) => {
         showButton={false}
         onMenuPress={toggle}
       />
-      <SearchContainer navigation={navigation} />
+      <SearchContainer
+        navigation={navigation}
+        setFilter={setFilterBy}
+        filter={filterBy}
+      />
       <ScrollView
         contentContainerStyle={{
           marginTop: 20,
           marginHorizontal: 10,
           paddingBottom: 40,
         }}>
-        {!!data.length ? (
+        {!!data.length > 0 && !loading ? (
           data.map((item, key) => (
             <DoctorsCard doctor={item} key={key} navigation={navigation} />
           ))
-        ) : (
+        ) : loading ? (
           <ActivityIndicator
             animating={true}
             style={{
@@ -62,7 +72,20 @@ export const DcotorsScreen = ({navigation}) => {
             color={'#3498DB'}
             size="small"
           />
+        ) : (
+          <Text
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignItems: 'center',
+              alignSelf: 'center',
+              fontSize: 20,
+            }}>
+            Nothing Found !
+          </Text>
         )}
+        {}
       </ScrollView>
     </View>
   );

@@ -21,4 +21,4 @@ export default function App() {
   );
 }
 
-export const BASE_URL = 'https://dull-wings-sort-103-196-161-95.loca.lt';
+export const BASE_URL = 'https://sad-days-sing-39-57-152-97.loca.lt';

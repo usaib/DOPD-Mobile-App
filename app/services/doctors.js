@@ -2,6 +2,7 @@ import axios from 'axios';
 import {BASE_URL} from '../../App';
 
 const fetchDoctors = async params => {
+  console.log(params);
   return axios.post(BASE_URL + '/doctor/getAllDoctors', params, {
     headers: {
       'Content-Type': 'application/json',

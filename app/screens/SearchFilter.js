@@ -5,8 +5,7 @@ import {globalStyles} from '../styles/globalStyles';
 import {Sort} from '../components/Sort';
 import {Specializations} from '../components/Specializations';
 import {Surface, Button} from 'react-native-paper';
-import {styles} from '../components/RegisterForm';
-export const SearchFilter = ({navigation}) => {
+export const SearchFilter = ({navigation, route}) => {
   const toggle = () => {
     navigation?.toggleDrawer();
   };
@@ -17,11 +16,13 @@ export const SearchFilter = ({navigation}) => {
     'Most Rated': false,
     'Most Experienced': false,
   });
-  const [filterBy, setFilterBy] = useState(null);
+  const {setFilter, filter} = route.params;
+  const [filterBy, setFilterBy] = useState(filter);
 
   const filterSearch = () => {
     console.log('filter by', filterBy);
     console.log('Sort by', sortBy);
+    navigation.navigate('FindDoctors');
   };
   return (
     <View style={globalStyles.container}>
@@ -42,7 +43,11 @@ export const SearchFilter = ({navigation}) => {
           <Text style={globalStyles.cardHeading}>Sort</Text>
           <Sort sortBy={sortBy} setSortBy={setSortBy} />
           <Text style={globalStyles.cardHeading}>All Specializations</Text>
-          <Specializations filterBy={filterBy} setFilterBy={setFilterBy} />
+          <Specializations
+            filterBy={filterBy}
+            setFilterBy={setFilterBy}
+            setFilter={setFilter}
+          />
         </View>
         <Surface style={[searcFilterStyles.btnCont]}>
           <Button
@@ -54,9 +59,7 @@ export const SearchFilter = ({navigation}) => {
             }}
             onPress={filterSearch}
             style={searcFilterStyles.submitBtn}
-            disabled={
-              !(Object.values(sortBy).some(item => item === true) && filterBy)
-            }>
+            disabled={!filterBy}>
             Apply Filter
           </Button>
         </Surface>

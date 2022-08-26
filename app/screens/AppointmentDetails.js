@@ -21,6 +21,8 @@ import axios from 'axios';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import Pdf from 'react-native-pdf';
 import {useUserState} from '../context/userContext';
+import {getPrescription} from '../services/prescriptions';
+const RNFS = require('react-native-fs');
 
 export const AppointmentDetails = ({navigation, route}) => {
   const [data, setData] = useState([]);
@@ -28,6 +30,9 @@ export const AppointmentDetails = ({navigation, route}) => {
   const [choosed, setChoosed] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [source, setSource] = useState(false);
+  console.log(source);
+  const [view, setView] = useState(false);
+  const [prescription, setPrescription] = useState([]);
   const [downloaded, setDownloaded] = useState(false);
 
   const {
@@ -38,6 +43,17 @@ export const AppointmentDetails = ({navigation, route}) => {
     patientName,
     appointmentLink,
   } = route.params;
+
+  useEffect(() => {
+    const fetchPrescription = async () => {
+      console.log(appointmentId);
+      const resp = await getPrescription({appointmentId});
+      console.log(resp.data.data.data.rows);
+      setPrescription(resp.data.data.data.rows);
+    };
+    fetchPrescription();
+  }, [appointmentId]);
+
   const userState = useUserState();
 
   const htmlStyles = `.header {
@@ -138,23 +154,27 @@ export const AppointmentDetails = ({navigation, route}) => {
             </div>
           </section>
           <section class="medicines">
-            <div>
-              <span class="text" style="font-weight: 800">
-                Paracetamol
-              </span>
-              <span class="text">twice daily</span>
-            </div>
-            <div>
-              <span class="text" style="font-weight: 800">
-                Fexet 60 mg
-              </span>
-              <span class="text">half dosage daily at night</span>
-            </div>
+           
+            ${
+              prescription &&
+              prescription.length &&
+              prescription.map(data => {
+                return `<div>
+                    <span class="text" style="font-weight: 800">
+                      ${data.medicine_inventory.name}
+                    </span>
+                    <span class="text">${data.timing}</span>
+                    <span class="text">${data.dosage}</span>
+                  </div>`;
+              })
+            }
+            
             <div></div>
           </section>
         </main>
       </body>
     </html>`;
+  // console.log(E_prescription);
   const createPDF = async () => {
     let options = {
       html: E_prescription,
@@ -200,6 +220,10 @@ export const AppointmentDetails = ({navigation, route}) => {
       console.log(e);
     }
   };
+  async function verifyFiles(filepath) {
+    let exists = await RNFS.exists(filepath);
+    return exists;
+  }
   const handleUploadPhoto = async () => {
     try {
       setUploading(true);
@@ -244,14 +268,23 @@ export const AppointmentDetails = ({navigation, route}) => {
     }
   }, []);
   useEffect(() => {
-    if (!source) {
-      setSource({
-        uri: `/storage/emulated/0/Android/data/com.practiceproject/files/Documents/E-Prescription${appointmentId}.pdf`,
-      });
-      setDownloaded(true);
+    checkForFiles = async () => {
+      if (!source) {
+        let exists = await verifyFiles(
+          `/storage/emulated/0/Android/data/com.practiceproject/files/Documents/E-Prescription${appointmentId}.pdf`,
+        );
+        console.log('existing', exists);
+        if (exists) {
+          setSource({
+            uri: `/storage/emulated/0/Android/data/com.practiceproject/files/Documents/E-Prescription${appointmentId}.pdf`,
+          });
+          setDownloaded(true);
+        }
+        return;
+      }
       return;
-    }
-    return;
+    };
+    checkForFiles();
   }, []);
 
   const handleChoosePhoto = () => {
@@ -290,14 +323,65 @@ export const AppointmentDetails = ({navigation, route}) => {
                   marginLeft: 'auto',
                 }}
                 onPress={() => {
-                  console.log('Downloading prescription');
+                  if (!downloaded) {
+                    console.log('Downloading prescription');
+                    createPDF();
+                    setDownloaded(true);
+                    return;
+                  }
+                  setSource({
+                    uri: `/storage/emulated/0/Android/data/com.practiceproject/files/Documents/E-Prescription${appointmentId}.pdf`,
+                  });
                 }}>
-                <Image
-                  source={require('../images/downloadIcon.png')}
-                  style={{height: 45, width: 45}}
-                />
+                {!downloaded ? (
+                  <Image
+                    source={require('../images/downloadIcon.png')}
+                    style={{height: 45, width: 45}}
+                  />
+                ) : (
+                  <Image
+                    source={require('../images/check.png')}
+                    style={{height: 45, width: 45}}
+                  />
+                )}
               </TouchableOpacity>
             </View>
+            {source && (
+              <Text
+                style={{
+                  textDecorationLine: 'underline',
+                  color: '#0000EE',
+                  marginLeft: 6,
+                  marginTop: 5,
+                }}
+                onPress={() => {
+                  setView(prev => !prev);
+                }}>
+                {`Click here to ${!view ? 'view' : 'hide'}`}
+              </Text>
+            )}
+            {source && view && (
+              <View style={styles.pdfContainer}>
+                <Pdf
+                  source={source}
+                  onLoadComplete={(numberOfPages, filePath) => {
+                    console.log(`Number of pages: ${numberOfPages}`);
+                  }}
+                  onPageChanged={(page, numberOfPages) => {
+                    console.log(`Current page: ${page}`);
+                  }}
+                  onError={error => {
+                    console.log('here is an', error);
+                    setSource(false);
+                    setDownloaded(false);
+                  }}
+                  onPressLink={uri => {
+                    console.log(`Link pressed: ${uri}`);
+                  }}
+                  style={styles.pdf}
+                />
+              </View>
+            )}
           </View>
           <View style={{marginBottom: 15}}>
             <Text style={[styles.openText, {marginBottom: 20}]}>
@@ -337,22 +421,6 @@ export const AppointmentDetails = ({navigation, route}) => {
                 {new Date(dateTime).toLocaleTimeString()}
               </Text>
             </View>
-            {/* <View
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                alignItems: 'center',
-                marginLeft: 6,
-              }}>
-              <Image
-                source={require('../images/locationIcon.png')}
-                style={{height: 20, width: 20}}
-              />
-              <Text
-                style={[styles.paragraphText, {marginLeft: 13, fontSize: 16}]}>
-                Liaquat National Hospital, Karachi
-              </Text>
-            </View> */}
           </View>
 
           <View style={{marginBottom: 15}}>
@@ -386,7 +454,7 @@ export const AppointmentDetails = ({navigation, route}) => {
             <Text style={[styles.paragraphText]}>
               {!!data.length && data[0].otherDetails
                 ? data[0].otherDetails
-                : 'will be highlighted after your appointment'}
+                : 'will be highlighted if doctor mention any comment'}
             </Text>
           </View>
         </ScrollView>
@@ -436,6 +504,20 @@ export const AppointmentDetails = ({navigation, route}) => {
               </TouchableOpacity>
             </View>
             {source && (
+              <Text
+                style={{
+                  textDecorationLine: 'underline',
+                  color: '#0000EE',
+                  marginLeft: 6,
+                  marginTop: 5,
+                }}
+                onPress={() => {
+                  setView(prev => !prev);
+                }}>
+                {`Click here to ${!view ? 'view' : 'hide'}`}
+              </Text>
+            )}
+            {source && view && (
               <View style={styles.pdfContainer}>
                 <Pdf
                   source={source}
@@ -551,7 +633,7 @@ export const AppointmentDetails = ({navigation, route}) => {
             <Text style={[styles.paragraphText]}>
               {!!data.length && data[0].otherDetails
                 ? data[0].otherDetails
-                : 'will be highlighted after your appointment'}
+                : 'will be highlighted if doctor mention any comment'}
             </Text>
           </View>
         </ScrollView>

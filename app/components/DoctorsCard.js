@@ -44,10 +44,10 @@ export const DoctorsCard = ({doctor, navigation}) => {
                 uri: doctor.imageUrl,
               }}
               style={{
-                marginTop: 1.5,
+                marginTop: 0,
                 objectFit: 'contain',
-                width: 90,
-                height: 90,
+                width: 95,
+                height: 95,
               }}
             />
           </View>

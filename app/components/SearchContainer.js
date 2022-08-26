@@ -3,8 +3,9 @@ import {View, StyleSheet, Image, Text} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {Searchbar} from 'react-native-paper';
 import {globalStyles} from '../styles/globalStyles';
-export const SearchContainer = ({navigation}) => {
+export const SearchContainer = ({navigation, setFilter, filter}) => {
   const [searchQuery, setSearchQuery] = useState('');
+  console.log('now this ', filter, setFilter);
   const onChangeSearch = query => setSearchQuery(query);
   return (
     <View style={searchBarStyles.main}>
@@ -36,7 +37,10 @@ export const SearchContainer = ({navigation}) => {
         />
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate('SearchFilter');
+            navigation.navigate('SearchFilter', {
+              setFilter,
+              filter: filter,
+            });
           }}>
           <Image
             source={require('../images/filter.png')}
