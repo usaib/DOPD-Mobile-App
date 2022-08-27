@@ -11,12 +11,16 @@ import AppBarWrapper from '../components/AppBar';
 import HistoryItems from '../components/HistoryItems';
 import {fetchAppointments} from '../services/appointments';
 import {ScrollView} from 'react-native-gesture-handler';
+import {useUserState} from '../context/userContext';
+import {useIsFocused} from '@react-navigation/native';
 
 export const History = ({navigation}) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState([]);
   const [refreshing, setRefreshing] = useState(true);
   const [refreshed, setRefreshed] = useState(true);
+  const userState = useUserState();
+  const isVisible = useIsFocused();
 
   const toggle = () => {
     navigation?.toggleDrawer();
@@ -29,7 +33,7 @@ export const History = ({navigation}) => {
     const getData = async () => {
       setLoading(true);
       try {
-        const resp = await fetchAppointments();
+        const resp = await fetchAppointments({userId: userState.user.id});
         setData(resp.data.data.data.rows);
         console.log(resp.data.data.data.rows);
         setLoading(false);
@@ -39,8 +43,9 @@ export const History = ({navigation}) => {
         setLoading(false);
       }
     };
+
     getData();
-  }, [refreshed]);
+  }, [refreshed, isVisible]);
   const ItemView = obj => {
     return (
       // Flat List Item

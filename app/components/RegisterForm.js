@@ -35,27 +35,26 @@ export const RegisterForm = ({navigation}) => {
         age: values.age,
         gender: value,
       });
+      console.log(resp.data, resp.data.success);
 
-      if (!resp.data.msg.error) {
+      if (resp.data.success) {
+        setColor('#0381d1');
+        setErrorMessage(resp.data.message);
+        setLoading(false);
+        setError(true);
+        console.log(resp.data);
         setTimeout(() => {
-          setColor('#0381d1');
-
-          setErrorMessage(resp.data.msg);
-          setLoading(false);
-          setError(true);
-          console.log(resp.data);
-        }, 700);
+          navigation.navigate('Login');
+        }, 300);
       } else {
-        console.log('Failed To Create User');
-        console.log(resp.data.msg);
-        setErrorMessage(resp.data.msg.msg);
+        console.log(resp.data.message);
+        setErrorMessage(resp.data.message);
         setLoading(false);
         setError(true);
       }
     } catch (e) {
       setErrorMessage(e.msg);
       console.log(e);
-
       console.log('An error has occurred', e);
       setLoading(false);
       setError(true);
@@ -247,7 +246,6 @@ export const RegisterForm = ({navigation}) => {
             error={error}
             color={color}
             setError={setError}></ErrorSnackbar>
-            
         </View>
       )}
     </Formik>

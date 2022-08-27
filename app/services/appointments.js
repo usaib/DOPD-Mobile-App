@@ -2,10 +2,11 @@ import axios from 'axios';
 import {BASE_URL} from '../../App';
 const fetchAppointments = async params => {
   return axios.post(
-    BASE_URL + '/appointment/getAppointments',
+    BASE_URL + '/appointment/getUserAppointments',
     {
-      limit: 100,
+      limit: 100000,
       offset: 0,
+      userId: params.userId,
     },
     {
       headers: {

@@ -33,11 +33,9 @@ const signIn = async params => {
 const create = async params => {
   console.log('In service call', params);
   return axios.post(
-    BASE_URL + '/user/create',
+    BASE_URL + '/user/createUser',
     {
-      user: {
-        ...params,
-      },
+      ...params,
     },
     {
       headers: {
