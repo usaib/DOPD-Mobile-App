@@ -7,6 +7,7 @@ export default function HistoryItems({
   doctorName,
   patientName,
   appointmentType,
+  doctorSpecialization,
   dateTime,
   appointmentStatus,
   navigation,
@@ -60,6 +61,7 @@ export default function HistoryItems({
       doctorName,
       patientName,
       appointmentLink,
+      doctorSpecialization,
     });
   };
   return (

@@ -41,24 +41,25 @@ function MainScreen({navigation}) {
         showMenu={true}
         onMenuPress={toggle}
       />
-      <View style={styles.cardView}></View>
+
       <ScrollView
-        style={{
-          paddingHorizontal: 20,
-          marginTop: 0,
+        contentContainerStyle={{
+          alignSelf: 'center',
         }}>
-        <View style={styles.top}></View>
-        <Text
-          style={{
-            fontSize: 15,
-            color: '#a1a1a1',
-            marginTop: 100,
-            letterSpacing: 0.5,
-            fontWeight: '600',
-          }}>
-          Good afternoon, {userState.user ? userState.user.name : ''} !
-        </Text>
-        <Text style={styles.openText}>How are you today?</Text>
+        <View style={styles.top}>
+          <Text
+            style={{
+              fontSize: 15,
+              color: '#a1a1a1',
+              marginTop: 100,
+              letterSpacing: 0.5,
+              fontWeight: '600',
+            }}>
+            Good afternoon, {userState.user ? userState.user.name : ''} !
+          </Text>
+          <Text style={styles.openText}>How are you today?</Text>
+        </View>
+
         <CustomCard
           onPress={() => {
             setShowFab(true);
@@ -98,10 +99,10 @@ function MainScreen({navigation}) {
             onPress={() => {
               navigation.navigate('FindDoctors');
             }}
-            width={175}
-            height={270}
+            width={345}
+            height={180}
             backColor="#053F5E">
-            <View style={{marginTop: 55}}>
+            <View style={{marginTop: 55, width: 200}}>
               <Text
                 style={[styles.cardText, {fontWeight: '700', color: '#fff'}]}>
                 Check Doctors in your Area
@@ -111,37 +112,6 @@ function MainScreen({navigation}) {
               source={require('../images/doctors.png')}
               style={[styles.cardImage, {width: 175, right: 0}]}
             />
-          </CustomCard>
-          <CustomCard
-            onPress={() => {
-              console.log('In-person or online video appointment');
-            }}
-            width={170}
-            height={270}
-            backColor="#FFE194"
-            cirBackCol="#E8E46E57"
-            bottom={-10}
-            right={-20}>
-            <Image
-              source={require('../images/appointment.png')}
-              style={[styles.cardImage, {right: 10, bottom: 0, height: 140}]}
-            />
-            <View style={{marginTop: 55}}>
-              <Text
-                style={[
-                  styles.cardText,
-                  {fontWeight: '700', marginBottom: 10},
-                ]}>
-                Book an appointment
-              </Text>
-              <Text
-                style={[
-                  styles.cardText,
-                  {fontSize: 15, textTransform: 'none'},
-                ]}>
-                In-person or online video appointment
-              </Text>
-            </View>
           </CustomCard>
         </View>
       </ScrollView>
@@ -154,27 +124,12 @@ export const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     flexDirection: 'column',
   },
-  cardView: {
-    flex: 1,
-    margin: 10,
-  },
-  Text: {
-    marginLeft: 10,
-    color: '#3498DB',
-    fontFamily: 'Gibson-Regular',
-    fontSize: 20,
-  },
-  button: {
-    fontFamily: 'Gibson-Regular',
-    color: 'white',
-  },
   top: {
     height: 170,
-    width: Dimensions.get('window').width - 30,
+    width: Dimensions.get('window').width - 50,
     backgroundColor: '#B5DEFF35',
-    position: 'absolute',
     borderBottomRightRadius: 200,
-    borderBottomLeftRadius: 20,
+    borderBottomLeftRadius: 10,
   },
   openText: {
     fontSize: 28,

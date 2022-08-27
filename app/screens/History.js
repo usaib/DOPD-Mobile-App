@@ -46,6 +46,7 @@ export const History = ({navigation}) => {
       // Flat List Item
       <HistoryItems
         doctorName={obj.item.doctor.name}
+        doctorSpecialization={obj.item.doctor.specialization}
         appointmentId={obj.item.id}
         appointmentLink={obj.item.appointmentLink}
         patientName={obj.item.user.name}
@@ -71,29 +72,6 @@ export const History = ({navigation}) => {
       />
       <ScrollView
         contentContainerStyle={{flex: 1, marginTop: 5, paddingLeft: 15}}>
-        {/* {loading ? (
-          <ActivityIndicator
-            animating={true}
-            style={{
-              marginTop: 250,
-            }}
-            color={'#3498DB'}
-            size="small"
-          />
-        ) : (
-          data.length &&
-          data.map(obj => (
-            <HistoryItems
-              doctorName={obj.doctor.name}
-              appointmentId={obj.id}
-              patientName={obj.user.name}
-              dateTime={obj.dateTime}
-              appointmentType={obj.type}
-              appointmentStatus={obj.status}
-              navigation={navigation}
-            />
-          ))
-        )} */}
         <FlatList
           data={data}
           keyExtractor={(obj, index) => index.toString()}
