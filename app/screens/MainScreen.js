@@ -114,7 +114,7 @@ function MainScreen({navigation}) {
           </CustomCard>
           <CustomCard
             onPress={() => {
-              console.log('In-person or online video appointment');
+              navigation.navigate('FindDoctors');
             }}
             width={170}
             height={270}
@@ -137,9 +137,9 @@ function MainScreen({navigation}) {
               <Text
                 style={[
                   styles.cardText,
-                  {fontSize: 15, textTransform: 'none'},
+                  {fontSize: 14, textTransform: 'none'},
                 ]}>
-                In-person or online video appointment
+                In-person or online Appointment
               </Text>
             </View>
           </CustomCard>

@@ -12,8 +12,10 @@ import {UserProvider} from './app/context/userContext';
 import {LogBox} from 'react-native';
 LogBox.ignoreLogs(['Warning:...']);
 LogBox.ignoreAllLogs();
+import SplashScreen from 'react-native-splash-screen';
 
 export default function App() {
+  setTimeout(() => SplashScreen.hide(), 500);
   return (
     <UserProvider>
       <Router />
@@ -21,4 +23,4 @@ export default function App() {
   );
 }
 
-export const BASE_URL = 'https://four-drinks-hug-39-57-176-131.loca.lt';
+export const BASE_URL = 'https://rich-icons-live-39-57-212-87.loca.lt';

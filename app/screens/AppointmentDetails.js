@@ -15,7 +15,7 @@ import {
   fetchDiagnosedDiseaseDetails,
   updateDiagnosedDisease,
 } from '../services/diagnose';
-import {Button} from 'react-native-paper';
+import {ActivityIndicator, Button} from 'react-native-paper';
 import {launchImageLibrary} from 'react-native-image-picker';
 import axios from 'axios';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
@@ -27,6 +27,7 @@ import {
   getAppointmentSlip,
   getEprescription,
 } from '../assets/htmlData';
+import {ErrorSnackbar} from '../components/Snackbar';
 const RNFS = require('react-native-fs');
 
 export const AppointmentDetails = ({navigation, route}) => {
@@ -42,6 +43,8 @@ export const AppointmentDetails = ({navigation, route}) => {
   const [viewAppSlip, setViewAppSlip] = useState(false);
   const [prescription, setPrescription] = useState([]);
   const [downloaded, setDownloaded] = useState(false);
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const [downloadedAppSlip, setDownloadedAppSlip] = useState(false);
 
   const {
@@ -52,6 +55,7 @@ export const AppointmentDetails = ({navigation, route}) => {
     patientName,
     appointmentLink,
     doctorSpecialization,
+    appointmentStatus,
   } = route.params;
 
   console.log(doctorSpecialization);
@@ -149,10 +153,17 @@ export const AppointmentDetails = ({navigation, route}) => {
     try {
       setUploading(true);
       const resp = await axios.post(
-        `https://puny-suits-fetch-103-196-160-155.loca.lt/api/model/uploadImage`,
+        `https://icy-bags-relate-39-57-212-87.loca.lt/api/model/uploadImage`,
         createFormData(photo, {userId: '1'}),
       );
       console.log(resp.data);
+      if (!resp.data.success) {
+        console.log('In error');
+        setErrorMessage(resp.data.msg);
+        setError(true);
+        setUploading(false);
+        return;
+      }
       setData([
         {
           diagnosedDisease: resp.data.disease,
@@ -263,6 +274,9 @@ export const AppointmentDetails = ({navigation, route}) => {
                   marginLeft: 'auto',
                 }}
                 onPress={() => {
+                  if (appointmentStatus != 'completed') {
+                    return;
+                  }
                   if (!downloaded) {
                     console.log('Downloading prescription');
                     createPDF();
@@ -471,6 +485,9 @@ export const AppointmentDetails = ({navigation, route}) => {
                   marginLeft: 'auto',
                 }}
                 onPress={() => {
+                  if (appointmentStatus != 'completed') {
+                    return;
+                  }
                   if (!downloaded) {
                     console.log('Downloading prescription');
                     createPDF();
@@ -684,6 +701,11 @@ export const AppointmentDetails = ({navigation, route}) => {
     } else {
       return (
         <ScrollView contentContainerStyle={{paddingHorizontal: 15}}>
+          <ErrorSnackbar
+            message={errorMessage}
+            error={error}
+            color={'#F00000'}
+            setError={setError}></ErrorSnackbar>
           {!!data.length && !data[0].wantExtraInfo && (
             <View style={{flex: 1}}>
               <Text style={[styles.openText]}>Description</Text>
@@ -765,7 +787,16 @@ export const AppointmentDetails = ({navigation, route}) => {
               )}
             </View>
           )}
-
+          {data.length == 0 && (
+            <ActivityIndicator
+              animating={true}
+              style={{
+                marginTop: 10,
+              }}
+              color={'#3498DB'}
+              size="large"
+            />
+          )}
           <Text style={[styles.openText]}>Provided Symptoms</Text>
           <View
             style={{display: 'flex', flexDirection: 'row', flexWrap: 'wrap'}}>

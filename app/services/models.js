@@ -1,5 +1,5 @@
 import axios from 'axios';
-const BASE_URL = 'https://puny-suits-fetch-103-196-160-155.loca.lt';
+const BASE_URL = 'https://icy-bags-relate-39-57-212-87.loca.lt';
 const prediction = async params => {
   console.log('In service call', params);
   return axios.post(

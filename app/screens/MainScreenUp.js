@@ -99,8 +99,8 @@ function MainScreen({navigation}) {
             onPress={() => {
               navigation.navigate('FindDoctors');
             }}
-            width={345}
-            height={180}
+            width={160}
+            height={270}
             backColor="#053F5E">
             <View style={{marginTop: 55, width: 200}}>
               <Text
@@ -112,6 +112,37 @@ function MainScreen({navigation}) {
               source={require('../images/doctors.png')}
               style={[styles.cardImage, {width: 175, right: 0}]}
             />
+          </CustomCard>
+          <CustomCard
+            onPress={() => {
+              console.log('In-person or online video appointment');
+            }}
+            width={160}
+            height={270}
+            backColor="#FFE194"
+            cirBackCol="#E8E46E57"
+            bottom={-10}
+            right={-20}>
+            <Image
+              source={require('../images/appointment.png')}
+              style={[styles.cardImage, {right: 10, bottom: 0, height: 140}]}
+            />
+            <View style={{marginTop: 55}}>
+              <Text
+                style={[
+                  styles.cardText,
+                  {fontWeight: '700', marginBottom: 10},
+                ]}>
+                Book an appointment
+              </Text>
+              <Text
+                style={[
+                  styles.cardText,
+                  {fontSize: 15, textTransform: 'none'},
+                ]}>
+                In-person or online video appointment
+              </Text>
+            </View>
           </CustomCard>
         </View>
       </ScrollView>

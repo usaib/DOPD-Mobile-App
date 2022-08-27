@@ -247,6 +247,7 @@ export const RegisterForm = ({navigation}) => {
             error={error}
             color={color}
             setError={setError}></ErrorSnackbar>
+            
         </View>
       )}
     </Formik>
