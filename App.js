@@ -23,4 +23,5 @@ export default function App() {
   );
 }
 
-export const BASE_URL = 'https://rich-icons-live-39-57-212-87.loca.lt';
+export const BASE_URL =
+  'https://17gs3ovzcd.execute-api.us-east-1.amazonaws.com/prod';

@@ -153,7 +153,7 @@ export const AppointmentDetails = ({navigation, route}) => {
     try {
       setUploading(true);
       const resp = await axios.post(
-        `https://icy-bags-relate-39-57-212-87.loca.lt/api/model/uploadImage`,
+        `https://17gs3ovzcd.execute-api.us-east-1.amazonaws.com/prod/detect/api/model/uploadImage`,
         createFormData(photo, {userId: '1'}),
       );
       console.log(resp.data);

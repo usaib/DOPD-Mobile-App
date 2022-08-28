@@ -67,7 +67,7 @@ function MainScreen({navigation}) {
               setShowFab,
             });
           }}
-          width={345}
+          width={355}
           height={180}
           backColor="#B5DEFF"
           cirBackCol="#86c6f42a"
